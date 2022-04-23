@@ -346,4 +346,5 @@ void CAN_state_data_send(uint16_t heat_limit){
 		gimbal_board_state_data[1]=heat_limit;
 		//48bits reserved
     HAL_CAN_AddTxMessage(&Communication_CAN, &gimbal_board_state_message, gimbal_board_state_data, &send_mail_box);
+	
 }
