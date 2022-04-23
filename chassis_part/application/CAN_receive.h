@@ -23,9 +23,8 @@
 
 #include "struct_typedef.h"
 
-#define CHASSIS_CAN hcan1
-#define GIMBAL_CAN hcan2
-#define Communication_CAN hcan2
+
+
 /* CAN send and receive ID */
 typedef enum
 {
@@ -34,12 +33,17 @@ typedef enum
     CAN_3508_M2_ID = 0x202,
     CAN_3508_M3_ID = 0x203,
     CAN_3508_M4_ID = 0x204,
+		CAN_CAP = 0x211,
 
     CAN_YAW_MOTOR_ID = 0x205,
     CAN_PIT_MOTOR_ID = 0x206,
     CAN_TRIGGER_MOTOR_ID = 0x207,
     CAN_GIMBAL_ALL_ID = 0x1FF,
 
+		CAN_FRIC_LIFT_MOTOR_ID = 0x201,
+		CAN_FRIC_RIGHT_MOTOR_ID = 0x202,
+		
+		
 } can_msg_id_e;
 
 //rm motor data
@@ -52,6 +56,13 @@ typedef struct
     int16_t last_ecd;
 } motor_measure_t;
 
+typedef struct 
+{
+	 fp32 InputVot;
+	 fp32 CapVot;
+	 fp32 TestCurrent;
+	 fp32 Target_Power;
+} cap_measure_t;
 
 /**
   * @brief          send control current of motor (0x205, 0x206, 0x207, 0x208)
@@ -148,26 +159,36 @@ extern const motor_measure_t *get_trigger_motor_measure_point(void);
   * @retval         电机数据指针
   */
 extern const motor_measure_t *get_chassis_motor_measure_point(uint8_t i);
+/**
+  * @brief          return the fric 3508 motor data point
+  * @param[in]      i: motor number,range [1,2]
+  * @retval         motor data point
+  */
+/**
+  * @brief          返回摩擦轮电机 3508电机数据指针
+  * @param[in]      i: 电机编号,范围[1,2]
+  * @retval         电机数据指针
+  */
+extern const motor_measure_t *get_fric_motor_measure_point(uint8_t i);
 
-
+/**
+  * @brief          send fric current
+  * @param[in]      none
+  * @retval         none
+  */
+/**
+  * @brief          发送摩擦轮电机电流
+  * @param[in]      none
+  * @retval         none
+  */
+ extern void CAN_CMD_FRIC(int16_t motor1, int16_t motor2);
+void CAN_CMD_CAP(uint16_t power, uint16_t buffer);
 #endif
 
-/*Additional define*/
+/*Addtional Define*/
+#define gimbal_board_Id 0x210
+#define chassis_board_Id 0x211
 
+/*Addtional Functions*/
+void CAN_gimbal_transfer(uint8_t*data);
 
-#define chassis_motor_cmd_id 0x301
-#define chassis_motor_feedback_id 0x302
-#define heat_data_id 0x401
-#define shoot_data_id 0x402
-#define state_data_id 0x403
-
-#define transform_key 1000
-/*Additional functions*/
-
-void CAN_motor_feedback_send(int16_t chassis_motor1, int16_t chassis_motor2, int16_t chassis_motor3, int16_t chassis_motor4);
-
-void CAN_heat_data_send(uint16_t shooter_heat0,uint16_t shooter_heat1);
-
-void CAN_shoot_data_send(uint8_t	bullet_type, uint8_t	bullet_freq, float	bullet_speed);
-
-void CAN_state_data_send(uint16_t heat_limit);

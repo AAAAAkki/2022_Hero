@@ -221,13 +221,13 @@ uint32_t calibrate_task_stack;
 
 static const RC_ctrl_t *calibrate_RC;   //remote control point
 static head_cali_t     head_cali;       //head cali data
-static gimbal_cali_t   gimbal_cali;     //gimbal cali data
+ gimbal_cali_t   gimbal_cali;     //gimbal cali data
 static imu_cali_t      accel_cali;      //accel cali data
 static imu_cali_t      gyro_cali;       //gyro cali data
 static imu_cali_t      mag_cali;        //mag cali data
 
 
-static uint8_t flash_write_buf[FLASH_WRITE_BUF_LENGHT];
+ uint8_t flash_write_buf[FLASH_WRITE_BUF_LENGHT];
 
 cali_sensor_t cali_sensor[CALI_LIST_LENGHT]; 
 
@@ -576,10 +576,24 @@ static void cali_data_read(void)
   */
 static void cali_data_write(void)
 {
-    uint8_t i = 0;
-    uint16_t offset = 0;
-
-
+    uint8_t i;
+    uint16_t offset;
+    cali_sensor_t local_cali_sensor[CALI_LIST_LENGHT]; 
+    //below static variables for collation
+    static head_cali_t     local_head_cali;       //head cali data
+    static gimbal_cali_t   local_gimbal_cali;     //gimbal cali data
+    static imu_cali_t      local_accel_cali;      //accel cali data
+    static imu_cali_t      local_gyro_cali;       //gyro cali data
+    static imu_cali_t      local_mag_cali;        //mag cali data
+    static uint32_t *local_cali_sensor_buf[CALI_LIST_LENGHT] = {
+            (uint32_t *)&local_head_cali, (uint32_t *)&local_gimbal_cali,
+            (uint32_t *)&local_gyro_cali, (uint32_t *)&local_accel_cali,
+            (uint32_t *)&local_mag_cali};
+    static uint8_t flash_read_buf[CALI_SENSOR_HEAD_LEGHT * 4];
+    //disable all interrupts
+    taskENTER_CRITICAL();
+CALI_DATA_WRITE_TAG:
+    offset = 0;
     for (i = 0; i < CALI_LIST_LENGHT; i++)
     {
         //copy the data of device calibration data
@@ -595,6 +609,39 @@ static void cali_data_write(void)
     cali_flash_erase(FLASH_USER_ADDR,1);
     //write data
     cali_flash_write(FLASH_USER_ADDR, (uint32_t *)flash_write_buf, (FLASH_WRITE_BUF_LENGHT + 3) / 4);
+    /*collate flash data*/
+    for (i = 0; i < CALI_LIST_LENGHT; i++)
+    {
+        local_cali_sensor[i].flash_len = cali_sensor_size[i];
+        local_cali_sensor[i].flash_buf = local_cali_sensor_buf[i];
+        //local_cali_sensor[i].cali_hook = (bool_t(*)(uint32_t *, bool_t))cali_hook_fun[i];
+    }
+
+    //read flash data
+    
+    offset = 0;
+    for (i = 0; i < CALI_LIST_LENGHT; i++)
+    {
+
+        //read the data in flash, 
+        cali_flash_read(FLASH_USER_ADDR + offset, local_cali_sensor[i].flash_buf, local_cali_sensor[i].flash_len);
+        
+        offset += local_cali_sensor[i].flash_len * 4;
+
+        //read the name and cali flag,
+        cali_flash_read(FLASH_USER_ADDR + offset, (uint32_t *)flash_read_buf, CALI_SENSOR_HEAD_LEGHT);
+        
+        local_cali_sensor[i].name[0] = flash_read_buf[0];
+        local_cali_sensor[i].name[1] = flash_read_buf[1];
+        local_cali_sensor[i].name[2] = flash_read_buf[2];
+        local_cali_sensor[i].cali_done = flash_read_buf[3];
+        
+        offset += CALI_SENSOR_HEAD_LEGHT * 4;
+        if(memcmp(local_cali_sensor[i].flash_buf, cali_sensor[i].flash_buf, local_cali_sensor[i].flash_len))
+            goto CALI_DATA_WRITE_TAG;
+    }
+    //compare
+    taskEXIT_CRITICAL();
 }
 
 

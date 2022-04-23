@@ -7,10 +7,10 @@
   *             gyro mode: use euler angle to control, encond mode: use enconde
   *             angle to control. and has some special mode:cali mode, motionless
   *             mode.
-  *             Íê³ÉÔÆÌ¨¿ØÖÆÈÎÎñ£¬ÓÉÓÚÔÆÌ¨Ê¹ÓÃÍÓÂÝÒÇ½âËã³öµÄ½Ç¶È£¬Æä·¶Î§ÔÚ£¨-pi,pi£©
-  *             ¹Ê¶øÉèÖÃÄ¿±ê½Ç¶È¾ùÎª·¶Î§£¬´æÔÚÐí¶à¶Ô½Ç¶È¼ÆËãµÄº¯Êý¡£ÔÆÌ¨Ö÷Òª·ÖÎª2ÖÖ
-  *             ×´Ì¬£¬ÍÓÂÝÒÇ¿ØÖÆ×´Ì¬ÊÇÀûÓÃ°åÔØÍÓÂÝÒÇ½âËãµÄ×ËÌ¬½Ç½øÐÐ¿ØÖÆ£¬±àÂëÆ÷¿ØÖÆ
-  *             ×´Ì¬ÊÇÍ¨¹ýµç»ú·´À¡µÄ±àÂëÖµ¿ØÖÆµÄÐ£×¼£¬´ËÍâ»¹ÓÐÐ£×¼×´Ì¬£¬Í£Ö¹×´Ì¬µÈ¡£
+  *             ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç½ï¿½ï¿½ï¿½ï¿½ï¿½Ä½Ç¶È£ï¿½ï¿½ä·¶Î§ï¿½Ú£ï¿½-pi,piï¿½ï¿½
+  *             ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Ç¶È¾ï¿½Îªï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô½Ç¶È¼ï¿½ï¿½ï¿½Äºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½Òªï¿½ï¿½Îª2ï¿½ï¿½
+  *             ×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬ï¿½Ç½ï¿½ï¿½Ð¿ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  *             ×´Ì¬ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Æµï¿½Ð£×¼ï¿½ï¿½ï¿½ï¿½ï¿½â»¹ï¿½ï¿½Ð£×¼×´Ì¬ï¿½ï¿½Í£Ö¹×´Ì¬ï¿½È¡ï¿½
   * @note       
   * @history
   *  Version    Date            Author          Modification
@@ -49,27 +49,27 @@
         }
 
         
-    Èç¹ûÒªÌí¼ÓÒ»¸öÐÂµÄÐÐÎªÄ£Ê½
-    1.Ê×ÏÈ£¬ÔÚgimbal_behaviour.hÎÄ¼þÖÐ£¬ Ìí¼ÓÒ»¸öÐÂÐÐÎªÃû×ÖÔÚ gimbal_behaviour_e
+    ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Âµï¿½ï¿½ï¿½ÎªÄ£Ê½
+    1.ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½gimbal_behaviour.hï¿½Ä¼ï¿½ï¿½Ð£ï¿½ ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ gimbal_behaviour_e
     erum
     {  
         ...
         ...
-        GIMBAL_XXX_XXX, // ÐÂÌí¼ÓµÄ
+        GIMBAL_XXX_XXX, // ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½
     }gimbal_behaviour_e,
 
-    2. ÊµÏÖÒ»¸öÐÂµÄº¯Êý gimbal_xxx_xxx_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set);
-        "yaw, pitch" ²ÎÊýÊÇÔÆÌ¨ÔË¶¯¿ØÖÆÊäÈëÁ¿
-        µÚÒ»¸ö²ÎÊý: 'yaw' Í¨³£¿ØÖÆyawÖáÒÆ¶¯,Í¨³£ÊÇ½Ç¶ÈÔöÁ¿,ÕýÖµÊÇÄæÊ±ÕëÔË¶¯,¸ºÖµÊÇË³Ê±Õë
-        µÚ¶þ¸ö²ÎÊý: 'pitch' Í¨³£¿ØÖÆpitchÖáÒÆ¶¯,Í¨³£ÊÇ½Ç¶ÈÔöÁ¿,ÕýÖµÊÇÄæÊ±ÕëÔË¶¯,¸ºÖµÊÇË³Ê±Õë
-        ÔÚÕâ¸öÐÂµÄº¯Êý, ÄãÄÜ¸ø "yaw"ºÍ"pitch"¸³ÖµÏëÒªµÄ²ÎÊý
-    3.  ÔÚ"gimbal_behavour_set"Õâ¸öº¯ÊýÖÐ£¬Ìí¼ÓÐÂµÄÂß¼­ÅÐ¶Ï£¬¸øgimbal_behaviour¸³Öµ³ÉGIMBAL_XXX_XXX
-        ÔÚgimbal_behaviour_mode_setº¯Êý×îºó£¬Ìí¼Ó"else if(gimbal_behaviour == GIMBAL_XXX_XXX)" ,È»ºóÑ¡ÔñÒ»ÖÖÔÆÌ¨¿ØÖÆÄ£Ê½
-        3ÖÖ:
-        GIMBAL_MOTOR_RAW : Ê¹ÓÃ'yaw' and 'pitch' ×÷Îªµç»úµçÁ÷Éè¶¨Öµ,Ö±½Ó·¢ËÍµ½CAN×ÜÏßÉÏ.
-        GIMBAL_MOTOR_ENCONDE : 'yaw' and 'pitch' ÊÇ½Ç¶ÈÔöÁ¿,  ¿ØÖÆ±àÂëÏà¶Ô½Ç¶È.
-        GIMBAL_MOTOR_GYRO : 'yaw' and 'pitch' ÊÇ½Ç¶ÈÔöÁ¿,  ¿ØÖÆÍÓÂÝÒÇ¾ø¶Ô½Ç¶È.
-    4.  ÔÚ"gimbal_behaviour_control_set" º¯ÊýµÄ×îºó£¬Ìí¼Ó
+    2. Êµï¿½ï¿½Ò»ï¿½ï¿½ï¿½ÂµÄºï¿½ï¿½ï¿½ gimbal_xxx_xxx_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set);
+        "yaw, pitch" ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½Ë¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: 'yaw' Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½yawï¿½ï¿½ï¿½Æ¶ï¿½,Í¨ï¿½ï¿½ï¿½Ç½Ç¶ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ë¶ï¿½,ï¿½ï¿½Öµï¿½ï¿½Ë³Ê±ï¿½ï¿½
+        ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: 'pitch' Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pitchï¿½ï¿½ï¿½Æ¶ï¿½,Í¨ï¿½ï¿½ï¿½Ç½Ç¶ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ë¶ï¿½,ï¿½ï¿½Öµï¿½ï¿½Ë³Ê±ï¿½ï¿½
+        ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÂµÄºï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½Ü¸ï¿½ "yaw"ï¿½ï¿½"pitch"ï¿½ï¿½Öµï¿½ï¿½Òªï¿½Ä²ï¿½ï¿½ï¿½
+    3.  ï¿½ï¿½"gimbal_behavour_set"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½ï¿½ß¼ï¿½ï¿½Ð¶Ï£ï¿½ï¿½ï¿½gimbal_behaviourï¿½ï¿½Öµï¿½ï¿½GIMBAL_XXX_XXX
+        ï¿½ï¿½gimbal_behaviour_mode_setï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"else if(gimbal_behaviour == GIMBAL_XXX_XXX)" ,È»ï¿½ï¿½Ñ¡ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ä£Ê½
+        3ï¿½ï¿½:
+        GIMBAL_MOTOR_RAW : Ê¹ï¿½ï¿½'yaw' and 'pitch' ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è¶¨Öµ,Ö±ï¿½Ó·ï¿½ï¿½Íµï¿½CANï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+        GIMBAL_MOTOR_ENCONDE : 'yaw' and 'pitch' ï¿½Ç½Ç¶ï¿½ï¿½ï¿½ï¿½ï¿½,  ï¿½ï¿½ï¿½Æ±ï¿½ï¿½ï¿½ï¿½ï¿½Ô½Ç¶ï¿½.
+        GIMBAL_MOTOR_GYRO : 'yaw' and 'pitch' ï¿½Ç½Ç¶ï¿½ï¿½ï¿½ï¿½ï¿½,  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½Ô½Ç¶ï¿½.
+    4.  ï¿½ï¿½"gimbal_behaviour_control_set" ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         else if(gimbal_behaviour == GIMBAL_XXX_XXX)
         {
             gimbal_xxx_xxx_control(&rc_add_yaw, &rc_add_pit, gimbal_control_set);
@@ -87,11 +87,11 @@
 #include "user_lib.h"
 
 //when gimbal is in calibrating, set buzzer frequency and strenght
-//µ±ÔÆÌ¨ÔÚÐ£×¼, ÉèÖÃ·äÃùÆ÷ÆµÂÊºÍÇ¿¶È
+//ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½Ð£×¼, ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½Êºï¿½Ç¿ï¿½ï¿½
 #define gimbal_warn_buzzer_on() buzzer_on(31, 20000)
 #define gimbal_warn_buzzer_off() buzzer_off()
 
-#define int_abs(x) ((x) > 0 ? (x) : (-x))
+#define int_abs(x) ((x) > 0   (x) : (-x))
 /**
   * @brief          remote control dealline solve,because the value of rocker is not zero in middle place,
   * @param          input:the raw channel value 
@@ -99,10 +99,10 @@
   * @param          deadline
   */
 /**
-  * @brief          Ò£¿ØÆ÷µÄËÀÇøÅÐ¶Ï£¬ÒòÎªÒ£¿ØÆ÷µÄ²¦¸ËÔÚÖÐÎ»µÄÊ±ºò£¬²»Ò»¶¨Îª0£¬
-  * @param          ÊäÈëµÄÒ£¿ØÆ÷Öµ
-  * @param          Êä³öµÄËÀÇø´¦ÀíºóÒ£¿ØÆ÷Öµ
-  * @param          ËÀÇøÖµ
+  * @brief          Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï£ï¿½ï¿½ï¿½ÎªÒ£ï¿½ï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½Ê±ï¿½ò£¬²ï¿½Ò»ï¿½ï¿½Îª0ï¿½ï¿½
+  * @param          ï¿½ï¿½ï¿½ï¿½ï¿½Ò£ï¿½ï¿½ï¿½ï¿½Öµ
+  * @param          ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò£ï¿½ï¿½ï¿½ï¿½Öµ
+  * @param          ï¿½ï¿½ï¿½ï¿½Öµ
   */
 #define rc_deadband_limit(input, output, dealine)        \
     {                                                    \
@@ -116,7 +116,6 @@
         }                                                \
     }
 
-
 /**
   * @brief          judge if gimbal reaches the limit by gyro
   * @param          gyro: rotation speed unit rad/s
@@ -128,14 +127,14 @@
   * @param          cali step, +1 by one step
   */
 /**
-  * @brief          Í¨¹ýÅÐ¶Ï½ÇËÙ¶ÈÀ´ÅÐ¶ÏÔÆÌ¨ÊÇ·ñµ½´ï¼«ÏÞÎ»ÖÃ
-  * @param          ¶ÔÓ¦ÖáµÄ½ÇËÙ¶È£¬µ¥Î»rad/s
-  * @param          ¼ÆÊ±Ê±¼ä£¬µ½´ïGIMBAL_CALI_STEP_TIMEµÄÊ±¼äºó¹éÁã
-  * @param          ¼ÇÂ¼µÄ½Ç¶È rad
-  * @param          ·´À¡µÄ½Ç¶È rad
-  * @param          ¼ÇÂ¼µÄ±àÂëÖµ raw
-  * @param          ·´À¡µÄ±àÂëÖµ raw
-  * @param          Ð£×¼µÄ²½Öè Íê³ÉÒ»´Î ¼ÓÒ»
+  * @brief          Í¨ï¿½ï¿½ï¿½Ð¶Ï½ï¿½ï¿½Ù¶ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½Ì¨ï¿½Ç·ñµ½´ï¼«ï¿½ï¿½Î»ï¿½ï¿½
+  * @param          ï¿½ï¿½Ó¦ï¿½ï¿½Ä½ï¿½ï¿½Ù¶È£ï¿½ï¿½ï¿½Î»rad/s
+  * @param          ï¿½ï¿½Ê±Ê±ï¿½ä£¬ï¿½ï¿½ï¿½ï¿½GIMBAL_CALI_STEP_TIMEï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  * @param          ï¿½ï¿½Â¼ï¿½Ä½Ç¶ï¿½ rad
+  * @param          ï¿½ï¿½ï¿½ï¿½ï¿½Ä½Ç¶ï¿½ rad
+  * @param          ï¿½ï¿½Â¼ï¿½Ä±ï¿½ï¿½ï¿½Öµ raw
+  * @param          ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½Öµ raw
+  * @param          Ð£×¼ï¿½Ä²ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ ï¿½ï¿½Ò»
   */
 #define gimbal_cali_gyro_judge(gyro, cmd_time, angle_set, angle, ecd_set, ecd, step) \
     {                                                                                \
@@ -158,8 +157,8 @@
   * @retval         none
   */
 /**
-  * @brief          ÔÆÌ¨ÐÐÎª×´Ì¬»úÉèÖÃ.
-  * @param[in]      gimbal_mode_set: ÔÆÌ¨Êý¾ÝÖ¸Õë
+  * @brief          ï¿½ï¿½Ì¨ï¿½ï¿½Îª×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+  * @param[in]      gimbal_mode_set: ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
   * @retval         none
   */
 static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set);
@@ -174,11 +173,11 @@ static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set);
   * @retval         none
   */
 /**
-  * @brief          µ±ÔÆÌ¨ÐÐÎªÄ£Ê½ÊÇGIMBAL_ZERO_FORCE, Õâ¸öº¯Êý»á±»µ÷ÓÃ,ÔÆÌ¨¿ØÖÆÄ£Ê½ÊÇrawÄ£Ê½.Ô­Ê¼Ä£Ê½ÒâÎ¶×Å
-  *                 Éè¶¨Öµ»áÖ±½Ó·¢ËÍµ½CAN×ÜÏßÉÏ,Õâ¸öº¯Êý½«»áÉèÖÃËùÓÐÎª0.
-  * @param[in]      yaw:·¢ËÍyawµç»úµÄÔ­Ê¼Öµ£¬»áÖ±½ÓÍ¨¹ýcan ·¢ËÍµ½µç»ú
-  * @param[in]      pitch:·¢ËÍpitchµç»úµÄÔ­Ê¼Öµ£¬»áÖ±½ÓÍ¨¹ýcan ·¢ËÍµ½µç»ú
-  * @param[in]      gimbal_control_set: ÔÆÌ¨Êý¾ÝÖ¸Õë
+  * @brief          ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ÎªÄ£Ê½ï¿½ï¿½GIMBAL_ZERO_FORCE, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á±»ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½rawÄ£Ê½.Ô­Ê¼Ä£Ê½ï¿½ï¿½Î¶ï¿½ï¿½
+  *                 ï¿½è¶¨Öµï¿½ï¿½Ö±ï¿½Ó·ï¿½ï¿½Íµï¿½CANï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª0.
+  * @param[in]      yaw:ï¿½ï¿½ï¿½ï¿½yawï¿½ï¿½ï¿½ï¿½ï¿½Ô­Ê¼Öµï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½Í¨ï¿½ï¿½can ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½
+  * @param[in]      pitch:ï¿½ï¿½ï¿½ï¿½pitchï¿½ï¿½ï¿½ï¿½ï¿½Ô­Ê¼Öµï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½Í¨ï¿½ï¿½can ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½
+  * @param[in]      gimbal_control_set: ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
   * @retval         none
   */
 static void gimbal_zero_force_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set);
@@ -193,11 +192,11 @@ static void gimbal_zero_force_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *
   * @retval         none
   */
 /**
-  * @brief          ÔÆÌ¨³õÊ¼»¯¿ØÖÆ£¬µç»úÊÇÍÓÂÝÒÇ½Ç¶È¿ØÖÆ£¬ÔÆÌ¨ÏÈÌ§ÆðpitchÖá£¬ºóÐý×ªyawÖá
-  * @param[out]     yawÖá½Ç¶È¿ØÖÆ£¬Îª½Ç¶ÈµÄÔöÁ¿ µ¥Î» rad
-  * @param[out]     pitchÖá½Ç¶È¿ØÖÆ£¬Îª½Ç¶ÈµÄÔöÁ¿ µ¥Î» rad
-  * @param[in]      ÔÆÌ¨Êý¾ÝÖ¸Õë
-  * @retval         ·µ»Ø¿Õ
+  * @brief          ï¿½ï¿½Ì¨ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç½Ç¶È¿ï¿½ï¿½Æ£ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½Ì§ï¿½ï¿½pitchï¿½á£¬ï¿½ï¿½ï¿½ï¿½×ªyawï¿½ï¿½
+  * @param[out]     yawï¿½ï¿½Ç¶È¿ï¿½ï¿½Æ£ï¿½Îªï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î» rad
+  * @param[out]     pitchï¿½ï¿½Ç¶È¿ï¿½ï¿½Æ£ï¿½Îªï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î» rad
+  * @param[in]      ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
+  * @retval         ï¿½ï¿½ï¿½Ø¿ï¿½
   */
 static void gimbal_init_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set);
 
@@ -212,11 +211,11 @@ static void gimbal_init_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal
   * @retval         none
   */
 /**
-  * @brief          ÔÆÌ¨Ð£×¼¿ØÖÆ£¬µç»úÊÇraw¿ØÖÆ£¬ÔÆÌ¨ÏÈÌ§Æðpitch£¬·ÅÏÂpitch£¬ÔÚÕý×ªyaw£¬×îºó·´×ªyaw£¬¼ÇÂ¼µ±Ê±µÄ½Ç¶ÈºÍ±àÂëÖµ
+  * @brief          ï¿½ï¿½Ì¨Ð£×¼ï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rawï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½Ì§ï¿½ï¿½pitchï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pitchï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªyawï¿½ï¿½ï¿½ï¿½ï¿½×ªyawï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Ê±ï¿½Ä½Ç¶ÈºÍ±ï¿½ï¿½ï¿½Öµ
   * @author         RM
-  * @param[out]     yaw:·¢ËÍyawµç»úµÄÔ­Ê¼Öµ£¬»áÖ±½ÓÍ¨¹ýcan ·¢ËÍµ½µç»ú
-  * @param[out]     pitch:·¢ËÍpitchµç»úµÄÔ­Ê¼Öµ£¬»áÖ±½ÓÍ¨¹ýcan ·¢ËÍµ½µç»ú
-  * @param[in]      gimbal_control_set:ÔÆÌ¨Êý¾ÝÖ¸Õë
+  * @param[out]     yaw:ï¿½ï¿½ï¿½ï¿½yawï¿½ï¿½ï¿½ï¿½ï¿½Ô­Ê¼Öµï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½Í¨ï¿½ï¿½can ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½
+  * @param[out]     pitch:ï¿½ï¿½ï¿½ï¿½pitchï¿½ï¿½ï¿½ï¿½ï¿½Ô­Ê¼Öµï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½Í¨ï¿½ï¿½can ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½
+  * @param[in]      gimbal_control_set:ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
   * @retval         none
   */
 static void gimbal_cali_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set);
@@ -230,10 +229,10 @@ static void gimbal_cali_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal
   * @retval         none
   */
 /**
-  * @brief          ÔÆÌ¨ÍÓÂÝÒÇ¿ØÖÆ£¬µç»úÊÇÍÓÂÝÒÇ½Ç¶È¿ØÖÆ£¬
-  * @param[out]     yaw: yawÖá½Ç¶È¿ØÖÆ£¬Îª½Ç¶ÈµÄÔöÁ¿ µ¥Î» rad
-  * @param[out]     pitch:pitchÖá½Ç¶È¿ØÖÆ£¬Îª½Ç¶ÈµÄÔöÁ¿ µ¥Î» rad
-  * @param[in]      gimbal_control_set:ÔÆÌ¨Êý¾ÝÖ¸Õë
+  * @brief          ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç½Ç¶È¿ï¿½ï¿½Æ£ï¿½
+  * @param[out]     yaw: yawï¿½ï¿½Ç¶È¿ï¿½ï¿½Æ£ï¿½Îªï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î» rad
+  * @param[out]     pitch:pitchï¿½ï¿½Ç¶È¿ï¿½ï¿½Æ£ï¿½Îªï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î» rad
+  * @param[in]      gimbal_control_set:ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
   * @retval         none
   */
 static void gimbal_absolute_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set);
@@ -247,10 +246,10 @@ static void gimbal_absolute_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control
   * @retval         none
   */
 /**
-  * @brief          ÔÆÌ¨±àÂëÖµ¿ØÖÆ£¬µç»úÊÇÏà¶Ô½Ç¶È¿ØÖÆ£¬
-  * @param[in]      yaw: yawÖá½Ç¶È¿ØÖÆ£¬Îª½Ç¶ÈµÄÔöÁ¿ µ¥Î» rad
-  * @param[in]      pitch: pitchÖá½Ç¶È¿ØÖÆ£¬Îª½Ç¶ÈµÄÔöÁ¿ µ¥Î» rad
-  * @param[in]      gimbal_control_set: ÔÆÌ¨Êý¾ÝÖ¸Õë
+  * @brief          ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô½Ç¶È¿ï¿½ï¿½Æ£ï¿½
+  * @param[in]      yaw: yawï¿½ï¿½Ç¶È¿ï¿½ï¿½Æ£ï¿½Îªï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î» rad
+  * @param[in]      pitch: pitchï¿½ï¿½Ç¶È¿ï¿½ï¿½Æ£ï¿½Îªï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î» rad
+  * @param[in]      gimbal_control_set: ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
   * @retval         none
   */
 static void gimbal_relative_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set);
@@ -264,16 +263,16 @@ static void gimbal_relative_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control
   * @retval         none
   */
 /**
-  * @brief          ÔÆÌ¨½øÈëÒ£¿ØÆ÷ÎÞÊäÈë¿ØÖÆ£¬µç»úÊÇÏà¶Ô½Ç¶È¿ØÖÆ£¬
+  * @brief          ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô½Ç¶È¿ï¿½ï¿½Æ£ï¿½
   * @author         RM
-  * @param[in]      yaw: yawÖá½Ç¶È¿ØÖÆ£¬Îª½Ç¶ÈµÄÔöÁ¿ µ¥Î» rad
-  * @param[in]      pitch: pitchÖá½Ç¶È¿ØÖÆ£¬Îª½Ç¶ÈµÄÔöÁ¿ µ¥Î» rad
-  * @param[in]      gimbal_control_set:ÔÆÌ¨Êý¾ÝÖ¸Õë
+  * @param[in]      yaw: yawï¿½ï¿½Ç¶È¿ï¿½ï¿½Æ£ï¿½Îªï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î» rad
+  * @param[in]      pitch: pitchï¿½ï¿½Ç¶È¿ï¿½ï¿½Æ£ï¿½Îªï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î» rad
+  * @param[in]      gimbal_control_set:ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
   * @retval         none
   */
 static void gimbal_motionless_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set);
 
-//ÔÆÌ¨ÐÐÎª×´Ì¬»ú
+//ï¿½ï¿½Ì¨ï¿½ï¿½Îª×´Ì¬ï¿½ï¿½
 static gimbal_behaviour_e gimbal_behaviour = GIMBAL_ZERO_FORCE;
 
 /**
@@ -283,8 +282,8 @@ static gimbal_behaviour_e gimbal_behaviour = GIMBAL_ZERO_FORCE;
   * @retval         none
   */
 /**
-  * @brief          ±»gimbal_set_modeº¯Êýµ÷ÓÃÔÚgimbal_task.c,ÔÆÌ¨ÐÐÎª×´Ì¬»úÒÔ¼°µç»ú×´Ì¬»úÉèÖÃ
-  * @param[out]     gimbal_mode_set: ÔÆÌ¨Êý¾ÝÖ¸Õë
+  * @brief          ï¿½ï¿½gimbal_set_modeï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gimbal_task.c,ï¿½ï¿½Ì¨ï¿½ï¿½Îª×´Ì¬ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  * @param[out]     gimbal_mode_set: ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
   * @retval         none
   */
 
@@ -295,11 +294,11 @@ void gimbal_behaviour_mode_set(gimbal_control_t *gimbal_mode_set)
         return;
     }
     //set gimbal_behaviour variable
-    //ÔÆÌ¨ÐÐÎª×´Ì¬»úÉèÖÃ
+    //ï¿½ï¿½Ì¨ï¿½ï¿½Îª×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     gimbal_behavour_set(gimbal_mode_set);
 
     //accoring to gimbal_behaviour, set motor control mode
-    //¸ù¾ÝÔÆÌ¨ÐÐÎª×´Ì¬»úÉèÖÃµç»ú×´Ì¬»ú
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½Îª×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½×´Ì¬ï¿½ï¿½
     if (gimbal_behaviour == GIMBAL_ZERO_FORCE)
     {
         gimbal_mode_set->gimbal_yaw_motor.gimbal_motor_mode = GIMBAL_MOTOR_RAW;
@@ -330,6 +329,16 @@ void gimbal_behaviour_mode_set(gimbal_control_t *gimbal_mode_set)
         gimbal_mode_set->gimbal_yaw_motor.gimbal_motor_mode = GIMBAL_MOTOR_ENCONDE;
         gimbal_mode_set->gimbal_pitch_motor.gimbal_motor_mode = GIMBAL_MOTOR_ENCONDE;
     }
+    else if (gimbal_behaviour == GIMBAL_VISION_PID)
+    {
+        gimbal_mode_set->gimbal_pitch_motor.gimbal_motor_mode = GIMBAL_MOTOR_VISION_PID;
+        gimbal_mode_set->gimbal_yaw_motor.gimbal_motor_mode = GIMBAL_MOTOR_VISION_PID;
+    }
+//		    if(gimbal_mode_set->gimbal_rc_ctrl->mouse.press_r){
+//        gimbal_mode_set->vision_mode = 1;
+//    }else{
+//        gimbal_mode_set->vision_mode = 0;
+//    }
 }
 
 /**
@@ -341,10 +350,10 @@ void gimbal_behaviour_mode_set(gimbal_control_t *gimbal_mode_set)
   * @retval         none
   */
 /**
-  * @brief          ÔÆÌ¨ÐÐÎª¿ØÖÆ£¬¸ù¾Ý²»Í¬ÐÐÎª²ÉÓÃ²»Í¬¿ØÖÆº¯Êý
-  * @param[out]     add_yaw:ÉèÖÃµÄyaw½Ç¶ÈÔö¼ÓÖµ£¬µ¥Î» rad
-  * @param[out]     add_pitch:ÉèÖÃµÄpitch½Ç¶ÈÔö¼ÓÖµ£¬µ¥Î» rad
-  * @param[in]      gimbal_mode_set:ÔÆÌ¨Êý¾ÝÖ¸Õë
+  * @brief          ï¿½ï¿½Ì¨ï¿½ï¿½Îªï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½Ý²ï¿½Í¬ï¿½ï¿½Îªï¿½ï¿½ï¿½Ã²ï¿½Í¬ï¿½ï¿½ï¿½Æºï¿½ï¿½ï¿½
+  * @param[out]     add_yaw:ï¿½ï¿½ï¿½Ãµï¿½yawï¿½Ç¶ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½Î» rad
+  * @param[out]     add_pitch:ï¿½ï¿½ï¿½Ãµï¿½pitchï¿½Ç¶ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½Î» rad
+  * @param[in]      gimbal_mode_set:ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
   * @retval         none
   */
 void gimbal_behaviour_control_set(fp32 *add_yaw, fp32 *add_pitch, gimbal_control_t *gimbal_control_set)
@@ -354,7 +363,6 @@ void gimbal_behaviour_control_set(fp32 *add_yaw, fp32 *add_pitch, gimbal_control
     {
         return;
     }
-
 
     if (gimbal_behaviour == GIMBAL_ZERO_FORCE)
     {
@@ -380,7 +388,11 @@ void gimbal_behaviour_control_set(fp32 *add_yaw, fp32 *add_pitch, gimbal_control
     {
         gimbal_motionless_control(add_yaw, add_pitch, gimbal_control_set);
     }
-
+    else if (gimbal_behaviour == GIMBAL_VISION_PID)
+    {
+        *add_yaw = 0;
+        *add_pitch = 0;
+    }
 }
 
 /**
@@ -389,7 +401,7 @@ void gimbal_behaviour_control_set(fp32 *add_yaw, fp32 *add_pitch, gimbal_control
   * @retval         1: no move 0:normal
   */
 /**
-  * @brief          ÔÆÌ¨ÔÚÄ³Ð©ÐÐÎªÏÂ£¬ÐèÒªµ×ÅÌ²»¶¯
+  * @brief          ï¿½ï¿½Ì¨ï¿½ï¿½Ä³Ð©ï¿½ï¿½Îªï¿½Â£ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Ì²ï¿½ï¿½ï¿½
   * @param[in]      none
   * @retval         1: no move 0:normal
   */
@@ -412,7 +424,7 @@ bool_t gimbal_cmd_to_chassis_stop(void)
   * @retval         1: no move 0:normal
   */
 /**
-  * @brief          ÔÆÌ¨ÔÚÄ³Ð©ÐÐÎªÏÂ£¬ÐèÒªÉä»÷Í£Ö¹
+  * @brief          ï¿½ï¿½Ì¨ï¿½ï¿½Ä³Ð©ï¿½ï¿½Îªï¿½Â£ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Í£Ö¹
   * @param[in]      none
   * @retval         1: no move 0:normal
   */
@@ -429,15 +441,14 @@ bool_t gimbal_cmd_to_shoot_stop(void)
     }
 }
 
-
 /**
   * @brief          gimbal behave mode set.
   * @param[in]      gimbal_mode_set: gimbal data
   * @retval         none
   */
 /**
-  * @brief          ÔÆÌ¨ÐÐÎª×´Ì¬»úÉèÖÃ.
-  * @param[in]      gimbal_mode_set: ÔÆÌ¨Êý¾ÝÖ¸Õë
+  * @brief          ï¿½ï¿½Ì¨ï¿½ï¿½Îª×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+  * @param[in]      gimbal_mode_set: ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
   * @retval         none
   */
 static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set)
@@ -447,13 +458,13 @@ static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set)
         return;
     }
     //in cali mode, return
-    //Ð£×¼ÐÐÎª£¬return ²»»áÉèÖÃÆäËûµÄÄ£Ê½
-    if (gimbal_behaviour == GIMBAL_CALI && gimbal_mode_set->gimbal_cali.step != GIMBAL_CALI_END_STEP)
+    //Ð£×¼ï¿½ï¿½Îªï¿½ï¿½return ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
+    if (gimbal_behaviour == GIMBAL_CALI && gimbal_mode_set->gimbal_cali.step != 0)
     {
         return;
     }
     //if other operate make step change to start, means enter cali mode
-    //Èç¹ûÍâ²¿Ê¹µÃÐ£×¼²½Öè´Ó0 ±ä³É start£¬Ôò½øÈëÐ£×¼Ä£Ê½
+    //ï¿½ï¿½ï¿½ï¿½â²¿Ê¹ï¿½ï¿½Ð£×¼ï¿½ï¿½ï¿½ï¿½ï¿½0 ï¿½ï¿½ï¿½ startï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£×¼Ä£Ê½
     if (gimbal_mode_set->gimbal_cali.step == GIMBAL_CALI_START_STEP && !toe_is_error(DBUS_TOE))
     {
         gimbal_behaviour = GIMBAL_CALI;
@@ -461,17 +472,17 @@ static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set)
     }
 
     //init mode, judge if gimbal is in middle place
-    //³õÊ¼»¯Ä£Ê½ÅÐ¶ÏÊÇ·ñµ½´ïÖÐÖµÎ»ÖÃ
+    //ï¿½ï¿½Ê¼ï¿½ï¿½Ä£Ê½ï¿½Ð¶ï¿½ï¿½Ç·ñµ½´ï¿½ï¿½ï¿½ÖµÎ»ï¿½ï¿½
     if (gimbal_behaviour == GIMBAL_INIT)
     {
         static uint16_t init_time = 0;
         static uint16_t init_stop_time = 0;
         init_time++;
-        
+
         if ((fabs(gimbal_mode_set->gimbal_yaw_motor.relative_angle - INIT_YAW_SET) < GIMBAL_INIT_ANGLE_ERROR &&
              fabs(gimbal_mode_set->gimbal_pitch_motor.absolute_angle - INIT_PITCH_SET) < GIMBAL_INIT_ANGLE_ERROR))
         {
-            
+
             if (init_stop_time < GIMBAL_INIT_STOP_TIME)
             {
                 init_stop_time++;
@@ -479,14 +490,14 @@ static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set)
         }
         else
         {
-            
+
             if (init_time < GIMBAL_INIT_TIME)
             {
                 init_time++;
             }
         }
 
-        //³¬¹ý³õÊ¼»¯×î´óÊ±¼ä£¬»òÕßÒÑ¾­ÎÈ¶¨µ½ÖÐÖµÒ»¶ÎÊ±¼ä£¬ÍË³ö³õÊ¼»¯×´Ì¬¿ª¹Ø´òÏÂµµ£¬»òÕßµôÏß
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä£¬ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½È¶ï¿½ï¿½ï¿½ï¿½ï¿½ÖµÒ»ï¿½ï¿½Ê±ï¿½ä£¬ï¿½Ë³ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½Ø´ï¿½ï¿½Âµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½
         if (init_time < GIMBAL_INIT_TIME && init_stop_time < GIMBAL_INIT_STOP_TIME &&
             !switch_is_down(gimbal_mode_set->gimbal_rc_ctrl->rc.s[GIMBAL_MODE_CHANNEL]) && !toe_is_error(DBUS_TOE))
         {
@@ -499,27 +510,29 @@ static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set)
         }
     }
 
-    //¿ª¹Ø¿ØÖÆ ÔÆÌ¨×´Ì¬
+    //ï¿½ï¿½ï¿½Ø¿ï¿½ï¿½ï¿½ ï¿½ï¿½Ì¨×´Ì¬
     if (switch_is_down(gimbal_mode_set->gimbal_rc_ctrl->rc.s[GIMBAL_MODE_CHANNEL]))
     {
         gimbal_behaviour = GIMBAL_ZERO_FORCE;
     }
     else if (switch_is_mid(gimbal_mode_set->gimbal_rc_ctrl->rc.s[GIMBAL_MODE_CHANNEL]))
     {
-        gimbal_behaviour = GIMBAL_RELATIVE_ANGLE;
+        gimbal_behaviour = GIMBAL_ABSOLUTE_ANGLE;
+				gimbal_mode_set->vision_mode=0;
     }
     else if (switch_is_up(gimbal_mode_set->gimbal_rc_ctrl->rc.s[GIMBAL_MODE_CHANNEL]))
     {
+				gimbal_mode_set->vision_mode=1;
         gimbal_behaviour = GIMBAL_ABSOLUTE_ANGLE;
     }
 
-    if( toe_is_error(DBUS_TOE))
+    if (toe_is_error(DBUS_TOE))
     {
         gimbal_behaviour = GIMBAL_ZERO_FORCE;
     }
 
     //enter init mode
-    //ÅÐ¶Ï½øÈëinit×´Ì¬»ú
+    //ï¿½Ð¶Ï½ï¿½ï¿½ï¿½init×´Ì¬ï¿½ï¿½
     {
         static gimbal_behaviour_e last_gimbal_behaviour = GIMBAL_ZERO_FORCE;
         if (last_gimbal_behaviour == GIMBAL_ZERO_FORCE && gimbal_behaviour != GIMBAL_ZERO_FORCE)
@@ -528,9 +541,6 @@ static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set)
         }
         last_gimbal_behaviour = gimbal_behaviour;
     }
-
-
-
 }
 
 /**
@@ -543,11 +553,11 @@ static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set)
   * @retval         none
   */
 /**
-  * @brief          µ±ÔÆÌ¨ÐÐÎªÄ£Ê½ÊÇGIMBAL_ZERO_FORCE, Õâ¸öº¯Êý»á±»µ÷ÓÃ,ÔÆÌ¨¿ØÖÆÄ£Ê½ÊÇrawÄ£Ê½.Ô­Ê¼Ä£Ê½ÒâÎ¶×Å
-  *                 Éè¶¨Öµ»áÖ±½Ó·¢ËÍµ½CAN×ÜÏßÉÏ,Õâ¸öº¯Êý½«»áÉèÖÃËùÓÐÎª0.
-  * @param[in]      yaw:·¢ËÍyawµç»úµÄÔ­Ê¼Öµ£¬»áÖ±½ÓÍ¨¹ýcan ·¢ËÍµ½µç»ú
-  * @param[in]      pitch:·¢ËÍpitchµç»úµÄÔ­Ê¼Öµ£¬»áÖ±½ÓÍ¨¹ýcan ·¢ËÍµ½µç»ú
-  * @param[in]      gimbal_control_set: ÔÆÌ¨Êý¾ÝÖ¸Õë
+  * @brief          ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ÎªÄ£Ê½ï¿½ï¿½GIMBAL_ZERO_FORCE, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á±»ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½rawÄ£Ê½.Ô­Ê¼Ä£Ê½ï¿½ï¿½Î¶ï¿½ï¿½
+  *                 ï¿½è¶¨Öµï¿½ï¿½Ö±ï¿½Ó·ï¿½ï¿½Íµï¿½CANï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª0.
+  * @param[in]      yaw:ï¿½ï¿½ï¿½ï¿½yawï¿½ï¿½ï¿½ï¿½ï¿½Ô­Ê¼Öµï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½Í¨ï¿½ï¿½can ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½
+  * @param[in]      pitch:ï¿½ï¿½ï¿½ï¿½pitchï¿½ï¿½ï¿½ï¿½ï¿½Ô­Ê¼Öµï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½Í¨ï¿½ï¿½can ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½
+  * @param[in]      gimbal_control_set: ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
   * @retval         none
   */
 static void gimbal_zero_force_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set)
@@ -570,12 +580,12 @@ static void gimbal_zero_force_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *
   * @retval         none
   */
 /**
-  * @brief          ÔÆÌ¨³õÊ¼»¯¿ØÖÆ£¬µç»úÊÇÍÓÂÝÒÇ½Ç¶È¿ØÖÆ£¬ÔÆÌ¨ÏÈÌ§ÆðpitchÖá£¬ºóÐý×ªyawÖá
+  * @brief          ï¿½ï¿½Ì¨ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç½Ç¶È¿ï¿½ï¿½Æ£ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½Ì§ï¿½ï¿½pitchï¿½á£¬ï¿½ï¿½ï¿½ï¿½×ªyawï¿½ï¿½
   * @author         RM
-  * @param[out]     yawÖá½Ç¶È¿ØÖÆ£¬Îª½Ç¶ÈµÄÔöÁ¿ µ¥Î» rad
-  * @param[out]     pitchÖá½Ç¶È¿ØÖÆ£¬Îª½Ç¶ÈµÄÔöÁ¿ µ¥Î» rad
-  * @param[in]      ÔÆÌ¨Êý¾ÝÖ¸Õë
-  * @retval         ·µ»Ø¿Õ
+  * @param[out]     yawï¿½ï¿½Ç¶È¿ï¿½ï¿½Æ£ï¿½Îªï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î» rad
+  * @param[out]     pitchï¿½ï¿½Ç¶È¿ï¿½ï¿½Æ£ï¿½Îªï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î» rad
+  * @param[in]      ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
+  * @retval         ï¿½ï¿½ï¿½Ø¿ï¿½
   */
 static void gimbal_init_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set)
 {
@@ -584,7 +594,7 @@ static void gimbal_init_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal
         return;
     }
 
-    //³õÊ¼»¯×´Ì¬¿ØÖÆÁ¿¼ÆËã
+    //ï¿½ï¿½Ê¼ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     if (fabs(INIT_PITCH_SET - gimbal_control_set->gimbal_pitch_motor.absolute_angle) > GIMBAL_INIT_ANGLE_ERROR)
     {
         *pitch = (INIT_PITCH_SET - gimbal_control_set->gimbal_pitch_motor.absolute_angle) * GIMBAL_INIT_PITCH_SPEED;
@@ -608,11 +618,11 @@ static void gimbal_init_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal
   * @retval         none
   */
 /**
-  * @brief          ÔÆÌ¨Ð£×¼¿ØÖÆ£¬µç»úÊÇraw¿ØÖÆ£¬ÔÆÌ¨ÏÈÌ§Æðpitch£¬·ÅÏÂpitch£¬ÔÚÕý×ªyaw£¬×îºó·´×ªyaw£¬¼ÇÂ¼µ±Ê±µÄ½Ç¶ÈºÍ±àÂëÖµ
+  * @brief          ï¿½ï¿½Ì¨Ð£×¼ï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rawï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½Ì§ï¿½ï¿½pitchï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pitchï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªyawï¿½ï¿½ï¿½ï¿½ï¿½×ªyawï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Ê±ï¿½Ä½Ç¶ÈºÍ±ï¿½ï¿½ï¿½Öµ
   * @author         RM
-  * @param[out]     yaw:·¢ËÍyawµç»úµÄÔ­Ê¼Öµ£¬»áÖ±½ÓÍ¨¹ýcan ·¢ËÍµ½µç»ú
-  * @param[out]     pitch:·¢ËÍpitchµç»úµÄÔ­Ê¼Öµ£¬»áÖ±½ÓÍ¨¹ýcan ·¢ËÍµ½µç»ú
-  * @param[in]      gimbal_control_set:ÔÆÌ¨Êý¾ÝÖ¸Õë
+  * @param[out]     yaw:ï¿½ï¿½ï¿½ï¿½yawï¿½ï¿½ï¿½ï¿½ï¿½Ô­Ê¼Öµï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½Í¨ï¿½ï¿½can ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½
+  * @param[out]     pitch:ï¿½ï¿½ï¿½ï¿½pitchï¿½ï¿½ï¿½ï¿½ï¿½Ô­Ê¼Öµï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½Í¨ï¿½ï¿½can ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½
+  * @param[in]      gimbal_control_set:ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
   * @retval         none
   */
 static void gimbal_cali_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set)
@@ -629,7 +639,7 @@ static void gimbal_cali_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal
         *pitch = GIMBAL_CALI_MOTOR_SET;
         *yaw = 0;
 
-        //ÅÐ¶ÏÍÓÂÝÒÇÊý¾Ý£¬ ²¢¼ÇÂ¼×î´ó×îÐ¡½Ç¶ÈÊý¾Ý
+        //ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½Ç¶ï¿½ï¿½ï¿½ï¿½ï¿½
         gimbal_cali_gyro_judge(gimbal_control_set->gimbal_pitch_motor.motor_gyro, cali_time, gimbal_control_set->gimbal_cali.max_pitch,
                                gimbal_control_set->gimbal_pitch_motor.absolute_angle, gimbal_control_set->gimbal_cali.max_pitch_ecd,
                                gimbal_control_set->gimbal_pitch_motor.gimbal_motor_measure->ecd, gimbal_control_set->gimbal_cali.step);
@@ -646,7 +656,7 @@ static void gimbal_cali_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal
     else if (gimbal_control_set->gimbal_cali.step == GIMBAL_CALI_YAW_MAX_STEP)
     {
         *pitch = 0;
-        *yaw = GIMBAL_CALI_MOTOR_SET;
+        *yaw = 0;
 
         gimbal_cali_gyro_judge(gimbal_control_set->gimbal_yaw_motor.motor_gyro, cali_time, gimbal_control_set->gimbal_cali.max_yaw,
                                gimbal_control_set->gimbal_yaw_motor.absolute_angle, gimbal_control_set->gimbal_cali.max_yaw_ecd,
@@ -656,7 +666,7 @@ static void gimbal_cali_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal
     else if (gimbal_control_set->gimbal_cali.step == GIMBAL_CALI_YAW_MIN_STEP)
     {
         *pitch = 0;
-        *yaw = -GIMBAL_CALI_MOTOR_SET;
+        *yaw = -0;
 
         gimbal_cali_gyro_judge(gimbal_control_set->gimbal_yaw_motor.motor_gyro, cali_time, gimbal_control_set->gimbal_cali.min_yaw,
                                gimbal_control_set->gimbal_yaw_motor.absolute_angle, gimbal_control_set->gimbal_cali.min_yaw_ecd,
@@ -668,7 +678,6 @@ static void gimbal_cali_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal
     }
 }
 
-
 /**
   * @brief          when gimbal behaviour mode is GIMBAL_ABSOLUTE_ANGLE, the function is called
   *                 and gimbal control mode is gyro mode. 
@@ -678,10 +687,10 @@ static void gimbal_cali_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal
   * @retval         none
   */
 /**
-  * @brief          ÔÆÌ¨ÍÓÂÝÒÇ¿ØÖÆ£¬µç»úÊÇÍÓÂÝÒÇ½Ç¶È¿ØÖÆ£¬
-  * @param[out]     yaw: yawÖá½Ç¶È¿ØÖÆ£¬Îª½Ç¶ÈµÄÔöÁ¿ µ¥Î» rad
-  * @param[out]     pitch:pitchÖá½Ç¶È¿ØÖÆ£¬Îª½Ç¶ÈµÄÔöÁ¿ µ¥Î» rad
-  * @param[in]      gimbal_control_set:ÔÆÌ¨Êý¾ÝÖ¸Õë
+  * @brief          ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç½Ç¶È¿ï¿½ï¿½Æ£ï¿½
+  * @param[out]     yaw: yawï¿½ï¿½Ç¶È¿ï¿½ï¿½Æ£ï¿½Îªï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î» rad
+  * @param[out]     pitch:pitchï¿½ï¿½Ç¶È¿ï¿½ï¿½Æ£ï¿½Îªï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î» rad
+  * @param[in]      gimbal_control_set:ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
   * @retval         none
   */
 static void gimbal_absolute_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set)
@@ -699,7 +708,6 @@ static void gimbal_absolute_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control
     *yaw = yaw_channel * YAW_RC_SEN - gimbal_control_set->gimbal_rc_ctrl->mouse.x * YAW_MOUSE_SEN;
     *pitch = pitch_channel * PITCH_RC_SEN + gimbal_control_set->gimbal_rc_ctrl->mouse.y * PITCH_MOUSE_SEN;
 
-
     {
         static uint16_t last_turn_keyboard = 0;
         static uint8_t gimbal_turn_flag = 0;
@@ -710,15 +718,15 @@ static void gimbal_absolute_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control
             if (gimbal_turn_flag == 0)
             {
                 gimbal_turn_flag = 1;
-                //±£´æµôÍ·µÄÄ¿±êÖµ
+                //ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½Ä¿ï¿½ï¿½Öµ
                 gimbal_end_angle = rad_format(gimbal_control_set->gimbal_yaw_motor.absolute_angle + PI);
             }
         }
-        last_turn_keyboard = gimbal_control_set->gimbal_rc_ctrl->key.v ;
+        last_turn_keyboard = gimbal_control_set->gimbal_rc_ctrl->key.v;
 
         if (gimbal_turn_flag)
         {
-            //²»¶Ï¿ØÖÆµ½µôÍ·µÄÄ¿±êÖµ£¬Õý×ª£¬·´×°ÊÇËæ»ú
+            //ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½Æµï¿½ï¿½ï¿½Í·ï¿½ï¿½Ä¿ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½×°ï¿½ï¿½ï¿½ï¿½ï¿½
             if (rad_format(gimbal_end_angle - gimbal_control_set->gimbal_yaw_motor.absolute_angle) > 0.0f)
             {
                 *yaw += TURN_SPEED;
@@ -728,14 +736,13 @@ static void gimbal_absolute_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control
                 *yaw -= TURN_SPEED;
             }
         }
-        //µ½´ïpi £¨180¡ã£©ºóÍ£Ö¹
+        //ï¿½ï¿½ï¿½ï¿½pi ï¿½ï¿½180ï¿½ã£©ï¿½ï¿½Í£Ö¹
         if (gimbal_turn_flag && fabs(rad_format(gimbal_end_angle - gimbal_control_set->gimbal_yaw_motor.absolute_angle)) < 0.01f)
         {
             gimbal_turn_flag = 0;
         }
     }
 }
-
 
 /**
   * @brief          when gimbal behaviour mode is GIMBAL_RELATIVE_ANGLE, the function is called
@@ -746,10 +753,10 @@ static void gimbal_absolute_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control
   * @retval         none
   */
 /**
-  * @brief          ÔÆÌ¨±àÂëÖµ¿ØÖÆ£¬µç»úÊÇÏà¶Ô½Ç¶È¿ØÖÆ£¬
-  * @param[in]      yaw: yawÖá½Ç¶È¿ØÖÆ£¬Îª½Ç¶ÈµÄÔöÁ¿ µ¥Î» rad
-  * @param[in]      pitch: pitchÖá½Ç¶È¿ØÖÆ£¬Îª½Ç¶ÈµÄÔöÁ¿ µ¥Î» rad
-  * @param[in]      gimbal_control_set: ÔÆÌ¨Êý¾ÝÖ¸Õë
+  * @brief          ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô½Ç¶È¿ï¿½ï¿½Æ£ï¿½
+  * @param[in]      yaw: yawï¿½ï¿½Ç¶È¿ï¿½ï¿½Æ£ï¿½Îªï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î» rad
+  * @param[in]      pitch: pitchï¿½ï¿½Ç¶È¿ï¿½ï¿½Æ£ï¿½Îªï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î» rad
+  * @param[in]      gimbal_control_set: ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
   * @retval         none
   */
 static void gimbal_relative_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set)
@@ -765,8 +772,6 @@ static void gimbal_relative_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control
 
     *yaw = yaw_channel * YAW_RC_SEN - gimbal_control_set->gimbal_rc_ctrl->mouse.x * YAW_MOUSE_SEN;
     *pitch = pitch_channel * PITCH_RC_SEN + gimbal_control_set->gimbal_rc_ctrl->mouse.y * PITCH_MOUSE_SEN;
-
-
 }
 
 /**
@@ -778,11 +783,11 @@ static void gimbal_relative_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control
   * @retval         none
   */
 /**
-  * @brief          ÔÆÌ¨½øÈëÒ£¿ØÆ÷ÎÞÊäÈë¿ØÖÆ£¬µç»úÊÇÏà¶Ô½Ç¶È¿ØÖÆ£¬
+  * @brief          ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô½Ç¶È¿ï¿½ï¿½Æ£ï¿½
   * @author         RM
-  * @param[in]      yaw: yawÖá½Ç¶È¿ØÖÆ£¬Îª½Ç¶ÈµÄÔöÁ¿ µ¥Î» rad
-  * @param[in]      pitch: pitchÖá½Ç¶È¿ØÖÆ£¬Îª½Ç¶ÈµÄÔöÁ¿ µ¥Î» rad
-  * @param[in]      gimbal_control_set:ÔÆÌ¨Êý¾ÝÖ¸Õë
+  * @param[in]      yaw: yawï¿½ï¿½Ç¶È¿ï¿½ï¿½Æ£ï¿½Îªï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î» rad
+  * @param[in]      pitch: pitchï¿½ï¿½Ç¶È¿ï¿½ï¿½Æ£ï¿½Îªï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î» rad
+  * @param[in]      gimbal_control_set:ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
   * @retval         none
   */
 static void gimbal_motionless_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set)

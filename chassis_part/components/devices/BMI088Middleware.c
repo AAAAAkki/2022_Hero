@@ -40,7 +40,7 @@ void BMI088_ACCEL_NS_H(void)
 
 void BMI088_GYRO_NS_L(void)
 {
-    HAL_GPIO_WritePin(CS1_GYRO_GPIO_Port, CS1_GYRO_Pin, GPIO_PIN_RESET);//B0
+    HAL_GPIO_WritePin(CS1_GYRO_GPIO_Port, CS1_GYRO_Pin, GPIO_PIN_RESET);
 }
 void BMI088_GYRO_NS_H(void)
 {

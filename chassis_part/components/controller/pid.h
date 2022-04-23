@@ -23,6 +23,20 @@ enum PID_MODE
     PID_DELTA
 };
 
+
+typedef struct
+{
+    fp32 Q_coefficient;
+    fp32 last_state;
+    fp32 last_input;
+    fp32 last_input_hat;
+    fp32 d_hat;
+    fp32 (*Nominal_Input_Cal)(fp32 current_state, fp32 last_state);
+}NominalDOB;
+
+extern void NominalDOB_Init(NominalDOB* instance, fp32 Q_coefficient, fp32 (*Input_Fcn)(fp32,fp32));
+extern fp32 NominalDOB_Update(NominalDOB* instance, fp32 current_state, fp32 current_input);
+
 typedef struct
 {
     uint8_t mode;
@@ -33,7 +47,8 @@ typedef struct
 
     fp32 max_out;  //最大输出
     fp32 max_iout; //最大积分输出
-
+		fp32 derivative_output_filter_coefficient;
+    fp32 proportion_output_filter_coefficient;
     fp32 set;
     fp32 fdb;
 

@@ -59,10 +59,9 @@ void init_referee_struct_data(void)
 
 
     memset(&student_interactive_data_t, 0, sizeof(ext_student_interactive_data_t));
-
-
-
 }
+
+
 
 void referee_data_solve(uint8_t *frame)
 {
@@ -94,8 +93,6 @@ void referee_data_solve(uint8_t *frame)
             memcpy(&game_robot_HP_t, frame + index, sizeof(ext_game_robot_HP_t));
         }
         break;
-
-
         case FIELD_EVENTS_CMD_ID:
         {
             memcpy(&field_event, frame + index, sizeof(field_event));
@@ -120,13 +117,11 @@ void referee_data_solve(uint8_t *frame)
         case ROBOT_STATE_CMD_ID:
         {
             memcpy(&robot_state, frame + index, sizeof(robot_state));
-						CAN_state_data_send(robot_state.shooter_heat0_cooling_limit);
         }
         break;
         case POWER_HEAT_DATA_CMD_ID:
         {
             memcpy(&power_heat_data_t, frame + index, sizeof(power_heat_data_t));
-						CAN_heat_data_send(power_heat_data_t.shooter_heat0,power_heat_data_t.shooter_heat1);
         }
         break;
         case ROBOT_POS_CMD_ID:
@@ -152,7 +147,6 @@ void referee_data_solve(uint8_t *frame)
         case SHOOT_DATA_CMD_ID:
         {
             memcpy(&shoot_data_t, frame + index, sizeof(shoot_data_t));
-						CAN_shoot_data_send(shoot_data_t.bullet_type, shoot_data_t.bullet_freq, shoot_data_t.bullet_speed);
         }
         break;
         case BULLET_REMAINING_CMD_ID:
@@ -179,21 +173,63 @@ void get_chassis_power_and_buffer(fp32 *power, fp32 *buffer)
 
 }
 
+void get_chassis_max_power(uint16_t *max_power)
+{
+    *max_power = robot_state.chassis_power_limit;
+}
 
 uint8_t get_robot_id(void)
 {
     return robot_state.robot_id;
 }
 
-void get_shoot_heat0_limit_and_heat0(uint16_t *heat0_limit, uint16_t *heat0)
+void get_shoot_heat1_limit_and_heat0(uint16_t *heat0_limit, uint16_t *heat0)
 {
-    *heat0_limit = robot_state.shooter_heat0_cooling_limit;
-    *heat0 = power_heat_data_t.shooter_heat0;
+    *heat0_limit = robot_state.shooter_id1_17mm_cooling_limit;
+    *heat0 = power_heat_data_t.shooter_id1_17mm_cooling_heat;
 }
 
-void get_shoot_heat1_limit_and_heat1(uint16_t *heat1_limit, uint16_t *heat1)
+void get_shoot_heat2_limit_and_heat1(uint16_t *heat1_limit, uint16_t *heat1)
 {
-    *heat1_limit = robot_state.shooter_heat1_cooling_limit;
-    *heat1 = power_heat_data_t.shooter_heat1;
+    *heat1_limit = robot_state.shooter_id2_17mm_cooling_limit;
+    *heat1 = power_heat_data_t.shooter_id2_17mm_cooling_heat;
+}
+ext_robot_hurt_t *get_hurt_point(void)
+{
+    return &robot_hurt_t;
+}
+ext_game_robot_state_t *get_robot_status_point(void)
+{
+    return &robot_state;
 }
 
+fp32 get_bullet_speed(void)
+{
+	if(robot_state.shooter_id1_17mm_speed_limit ==15)
+{
+return 13.8f;
+}
+if(robot_state.shooter_id1_17mm_speed_limit == 18)
+{
+return 16.0f;
+}
+if(robot_state.shooter_id1_17mm_speed_limit == 30)
+{
+return 26.0f;
+}else return 13.8;
+}
+
+/*Additional Function*/
+void down_to_up_communication( ext_game_robot_state_t*bullet){
+uint8_t temp[2];
+temp[0]= bullet->shooter_id1_17mm_speed_limit;
+temp[1]= bullet->shooter_id1_42mm_speed_limit;
+CAN_gimbal_transfer(temp);
+}
+
+void down_to_top_communication(ext_game_robot_state_t*heat){
+uint8_t temp[4];
+temp[2]=heat->shooter_id1_17mm_cooling_limit;
+temp[3]=heat->shooter_id1_42mm_cooling_limit;
+CAN_gimbal_transfer(temp);		
+}

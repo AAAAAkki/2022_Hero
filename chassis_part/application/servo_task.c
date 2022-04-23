@@ -21,21 +21,30 @@
 #include "bsp_servo_pwm.h"
 #include "remote_control.h"
 
-#define SERVO_MIN_PWM   500
-#define SERVO_MAX_PWM   2500
+#define SERVO_MIN_PWM 500
+#define SERVO_MAX_PWM 2500
+
+#define SERVO_INFAN3_OPEN 2150
+#define SERVO_INFAN3_CLOSE 1150
+#define SERVO_INFAN4_OPEN 2150
+#define SERVO_INFAN4_CLOSE 1150
+
+#ifdef INFAN3
+int SERVO_OPEN = SERVO_INFAN3_OPEN;
+int SERVO_CLOSE = SERVO_INFAN3_CLOSE;
+#elif INFAN4
+#define SERVO_OPEN SERVO_INFAN4_OPEN
+#define SERVO_CLOSE SERVO_INFAN4_CLOSE
+#else
+#error please define INFAN NO for servo
+#endif
+  
 
 #define PWM_DETAL_VALUE 10
 
-#define SERVO1_ADD_PWM_KEY  KEY_PRESSED_OFFSET_Z
-#define SERVO2_ADD_PWM_KEY  KEY_PRESSED_OFFSET_X
-#define SERVO3_ADD_PWM_KEY  KEY_PRESSED_OFFSET_C
-#define SERVO4_ADD_PWM_KEY  KEY_PRESSED_OFFSET_V
-
-#define SERVO_MINUS_PWM_KEY KEY_PRESSED_OFFSET_SHIFT
-
 const RC_ctrl_t *servo_rc;
-const static uint16_t servo_key[4] = {SERVO1_ADD_PWM_KEY, SERVO2_ADD_PWM_KEY, SERVO3_ADD_PWM_KEY, SERVO4_ADD_PWM_KEY};
-uint16_t servo_pwm[4] = {SERVO_MIN_PWM, SERVO_MIN_PWM, SERVO_MIN_PWM, SERVO_MIN_PWM};
+volatile uint16_t pwm_set;
+uint8_t open_flag = 0;
 /**
   * @brief          servo_task
   * @param[in]      pvParameters: NULL
@@ -46,39 +55,48 @@ uint16_t servo_pwm[4] = {SERVO_MIN_PWM, SERVO_MIN_PWM, SERVO_MIN_PWM, SERVO_MIN_
   * @param[in]      pvParameters: NULL
   * @retval         none
   */
-void servo_task(void const * argument)
+void servo_task(void const *argument)
 {
     servo_rc = get_remote_control_point();
 
-    while(1)
+    uint16_t time = 0;
+    pwm_set = SERVO_CLOSE;
+    while (1)
     {
-        for(uint8_t i = 0; i < 4; i++)
+        if (time)
         {
-
-            if( (servo_rc->key.v & SERVO_MINUS_PWM_KEY) && (servo_rc->key.v & servo_key[i]))
-            {
-                servo_pwm[i] -= PWM_DETAL_VALUE;
-            }
-            else if(servo_rc->key.v & servo_key[i])
-            {
-                servo_pwm[i] += PWM_DETAL_VALUE;
-            }
-
-            //limit the pwm
-           //ÏÞÖÆpwm
-            if(servo_pwm[i] < SERVO_MIN_PWM)
-            {
-                servo_pwm[i] = SERVO_MIN_PWM;
-            }
-            else if(servo_pwm[i] > SERVO_MAX_PWM)
-            {
-                servo_pwm[i] = SERVO_MAX_PWM;
-            }
-
-            servo_pwm_set(servo_pwm[i], i);
+            time--;
         }
-        osDelay(10);
-    }
+        if (!time)
+        {
+//            if ( servo_rc->rc.ch[4] > 100 &&servo_rc->rc.ch[4] <=660)
+//            {
+//                time = 100;
+//                open_flag = 1;
+//                pwm_set = SERVO_OPEN;
+//            }
+//            else if ( servo_rc->rc.ch[4] < -100&&servo_rc->rc.ch[4] >=-660)
+//            {
+//                time = 100;
+//                open_flag = 0;
+//                pwm_set = SERVO_CLOSE;
+//            }
+//						
+					if(servo_rc->key.v & KEY_PRESSED_OFFSET_V )
+					{
+								time = 100;
+                open_flag = 0;
+                pwm_set = SERVO_OPEN;	
+							
+					}			
+					else if(servo_rc->key.v & KEY_PRESSED_OFFSET_B )
+					{						 
+								time = 100;
+                open_flag = 1;
+                pwm_set = SERVO_CLOSE;	
+          }
+     }
+		servo_pwm_set(pwm_set);
+		osDelay(10);
+	}
 }
-
-

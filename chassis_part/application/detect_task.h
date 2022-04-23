@@ -74,7 +74,10 @@ enum errorList
     BOARD_MAG_TOE,
     REFEREE_TOE,
     RM_IMU_TOE,
-    OLED_TOE,
+    FRIC_RIGHT_MOTOR_TOE,
+    FRIC_LEFT_MOTOR_TOE,
+    VISION,
+		CAP_TOE,
     ERROR_LIST_LENGHT,
 };
 

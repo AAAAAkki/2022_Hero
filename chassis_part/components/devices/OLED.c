@@ -6,7 +6,7 @@
 #include "string.h"
 
 //#define OLED_ONE_COLOR
-#define OLED_TWO_COLOR
+#define OLED_ONE_COLOR
 
 
 OLED_GRAM_strutct_t oled_gram;

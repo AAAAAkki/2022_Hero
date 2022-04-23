@@ -41,8 +41,8 @@
 #define IMU_temp_PWM(pwm)  imu_pwm_set(pwm)                    //pwm给定
 
 #define BMI088_BOARD_INSTALL_SPIN_MATRIX    \
-    {0.0f, 1.0f, 0.0f},                     \
-    {-1.0f, 0.0f, 0.0f},                     \
+    {0.0f, -1.0f, 0.0f},                     \
+    {1.0f, 0.0f, 0.0f},                     \
     {0.0f, 0.0f, 1.0f}                      \
 
 
@@ -152,10 +152,10 @@ static const fp32 fliter_num[3] = {1.929454039488895f, -0.93178349823448126f, 0.
 
 
 
-static fp32 INS_gyro[3] = {0.0f, 0.0f, 0.0f};
+fp32 INS_gyro[3] = {0.0f, 0.0f, 0.0f};
 static fp32 INS_accel[3] = {0.0f, 0.0f, 0.0f};
 static fp32 INS_mag[3] = {0.0f, 0.0f, 0.0f};
-static fp32 INS_quat[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+fp32 INS_quat[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 fp32 INS_angle[3] = {0.0f, 0.0f, 0.0f};      //euler angle, unit rad.欧拉角 单位 rad
 
 
