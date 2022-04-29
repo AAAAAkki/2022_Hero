@@ -26,7 +26,7 @@
 
 CAN_HandleTypeDef hcan1;
 CAN_HandleTypeDef hcan2;
-CAN_HandleTypeDef CAN_Commucation;
+//CAN_HandleTypeDef CAN_Commucation;
 /* CAN1 init function */
 void MX_CAN1_Init(void)
 {

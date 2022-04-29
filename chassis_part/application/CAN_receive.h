@@ -26,6 +26,8 @@
 
 
 /* CAN send and receive ID */
+#define CAN_Communication hcan2
+
 typedef enum
 {
     CAN_CHASSIS_ALL_ID = 0x200,
@@ -181,14 +183,31 @@ extern const motor_measure_t *get_fric_motor_measure_point(uint8_t i);
   * @param[in]      none
   * @retval         none
   */
- extern void CAN_CMD_FRIC(int16_t motor1, int16_t motor2);
+extern void CAN_CMD_FRIC(int16_t motor1, int16_t motor2);
 void CAN_CMD_CAP(uint16_t power, uint16_t buffer);
 #endif
 
 /*Addtional Define*/
-#define gimbal_board_Id 0x210
-#define chassis_board_Id 0x211
+//can be added to enum
+//#define gimbal_board_Id 0x210
+//#define chassis_board_Id 0x211
+#define chassis_motor_cmd_id 0x301
+#define chassis_motor_feedback_id 0x302
+#define heat_data_id 0x401
+#define shoot_data_id 0x402
+#define state_data_id 0x403
+
+#define transform_key 1000
+/*Additional functions*/
+//feedback not necessary
+//void CAN_motor_feedback_send(int16_t chassis_motor1, int16_t chassis_motor2, int16_t chassis_motor3, int16_t chassis_motor4);
+
+void CAN_heat_data_send(uint16_t shooter_heat0);
+
+void CAN_shoot_data_send(uint8_t	bullet_type, uint8_t	bullet_freq, float	bullet_speed);
+
+void CAN_state_data_send(uint16_t heat_limit);
 
 /*Addtional Functions*/
-void CAN_gimbal_transfer(uint8_t*data);
+//void CAN_gimbal_transfer(uint8_t*data);
 

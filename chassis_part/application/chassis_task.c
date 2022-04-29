@@ -115,8 +115,8 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control);
   */
 static void chassis_control_loop(chassis_move_t *chassis_move_control_loop);
 
-/*CAN_gimbal_tx no sure*/
-static void CAN_gimbal_transfer(uint8_t*data);
+///*CAN_gimbal_tx no sure*/
+//static void CAN_gimbal_transfer(uint8_t*data);
 
 #if INCLUDE_uxTaskGetStackHighWaterMark
 uint32_t chassis_high_water;

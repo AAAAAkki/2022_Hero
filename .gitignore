@@ -1,6 +1,9 @@
 **/MDK-ARM/DebugConfig
 **/MDK-ARM/RTE
 **/MDK-ARM/standard_robot.uvguix.*
-*.o
 **/MDK-ARM/standard_robot.uvoptx
+*.o
+*.d
+*.crf
+*.uvoptx
 #**/MDK-ARM

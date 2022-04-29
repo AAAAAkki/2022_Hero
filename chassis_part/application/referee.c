@@ -117,12 +117,13 @@ void referee_data_solve(uint8_t *frame)
         case ROBOT_STATE_CMD_ID:
         {
             memcpy(&robot_state, frame + index, sizeof(robot_state));
-						down_to_up_communication(&robot_state);
+						CAN_state_data_send(robot_state.shooter_id1_42mm_cooling_limit);
         }
         break;
         case POWER_HEAT_DATA_CMD_ID:
         {
             memcpy(&power_heat_data_t, frame + index, sizeof(power_heat_data_t));
+						CAN_heat_data_send(power_heat_data_t.shooter_id1_42mm_cooling_heat);
         }
         break;
         case ROBOT_POS_CMD_ID:
@@ -148,6 +149,7 @@ void referee_data_solve(uint8_t *frame)
         case SHOOT_DATA_CMD_ID:
         {
             memcpy(&shoot_data_t, frame + index, sizeof(shoot_data_t));
+						CAN_shoot_data_send(shoot_data_t.bullet_type, shoot_data_t.bullet_freq, shoot_data_t.bullet_speed);
         }
         break;
         case BULLET_REMAINING_CMD_ID:
@@ -221,18 +223,18 @@ return 26.0f;
 }
 
 /*Additional Function*/
-void down_to_up_communication(ext_game_robot_state_t *bullet)
-{
-		uint8_t temp[2];
-		temp[0]= bullet->shooter_id1_17mm_speed_limit;
-		temp[1]= bullet->shooter_id1_42mm_speed_limit;
-		CAN_gimbal_transfer(temp);
-}
+//void down_to_up_communication(ext_game_robot_state_t *bullet)
+//{
+//		uint8_t temp[2];
+//		temp[0]= bullet->shooter_id1_17mm_speed_limit;
+//		temp[1]= bullet->shooter_id1_42mm_speed_limit;
+//		CAN_gimbal_transfer(temp);
+//}
 
-void down_to_top_communication(ext_game_robot_state_t*heat)
-{
-		uint8_t temp[4];
-		temp[2]=heat->shooter_id1_17mm_cooling_limit;
-		temp[3]=heat->shooter_id1_42mm_cooling_limit;
-		CAN_gimbal_transfer(temp);		
-}
+//void down_to_top_communication(ext_game_robot_state_t*heat)
+//{
+//		uint8_t temp[4];
+//		temp[2]=heat->shooter_id1_17mm_cooling_limit;
+//		temp[3]=heat->shooter_id1_42mm_cooling_limit;
+//		CAN_gimbal_transfer(temp);		
+//}

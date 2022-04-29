@@ -21,7 +21,7 @@
 #include "CAN_receive.h"
 
 #include "cmsis_os.h"
-
+#include "arm_math.h"
 #include "main.h"
 #include "bsp_rng.h"
 
@@ -113,7 +113,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
   {
     switch (rx_header.StdId)
     {
-		 case CAN_TRIGGER_MOTOR_ID:
+		case CAN_TRIGGER_MOTOR_ID:
     {
       static uint8_t i = 0;
       //get motor id
@@ -149,30 +149,27 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
       detect_hook(PITCH_GIMBAL_MOTOR_TOE);
       break;
     }
-  
+		}
+	}
 	if (hcan == &CAN_Commucation){
 	/*Additional Function*/		
-		case gimbal_board_Id:
-		{
-      //get yaw,pitch
-      uint16_t temp[4];
-			uint16_t yaw; 
-	    uint16_t pitch;
-/**/
-      temp[0]=(int16_t)(rx_data[0]);			
-			temp[1]=(int16_t)(rx_data[1]);
-			temp[2]=(int16_t)(rx_data[2]);
-			
-			yaw       = temp[0];
-			pitch     = temp[1];
-			break;
+		switch (rx_header.StdId){
+			case chassis_motor_cmd_id:
+			{
+				//get yaw,pitch
+				uint16_t temp[4];
+				temp[0]=(int16_t)(rx_data[0]<<8|rx_data[1]);
+				temp[1]=(int16_t)(rx_data[2]<<8|rx_data[3]);
+				temp[2]=(int16_t)(rx_data[4]<<8|rx_data[5]);
+				temp[3]=(int16_t)(rx_data[6]<<8|rx_data[7]);
+				
+				break;
+			}
+			default:
+			{
+				break;
+			}
 		}
-}
-    default:
-    {
-      break;
-    }
-    }
   }
 }
 
@@ -391,44 +388,81 @@ const motor_measure_t *get_fric_motor_measure_point(uint8_t i)
 }
 
 /*Additional Functions*/
- static CAN_TxHeaderTypeDef gimbal_board_tx_message;
- static uint8_t             gimbal_board_can_tx_data[8]={0};
- 
- void CAN_gimbal_transfer(uint8_t*data){
-  uint32_t send_mail_box;
-	uint8_t  temp[8];
-  gimbal_board_tx_message.StdId = CAN_GIMBAL_ALL_ID;
-  gimbal_board_tx_message.IDE = CAN_ID_STD;
-  gimbal_board_tx_message.RTR = CAN_RTR_DATA;
-  gimbal_board_tx_message.DLC = 0x08;
+// static CAN_TxHeaderTypeDef gimbal_board_tx_message;
+// static uint8_t             gimbal_board_can_tx_data[8]={0};
+// void CAN_gimbal_transfer(uint8_t*data){
+//  uint32_t send_mail_box;
+//	uint8_t  temp[8];
+//  gimbal_board_tx_message.StdId = CAN_GIMBAL_ALL_ID;
+//  gimbal_board_tx_message.IDE = CAN_ID_STD;
+//  gimbal_board_tx_message.RTR = CAN_RTR_DATA;
+//  gimbal_board_tx_message.DLC = 0x08;
 
-/*shoot*/
-	gimbal_board_can_tx_data[0] = (uint8_t)(temp[0]<<10);
-  gimbal_board_can_tx_data[1]	= (uint8_t)(temp[1]<<22);
-	 
-/*heat*/	 
-  gimbal_board_can_tx_data[2] = (uint8_t)(temp[2]<<8);
-	gimbal_board_can_tx_data[3] = (uint8_t)(temp[3]<<20); 
-	 
-	HAL_CAN_AddTxMessage(&CAN_Commucation, &gimbal_board_tx_message, gimbal_board_can_tx_data, &send_mail_box); 
-}	 
+///*shoot*/
+//	gimbal_board_can_tx_data[0] = (uint8_t)(temp[0]<<10);
+//  gimbal_board_can_tx_data[1]	= (uint8_t)(temp[1]<<22);
+//	 
+///*heat*/	 
+//  gimbal_board_can_tx_data[2] = (uint8_t)(temp[2]<<8);
+//	gimbal_board_can_tx_data[3] = (uint8_t)(temp[3]<<20); 
+//	 
+//	HAL_CAN_AddTxMessage(&CAN_Commucation, &gimbal_board_tx_message, gimbal_board_can_tx_data, &send_mail_box); 
+//}
 
-
-
-
+static CAN_TxHeaderTypeDef  gimbal_board_heat_message;
+static uint8_t              gimbal_board_heat_send_data[8]={0};
 
 
+void CAN_heat_data_send(uint16_t shooter_heat0){
+		uint32_t send_mail_box;
+		
+    gimbal_board_heat_message.StdId = heat_data_id;
+    gimbal_board_heat_message.IDE = CAN_ID_STD;
+    gimbal_board_heat_message.RTR = CAN_RTR_DATA;
+    gimbal_board_heat_message.DLC = 0x08;
+    gimbal_board_heat_send_data[0]=shooter_heat0>>8;
+		gimbal_board_heat_send_data[1]=shooter_heat0;
+		//gimbal_board_heat_send_data[2]=shooter_heat1>>8;
+		//gimbal_board_heat_send_data[3]=shooter_heat1;
+		
+    HAL_CAN_AddTxMessage(&CAN_Commucation, &gimbal_board_heat_message, gimbal_board_heat_send_data, &send_mail_box);
+}
 
+static CAN_TxHeaderTypeDef  gimbal_board_shoot_message;
+static uint8_t              gimbal_board_shoot_data[8]={0};
 
+void CAN_shoot_data_send(uint8_t	bullet_type, uint8_t	bullet_freq, float	bullet_speed){
+		uint32_t send_mail_box;
+		int16_t bullet_s=floorf(bullet_speed*100);
+    gimbal_board_shoot_message.StdId = shoot_data_id;
+    gimbal_board_shoot_message.IDE = CAN_ID_STD;
+    gimbal_board_shoot_message.RTR = CAN_RTR_DATA;
+    gimbal_board_shoot_message.DLC = 0x08;
+    gimbal_board_shoot_data[0]=bullet_type;
+		gimbal_board_shoot_data[1]=bullet_freq;
+		gimbal_board_shoot_data[2]=bullet_s>>8;
+		gimbal_board_shoot_data[3]=bullet_s;
+		
+    HAL_CAN_AddTxMessage(&CAN_Commucation, &gimbal_board_shoot_message, gimbal_board_shoot_data, &send_mail_box);
+}
 
+static CAN_TxHeaderTypeDef  gimbal_board_state_message;
+static uint8_t              gimbal_board_state_data[8]={0};
 
-
-
-
-
-
-
-
+void CAN_state_data_send(uint16_t heat_limit){
+		uint32_t send_mail_box;
+		
+    gimbal_board_state_message.StdId = state_data_id;
+    gimbal_board_state_message.IDE = CAN_ID_STD;
+    gimbal_board_state_message.RTR = CAN_RTR_DATA;
+    gimbal_board_state_message.DLC = 0x08;
+	
+    gimbal_board_state_data[0]=heat_limit>>8;
+		gimbal_board_state_data[1]=heat_limit;
+		//48bits reserved
+    HAL_CAN_AddTxMessage(&CAN_Commucation, &gimbal_board_state_message, gimbal_board_state_data, &send_mail_box);
+	
+}
 
 //	uint16_t yaw; 
 //	uint16_t pitch;
@@ -438,8 +472,4 @@ const motor_measure_t *get_fric_motor_measure_point(uint8_t i)
 //	gimbal_board_can_tx_data[2] = (pitch >> 8);
 //  gimbal_board_can_tx_data[3] = pitch;
 //	gimbal_board_can_tx_data[4] = INS_angle;
-	 
-	
-	
- 
 
