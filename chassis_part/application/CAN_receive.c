@@ -29,8 +29,10 @@
 
 extern CAN_HandleTypeDef hcan1;
 extern CAN_HandleTypeDef hcan2;
-extern CAN_HandleTypeDef CAN_Commucation;
+//extern CAN_HandleTypeDef CAN_Commucation;
+extern fp32 intermedia_chassis_speed[4];
 //motor data read
+#define CAN_Commucation hcan2
 #define get_motor_measure(ptr, data)                               \
   {                                                                \
     (ptr)->last_ecd = (ptr)->ecd;                                  \
@@ -162,7 +164,8 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 				temp[1]=(int16_t)(rx_data[2]<<8|rx_data[3]);
 				temp[2]=(int16_t)(rx_data[4]<<8|rx_data[5]);
 				temp[3]=(int16_t)(rx_data[6]<<8|rx_data[7]);
-				
+				for(int i=0;i<4;i++)
+						intermedia_chassis_speed[i]=((fp32)temp[i])/transform_key;
 				break;
 			}
 			default:

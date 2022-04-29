@@ -167,6 +167,9 @@ void chassis_task(void const *pvParameters)
     //set chassis control set-point
     //µ×ÅÌ¿ØÖÆÁ¿ÉèÖÃ
     chassis_set_contorl(&chassis_move);
+		
+		top_down_speed_set(&chassis_move);
+		
     //chassis control pid calculate
     //µ×ÅÌ¿ØÖÆPID¼ÆËã
     chassis_control_loop(&chassis_move);
@@ -669,4 +672,20 @@ chassis_move_t  *get_chassis_point(void)
   return &chassis_move;
 }
 
-/*Additional Functions*/
+/*Additional functions begin*/
+fp32 intermedia_chassis_speed[4];
+
+void top_down_speed_set(chassis_move_t *chassis_speed_set){
+	chassis_speed_set->vx_set=intermedia_chassis_speed[0];
+	chassis_speed_set->vy_set=intermedia_chassis_speed[1];
+	chassis_speed_set->wz_set=intermedia_chassis_speed[2];
+}
+
+//void motor_feedback_rpm_send(chassis_move_t *motor_feedback_rpm){
+//	int16_t motor_rpm[4];
+//	for(int i=0;i<4;i++){
+//		motor_rpm[i]=motor_feedback_rpm->motor_chassis[i].chassis_motor_measure->speed_rpm;
+//	}
+//	CAN_motor_feedback_send(motor_rpm[0],motor_rpm[1],motor_rpm[2],motor_rpm[3]);
+//}
+/*Additional functions end*/

@@ -217,3 +217,10 @@ extern void chassis_task(void const *pvParameters);
 extern void chassis_rc_to_control_vector(fp32 *vx_set, fp32 *vy_set, chassis_move_t *chassis_move_rc_to_vector);
 chassis_move_t  *get_chassis_point(void);
 #endif
+
+/*Additional functions begin*/
+//#define TopDownKey 0
+
+void top_down_speed_set(chassis_move_t *chassis_speed_set);
+
+void motor_feedback_rpm_send(chassis_move_t *motor_feedback_rpm);

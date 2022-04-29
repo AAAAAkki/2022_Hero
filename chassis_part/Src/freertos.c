@@ -195,7 +195,7 @@ void ConfigureTimeForRunTimeStats(){
   * @retval None
   */
 /* USER CODE END Header_test_task */
-void test_task(void const * argument)
+void stats_task(void const * argument)
 {
   /* init code for USB_DEVICE */
   MX_USB_DEVICE_Init();
