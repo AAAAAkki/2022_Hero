@@ -1,7 +1,7 @@
 standard_robot\freertos.o: ../Src/freertos.c
 standard_robot\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-standard_robot\freertos.o: F:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
-standard_robot\freertos.o: F:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+standard_robot\freertos.o: D:\04_GMaster\Keil\ARM\ARMCC\Bin\..\include\stddef.h
+standard_robot\freertos.o: D:\04_GMaster\Keil\ARM\ARMCC\Bin\..\include\stdint.h
 standard_robot\freertos.o: ../Inc/FreeRTOSConfig.h
 standard_robot\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 standard_robot\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
@@ -75,14 +75,14 @@ standard_robot\freertos.o: ..\application\led_flow_task.h
 standard_robot\freertos.o: ..\application\referee_usart_task.h
 standard_robot\freertos.o: ..\application\servo_task.h
 standard_robot\freertos.o: ..\application\voltage_task.h
-standard_robot\freertos.o: F:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
+standard_robot\freertos.o: D:\04_GMaster\Keil\ARM\ARMCC\Bin\..\include\stdio.h
 standard_robot\freertos.o: ../Inc/usbd_cdc_if.h
 standard_robot\freertos.o: ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h
 standard_robot\freertos.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
 standard_robot\freertos.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h
 standard_robot\freertos.o: ../Inc/usbd_conf.h
-standard_robot\freertos.o: F:\keil5\ARM\ARMCC\Bin\..\include\stdlib.h
-standard_robot\freertos.o: F:\keil5\ARM\ARMCC\Bin\..\include\string.h
+standard_robot\freertos.o: D:\04_GMaster\Keil\ARM\ARMCC\Bin\..\include\stdlib.h
+standard_robot\freertos.o: D:\04_GMaster\Keil\ARM\ARMCC\Bin\..\include\string.h
 standard_robot\freertos.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h
 standard_robot\freertos.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
 standard_robot\freertos.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h

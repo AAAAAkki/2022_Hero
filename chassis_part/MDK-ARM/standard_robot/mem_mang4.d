@@ -1,8 +1,8 @@
 standard_robot\mem_mang4.o: ..\components\support\mem_mang4.c
 standard_robot\mem_mang4.o: ..\components\support\mem_mang.h
-standard_robot\mem_mang4.o: F:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
-standard_robot\mem_mang4.o: F:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
-standard_robot\mem_mang4.o: F:\keil5\ARM\ARMCC\Bin\..\include\stdlib.h
+standard_robot\mem_mang4.o: D:\04_GMaster\Keil\ARM\ARMCC\Bin\..\include\stdint.h
+standard_robot\mem_mang4.o: D:\04_GMaster\Keil\ARM\ARMCC\Bin\..\include\stdio.h
+standard_robot\mem_mang4.o: D:\04_GMaster\Keil\ARM\ARMCC\Bin\..\include\stdlib.h
 standard_robot\mem_mang4.o: ..\components\support\macro_mutex.h
 standard_robot\mem_mang4.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 standard_robot\mem_mang4.o: ../Inc/stm32f4xx_hal_conf.h
@@ -18,7 +18,7 @@ standard_robot\mem_mang4.o: ../Drivers/CMSIS/Include/mpu_armv7.h
 standard_robot\mem_mang4.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
 standard_robot\mem_mang4.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 standard_robot\mem_mang4.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-standard_robot\mem_mang4.o: F:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
+standard_robot\mem_mang4.o: D:\04_GMaster\Keil\ARM\ARMCC\Bin\..\include\stddef.h
 standard_robot\mem_mang4.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 standard_robot\mem_mang4.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
 standard_robot\mem_mang4.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h

@@ -1,11 +1,11 @@
 standard_robot\calibrate_task.o: ..\application\calibrate_task.c
 standard_robot\calibrate_task.o: ..\application\calibrate_task.h
 standard_robot\calibrate_task.o: ..\application\struct_typedef.h
-standard_robot\calibrate_task.o: F:\keil5\ARM\ARMCC\Bin\..\include\string.h
+standard_robot\calibrate_task.o: D:\04_GMaster\Keil\ARM\ARMCC\Bin\..\include\string.h
 standard_robot\calibrate_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 standard_robot\calibrate_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-standard_robot\calibrate_task.o: F:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
-standard_robot\calibrate_task.o: F:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+standard_robot\calibrate_task.o: D:\04_GMaster\Keil\ARM\ARMCC\Bin\..\include\stddef.h
+standard_robot\calibrate_task.o: D:\04_GMaster\Keil\ARM\ARMCC\Bin\..\include\stdint.h
 standard_robot\calibrate_task.o: ../Inc/FreeRTOSConfig.h
 standard_robot\calibrate_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 standard_robot\calibrate_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

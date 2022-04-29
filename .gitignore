@@ -1,4 +1,6 @@
 **/MDK-ARM/DebugConfig
-**/MDK-ARM/standard_robot.uvguix.Jiang Ziqiu
+**/MDK-ARM/RTE
+**/MDK-ARM/standard_robot.uvguix.*
 *.o
+**/MDK-ARM/standard_robot.uvoptx
 #**/MDK-ARM

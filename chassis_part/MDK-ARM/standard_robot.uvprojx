@@ -48,8 +48,8 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>standard_tpye_c\</OutputDirectory>
-          <OutputName>standard_tpye_c</OutputName>
+          <OutputDirectory>standard_robot\</OutputDirectory>
+          <OutputName>standard_robot</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -137,7 +137,7 @@
             <DriverSelection>4107</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
-          <Flash2>BIN\UL2CM3.DLL</Flash2>
+          <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
           <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
@@ -189,7 +189,7 @@
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <nSecure>0</nSecure>
@@ -211,7 +211,7 @@
             <Ra2Chk>0</Ra2Chk>
             <Ra3Chk>0</Ra3Chk>
             <Im1Chk>1</Im1Chk>
-            <Im2Chk>0</Im2Chk>
+            <Im2Chk>1</Im2Chk>
             <OnChipMemories>
               <Ocm1>
                 <Type>0</Type>
@@ -313,7 +313,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>4</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -337,9 +337,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_HAL_DRIVER,STM32F407xx,USE_HAL_DRIVER,STM32F407xx,ARM_MATH_CM4,__FPU_USED=1U,__FPU_PRESENT=1U,__CC_ARM,ARM_MATH_MATRIX_CHECK,ARM_MATH_ROUNDING</Define>
+              <Define>INFAN3,USE_HAL_DRIVER,STM32F407xx,USE_HAL_DRIVER,STM32F407xx,ARM_MATH_CM4,__FPU_USED=1U,__FPU_PRESENT=1U,__CC_ARM,ARM_MATH_MATRIX_CHECK,ARM_MATH_ROUNDING</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\application;..\bsp\boards;..\components\devices;..\components\algorithm;..\components\algorithm\Include;..\components\support;..\application\protocol;..\components\controller;../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc</IncludePath>
+              <IncludePath>../Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\bsp\boards;..\application;..\application\protocol;..\components\algorithm;..\components\algorithm\Include;..\components\support;..\components\controller;F:\chassis</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -352,12 +352,12 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <ClangAsOpt>4</ClangAsOpt>
+            <ClangAsOpt>1</ClangAsOpt>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\\Inc</IncludePath>
+              <IncludePath>..\Inc</IncludePath>
             </VariousControls>
           </Aads>
           <LDads>
@@ -404,6 +404,11 @@
               <FilePath>../Src/gpio.c</FilePath>
             </File>
             <File>
+              <FileName>freertos.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Src/freertos.c</FilePath>
+            </File>
+            <File>
               <FileName>adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/adc.c</FilePath>
@@ -422,11 +427,6 @@
               <FileName>dma.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/dma.c</FilePath>
-            </File>
-            <File>
-              <FileName>freertos.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Src/freertos.c</FilePath>
             </File>
             <File>
               <FileName>i2c.c</FileName>
@@ -509,71 +509,6 @@
               <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_hal_adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_adc_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_can.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_can.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_crc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_crc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_i2c_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_rng.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_rtc_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_tim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_tim_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f4xx_hal_rcc.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c</FilePath>
@@ -637,6 +572,76 @@
               <FileName>stm32f4xx_hal_exti.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_adc_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_ll_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_can.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_can.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_crc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_i2c_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_rng.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_rtc_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_tim_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -769,14 +774,14 @@
               <FilePath>..\bsp\boards\bsp_fric.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_imu_pwm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\bsp\boards\bsp_imu_pwm.c</FilePath>
-            </File>
-            <File>
               <FileName>bsp_i2c.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\bsp\boards\bsp_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_imu_pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\bsp\boards\bsp_imu_pwm.c</FilePath>
             </File>
             <File>
               <FileName>bsp_laser.c</FileName>
@@ -799,6 +804,11 @@
               <FilePath>..\bsp\boards\bsp_rng.c</FilePath>
             </File>
             <File>
+              <FileName>bsp_servo_pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\bsp\boards\bsp_servo_pwm.c</FilePath>
+            </File>
+            <File>
               <FileName>bsp_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\bsp\boards\bsp_spi.c</FilePath>
@@ -807,11 +817,6 @@
               <FileName>bsp_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\bsp\boards\bsp_usart.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_servo_pwm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\bsp\boards\bsp_servo_pwm.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -849,24 +854,9 @@
               <FilePath>..\application\detect_task.c</FilePath>
             </File>
             <File>
-              <FileName>gimbal_behaviour.c</FileName>
+              <FileName>led_flow_task.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\application\gimbal_behaviour.c</FilePath>
-            </File>
-            <File>
-              <FileName>gimbal_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\application\gimbal_task.c</FilePath>
-            </File>
-            <File>
-              <FileName>INS_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\application\INS_task.c</FilePath>
-            </File>
-            <File>
-              <FileName>oled_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\application\oled_task.c</FilePath>
+              <FilePath>..\application\led_flow_task.c</FilePath>
             </File>
             <File>
               <FileName>referee.c</FileName>
@@ -884,64 +874,14 @@
               <FilePath>..\application\remote_control.c</FilePath>
             </File>
             <File>
-              <FileName>shoot.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\application\shoot.c</FilePath>
-            </File>
-            <File>
               <FileName>test_task.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\application\test_task.c</FilePath>
             </File>
             <File>
-              <FileName>usb_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\application\usb_task.c</FilePath>
-            </File>
-            <File>
               <FileName>voltage_task.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\application\voltage_task.c</FilePath>
-            </File>
-            <File>
-              <FileName>led_flow_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\application\led_flow_task.c</FilePath>
-            </File>
-            <File>
-              <FileName>servo_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\application\servo_task.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>devices</GroupName>
-          <Files>
-            <File>
-              <FileName>OLED.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\components\devices\OLED.c</FilePath>
-            </File>
-            <File>
-              <FileName>BMI088driver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\components\devices\BMI088driver.c</FilePath>
-            </File>
-            <File>
-              <FileName>BMI088Middleware.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\components\devices\BMI088Middleware.c</FilePath>
-            </File>
-            <File>
-              <FileName>ist8310driver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\components\devices\ist8310driver.c</FilePath>
-            </File>
-            <File>
-              <FileName>ist8310driver_middleware.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\components\devices\ist8310driver_middleware.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -949,19 +889,14 @@
           <GroupName>algorithm</GroupName>
           <Files>
             <File>
-              <FileName>AHRS.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\components\algorithm\AHRS.lib</FilePath>
-            </File>
-            <File>
               <FileName>AHRS_middleware.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\components\algorithm\AHRS_middleware.c</FilePath>
             </File>
             <File>
-              <FileName>arm_cortexM4lf_math.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\components\algorithm\arm_cortexM4lf_math.lib</FilePath>
+              <FileName>kalman_filter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\components\algorithm\kalman_filter.c</FilePath>
             </File>
             <File>
               <FileName>user_lib.c</FileName>
@@ -973,6 +908,11 @@
         <Group>
           <GroupName>support</GroupName>
           <Files>
+            <File>
+              <FileName>cpu_utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\components\support\cpu_utils.c</FilePath>
+            </File>
             <File>
               <FileName>CRC8_CRC16.c</FileName>
               <FileType>1</FileType>
@@ -1001,6 +941,16 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>shoot</GroupName>
+          <Files>
+            <File>
+              <FileName>shoot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>F:\one-board\application\shoot.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
@@ -1023,8 +973,7 @@
   <LayerInfo>
     <Layers>
       <Layer>
-        <LayName>&lt;Project Info&gt;</LayName>
-        <LayTarg>0</LayTarg>
+        <LayName>standard_robot</LayName>
         <LayPrjMark>1</LayPrjMark>
       </Layer>
     </Layers>
