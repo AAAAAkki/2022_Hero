@@ -942,13 +942,6 @@
         </Group>
         <Group>
           <GroupName>shoot</GroupName>
-          <Files>
-            <File>
-              <FileName>shoot.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>F:\one-board\application\shoot.c</FilePath>
-            </File>
-          </Files>
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>

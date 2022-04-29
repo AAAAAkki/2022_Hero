@@ -100,7 +100,6 @@
 "standard_robot\fifo.o"
 "standard_robot\mem_mang4.o"
 "standard_robot\pid.o"
-"standard_robot\shoot.o"
 --library_type=microlib --strict --scatter "standard_robot\standard_robot.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

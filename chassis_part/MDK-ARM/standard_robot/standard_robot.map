@@ -1915,10 +1915,16 @@ Section Cross References
     can_receive.o(i.CAN_cmd_gimbal) refers to can_receive.o(.bss) for .bss
     can_receive.o(i.CAN_cmd_gimbal) refers to can_receive.o(.data) for .data
     can_receive.o(i.CAN_cmd_gimbal) refers to can.o(.bss) for hcan2
-    can_receive.o(i.CAN_gimbal_transfer) refers to stm32f4xx_hal_can.o(i.HAL_CAN_AddTxMessage) for HAL_CAN_AddTxMessage
-    can_receive.o(i.CAN_gimbal_transfer) refers to can_receive.o(.bss) for .bss
-    can_receive.o(i.CAN_gimbal_transfer) refers to can_receive.o(.data) for .data
-    can_receive.o(i.CAN_gimbal_transfer) refers to can.o(.bss) for CAN_Commucation
+    can_receive.o(i.CAN_heat_data_send) refers to stm32f4xx_hal_can.o(i.HAL_CAN_AddTxMessage) for HAL_CAN_AddTxMessage
+    can_receive.o(i.CAN_heat_data_send) refers to can_receive.o(.bss) for .bss
+    can_receive.o(i.CAN_heat_data_send) refers to can_receive.o(.data) for .data
+    can_receive.o(i.CAN_shoot_data_send) refers to floorf.o(i.__hardfp_floorf) for __hardfp_floorf
+    can_receive.o(i.CAN_shoot_data_send) refers to stm32f4xx_hal_can.o(i.HAL_CAN_AddTxMessage) for HAL_CAN_AddTxMessage
+    can_receive.o(i.CAN_shoot_data_send) refers to can_receive.o(.bss) for .bss
+    can_receive.o(i.CAN_shoot_data_send) refers to can_receive.o(.data) for .data
+    can_receive.o(i.CAN_state_data_send) refers to stm32f4xx_hal_can.o(i.HAL_CAN_AddTxMessage) for HAL_CAN_AddTxMessage
+    can_receive.o(i.CAN_state_data_send) refers to can_receive.o(.bss) for .bss
+    can_receive.o(i.CAN_state_data_send) refers to can_receive.o(.data) for .data
     can_receive.o(i.HAL_CAN_RxFifo0MsgPendingCallback) refers to stm32f4xx_hal_can.o(i.HAL_CAN_GetRxMessage) for HAL_CAN_GetRxMessage
     can_receive.o(i.HAL_CAN_RxFifo0MsgPendingCallback) refers to detect_task.o(i.detect_hook) for detect_hook
     can_receive.o(i.HAL_CAN_RxFifo0MsgPendingCallback) refers to can.o(.bss) for hcan2
@@ -1988,8 +1994,6 @@ Section Cross References
     led_flow_task.o(i.led_RGB_flow_task) refers to bsp_led.o(i.aRGB_led_show) for aRGB_led_show
     led_flow_task.o(i.led_RGB_flow_task) refers to cmsis_os.o(i.osDelay) for osDelay
     led_flow_task.o(i.led_RGB_flow_task) refers to led_flow_task.o(.data) for .data
-    referee.o(i.down_to_top_communication) refers to can_receive.o(i.CAN_gimbal_transfer) for CAN_gimbal_transfer
-    referee.o(i.down_to_up_communication) refers to can_receive.o(i.CAN_gimbal_transfer) for CAN_gimbal_transfer
     referee.o(i.get_bullet_speed) refers to referee.o(.bss) for .bss
     referee.o(i.get_chassis_max_power) refers to referee.o(.bss) for .bss
     referee.o(i.get_chassis_power_and_buffer) refers to referee.o(.bss) for .bss
@@ -2002,6 +2006,9 @@ Section Cross References
     referee.o(i.init_referee_struct_data) refers to referee.o(.data) for .data
     referee.o(i.init_referee_struct_data) refers to referee.o(.bss) for .bss
     referee.o(i.referee_data_solve) refers to memcpya.o(.text) for __aeabi_memcpy
+    referee.o(i.referee_data_solve) refers to can_receive.o(i.CAN_state_data_send) for CAN_state_data_send
+    referee.o(i.referee_data_solve) refers to can_receive.o(i.CAN_heat_data_send) for CAN_heat_data_send
+    referee.o(i.referee_data_solve) refers to can_receive.o(i.CAN_shoot_data_send) for CAN_shoot_data_send
     referee.o(i.referee_data_solve) refers to referee.o(.data) for .data
     referee.o(i.referee_data_solve) refers to referee.o(.bss) for .bss
     referee_usart_task.o(i.USART6_IRQHandler) refers to fifo.o(i.fifo_s_puts) for fifo_s_puts
@@ -2118,40 +2125,6 @@ Section Cross References
     mem_mang4.o(i.heap_malloc) refers to mem_mang4.o(.data) for .data
     mem_mang4.o(i.heap_print_block) refers to mem_mang4.o(.data) for .data
     mem_mang4.o(i.insert_into_free_list) refers to mem_mang4.o(.data) for .data
-    shoot.o(i.get_shoot_point) refers to shoot.o(.bss) for .bss
-    shoot.o(i.shoot_bullet_control) refers to user_lib.o(i.loop_fp32_constrain) for loop_fp32_constrain
-    shoot.o(i.shoot_bullet_control) refers to shoot.o(i.trigger_motor_turn_back) for trigger_motor_turn_back
-    shoot.o(i.shoot_bullet_control) refers to shoot.o(.bss) for .bss
-    shoot.o(i.shoot_control_loop) refers to shoot.o(i.shoot_set_mode) for shoot_set_mode
-    shoot.o(i.shoot_control_loop) refers to shoot.o(i.shoot_feedback_update) for shoot_feedback_update
-    shoot.o(i.shoot_control_loop) refers to detect_task.o(i.toe_is_error) for toe_is_error
-    shoot.o(i.shoot_control_loop) refers to shoot.o(i.trigger_motor_turn_back) for trigger_motor_turn_back
-    shoot.o(i.shoot_control_loop) refers to shoot.o(i.shoot_bullet_control) for shoot_bullet_control
-    shoot.o(i.shoot_control_loop) refers to bsp_laser.o(i.laser_on) for laser_on
-    shoot.o(i.shoot_control_loop) refers to pid.o(i.PID_calc) for PID_calc
-    shoot.o(i.shoot_control_loop) refers to user_lib.o(i.ramp_calc) for ramp_calc
-    shoot.o(i.shoot_control_loop) refers to can_receive.o(i.CAN_CMD_FRIC) for CAN_CMD_FRIC
-    shoot.o(i.shoot_control_loop) refers to bsp_laser.o(i.laser_off) for laser_off
-    shoot.o(i.shoot_control_loop) refers to shoot.o(.data) for .data
-    shoot.o(i.shoot_control_loop) refers to shoot.o(.bss) for .bss
-    shoot.o(i.shoot_control_loop) refers to referee.o(.bss) for robot_state
-    shoot.o(i.shoot_feedback_update) refers to stm32f4xx_hal_gpio.o(i.HAL_GPIO_ReadPin) for HAL_GPIO_ReadPin
-    shoot.o(i.shoot_feedback_update) refers to detect_task.o(i.toe_is_error) for toe_is_error
-    shoot.o(i.shoot_feedback_update) refers to shoot.o(.data) for .data
-    shoot.o(i.shoot_feedback_update) refers to shoot.o(.bss) for .bss
-    shoot.o(i.shoot_init) refers to remote_control.o(i.get_remote_control_point) for get_remote_control_point
-    shoot.o(i.shoot_init) refers to referee.o(i.get_robot_status_point) for get_robot_status_point
-    shoot.o(i.shoot_init) refers to can_receive.o(i.get_trigger_motor_measure_point) for get_trigger_motor_measure_point
-    shoot.o(i.shoot_init) refers to can_receive.o(i.get_fric_motor_measure_point) for get_fric_motor_measure_point
-    shoot.o(i.shoot_init) refers to pid.o(i.PID_init) for PID_init
-    shoot.o(i.shoot_init) refers to shoot.o(i.shoot_feedback_update) for shoot_feedback_update
-    shoot.o(i.shoot_init) refers to user_lib.o(i.ramp_init) for ramp_init
-    shoot.o(i.shoot_init) refers to shoot.o(.bss) for .bss
-    shoot.o(i.shoot_init) refers to shoot.o(.constdata) for .constdata
-    shoot.o(i.shoot_set_mode) refers to referee.o(i.get_shoot_heat1_limit_and_heat0) for get_shoot_heat1_limit_and_heat0
-    shoot.o(i.shoot_set_mode) refers to shoot.o(.bss) for .bss
-    shoot.o(i.shoot_set_mode) refers to shoot.o(.data) for .data
-    shoot.o(i.trigger_motor_turn_back) refers to shoot.o(.bss) for .bss
     acosf.o(i.__hardfp_acosf) refers (Special) to iusefp.o(.text) for __I$use$fp
     acosf.o(i.__hardfp_acosf) refers to sqrtf.o(i.sqrtf) for sqrtf
     acosf.o(i.__hardfp_acosf) refers to funder.o(i.__mathlib_flt_infnan) for __mathlib_flt_infnan
@@ -2205,6 +2178,9 @@ Section Cross References
     atan2f_x.o(i.____softfp_atan2f$lsc) refers to atan2f_x.o(i.____hardfp_atan2f$lsc) for ____hardfp_atan2f$lsc
     atan2f_x.o(i.__atan2f$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
     atan2f_x.o(i.__atan2f$lsc) refers to atan2f_x.o(i.____hardfp_atan2f$lsc) for ____hardfp_atan2f$lsc
+    floorf.o(i.__hardfp_floorf) refers (Special) to iusefp.o(.text) for __I$use$fp
+    floorf.o(i.__softfp_floorf) refers (Special) to iusefp.o(.text) for __I$use$fp
+    floorf.o(i.floorf) refers (Special) to iusefp.o(.text) for __I$use$fp
     sqrtf.o(i.__hardfp_sqrtf) refers (Special) to iusefp.o(.text) for __I$use$fp
     sqrtf.o(i.__hardfp_sqrtf) refers to errno.o(i.__set_errno) for __set_errno
     sqrtf.o(i.__softfp_sqrtf) refers (Special) to iusefp.o(.text) for __I$use$fp
