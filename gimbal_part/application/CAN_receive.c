@@ -25,36 +25,45 @@
 #include "main.h"
 #include "bsp_rng.h"
 
-
 #include "detect_task.h"
 
 extern CAN_HandleTypeDef hcan1;
 extern CAN_HandleTypeDef hcan2;
 //motor data read
-#define get_motor_measure(ptr, data)                                    \
-    {                                                                   \
-        (ptr)->last_ecd = (ptr)->ecd;                                   \
-        (ptr)->ecd = (uint16_t)((data)[0] << 8 | (data)[1]);            \
-        (ptr)->speed_rpm = (uint16_t)((data)[2] << 8 | (data)[3]);      \
-        (ptr)->given_current = (uint16_t)((data)[4] << 8 | (data)[5]);  \
-        (ptr)->temperate = (data)[6];                                   \
-    }
+#define get_motor_measure(ptr, data)                               \
+  {                                                                \
+    (ptr)->last_ecd = (ptr)->ecd;                                  \
+    (ptr)->ecd = (uint16_t)((data)[0] << 8 | (data)[1]);           \
+    (ptr)->speed_rpm = (uint16_t)((data)[2] << 8 | (data)[3]);     \
+    (ptr)->given_current = (uint16_t)((data)[4] << 8 | (data)[5]); \
+    (ptr)->temperate = (data)[6];                                  \
+  }
+
+#define get_cap_measure(ptr, data)                               \
+  {                                                                \
+		(ptr)->InputVot = ((int16_t) ((data)[1] << 8 | (data)[0]))/100;      \
+		(ptr)->CapVot = ((int16_t) ((data)[3] <<8 | (data) [2]))/100; \
+		(ptr) -> TestCurrent = ((int16_t) ((data)[5] <<8 | (data) [4]))/100;   \
+		(ptr) -> Target_Power = ((int16_t) ((data)[7] <<8 | (data) [6]))/100;   \
+  }
 /*
 motor data,  0:chassis motor1 3508;1:chassis motor3 3508;2:chassis motor3 3508;3:chassis motor4 3508;
-		4:yaw gimbal motor 6020;5:pitch gimbal motor 6020;6:trigger motor 2006;7:scope motor;
+4:yaw gimbal motor 6020;5:pitch gimbal motor 6020;6:trigger motor 2006;
 电机数据, 0:底盘电机1 3508电机,  1:底盘电机2 3508电机,2:底盘电机3 3508电机,3:底盘电机4 3508电机;
-		4:yaw云台电机 6020电机; 5:pitch云台电机 6020电机; 6:拨弹电机 2006电机 7:scope motor 2006*/
-static motor_measure_t motor_chassis[8];
-
-static CAN_TxHeaderTypeDef  gimbal_tx_message;
-static uint8_t              gimbal_can_send_data[8];
-static CAN_TxHeaderTypeDef  chassis_tx_message;
-static uint8_t              chassis_can_send_data[8];
-
+	4:yaw云台电机 6020电机; 5:pitch云台电机 6020电机; 6:拨弹电机 2006电机 7:左摩擦轮电机 3508 8：右摩擦轮电机 3508 9:scope motor*/
+motor_measure_t motor_chassis[10];
 chassis_data_t chassis_data_receive;
 //global var to receive data from chassis
-		
-extern fp32 intermedia_chassis_speed[4];
+static cap_measure_t cap_measure;
+static CAN_TxHeaderTypeDef gimbal_tx_message;
+static uint8_t gimbal_can_send_data[8];
+static CAN_TxHeaderTypeDef chassis_tx_message;
+static uint8_t chassis_can_send_data[8];
+static CAN_TxHeaderTypeDef fric_tx_message;
+static uint8_t fric_can_send_data[8];
+
+static uint8_t cap_can_send_data[8];
+static CAN_TxHeaderTypeDef cap_tx_measure;
 /**
   * @brief          hal CAN fifo call back, receive motor data
   * @param[in]      hcan, the point to CAN handle
@@ -67,66 +76,109 @@ extern fp32 intermedia_chassis_speed[4];
   */
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
-    CAN_RxHeaderTypeDef rx_header;
-    uint8_t rx_data[8];
+  CAN_RxHeaderTypeDef rx_header;
+  uint8_t rx_data[9];
 
-    HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rx_header, rx_data);
-
+  HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rx_header, rx_data);
+  if (hcan == &hcan2)
+  {
     switch (rx_header.StdId)
     {
-				//remake below
-        case CAN_3508_M1_ID:
-        case CAN_3508_M2_ID:
-        case CAN_3508_M3_ID:
-        case CAN_3508_M4_ID:
-        case CAN_YAW_MOTOR_ID:
-        case CAN_PIT_MOTOR_ID:
-        case CAN_TRIGGER_MOTOR_ID:
-        {
-            static uint8_t i = 0;
-            //get motor id
-            i = rx_header.StdId - CAN_3508_M1_ID;
-            get_motor_measure(&motor_chassis[i], rx_data);
-            detect_hook(CHASSIS_MOTOR1_TOE + i);
-            break;
-        }
-				//remake above
-				case gimbal_scope_motor_id:
-				{
-            get_motor_measure(&motor_chassis[7], rx_data);
-            //detect_hook(CHASSIS_MOTOR1_TOE + i);
-            break;
-				}
-				//referee data decoding process on Gimbal Board
-				case chassis_motor_feedback_id:{
-					for(int i=0;i<4;i++)
-						motor_chassis[i].speed_rpm=(int16_t)(rx_data[2*i]<<8|rx_data[2*i+1]);
-				}
-				case state_data_id:
-				{
-					chassis_data_receive.shooter_heat0_limit=(uint16_t)(rx_data[0]<<8|rx_data[1]);
-					break;
-				}
-				case heat_data_id:
-				{
-					chassis_data_receive.shooter_heat0=(uint16_t)(rx_data[0]<<8|rx_data[1]);
-					break;
-				}
-				case shoot_data_id:
-				{
-					chassis_data_receive.bullet_type=rx_data[0];
-					chassis_data_receive.bullet_freq=rx_data[1];
-					chassis_data_receive.bullet_speed=(float)(rx_data[2]<<8|rx_data[1])/100;
-				}
-				
-        default:
-        {
-            break;
-        }
+    case CAN_3508_M1_ID:
+    case CAN_3508_M2_ID:
+    case CAN_3508_M3_ID:
+    case CAN_3508_M4_ID:
+    case CAN_YAW_MOTOR_ID:
+    {
+      static uint8_t i = 0;
+      //get motor id
+      i = rx_header.StdId - CAN_3508_M1_ID;
+      get_motor_measure(&motor_chassis[i], rx_data);
+      detect_hook(CHASSIS_MOTOR1_TOE + i);
+      break;
     }
+		case CAN_CAP:
+		{
+			get_cap_measure(&cap_measure,rx_data);
+			detect_hook(CAP_TOE);
+      break;
+		}
+		case gimbal_scope_motor_id:
+		{
+      get_motor_measure(&motor_chassis[9], rx_data);
+      //detect_hook(CHASSIS_MOTOR1_TOE + i);
+			break;
+		}
+		case state_data_id:
+		{
+			chassis_data_receive.shooter_heat0_limit=(uint16_t)(rx_data[0]<<8|rx_data[1]);
+			break;
+		}
+		case heat_data_id:
+		{
+			chassis_data_receive.shooter_heat0=(uint16_t)(rx_data[0]<<8|rx_data[1]);
+			break;
+		}
+		case shoot_data_id:
+		{
+			chassis_data_receive.bullet_type=rx_data[0];
+			chassis_data_receive.bullet_freq=rx_data[1];
+			chassis_data_receive.bullet_speed=(float)(rx_data[2]<<8|rx_data[1])/100;
+			break;
+		}
+    default:
+    {
+      break;
+    }
+    }
+  }
+  if (hcan == &hcan1)
+  {
+    switch (rx_header.StdId)
+    {
+		 case CAN_TRIGGER_MOTOR_ID:
+    {
+      static uint8_t i = 0;
+      //get motor id
+      i = 6;
+      get_motor_measure(&motor_chassis[i], rx_data);
+      detect_hook(TRIGGER_MOTOR_TOE);
+      break;
+    }
+    case CAN_FRIC_LIFT_MOTOR_ID:
+    {
+      static uint8_t i = 0;
+      //get motor id
+      i = 7;
+      get_motor_measure(&motor_chassis[i], rx_data);
+      detect_hook(FRIC_LEFT_MOTOR_TOE);
+      break;
+    }
+    case CAN_FRIC_RIGHT_MOTOR_ID:
+    {
+      static uint8_t i = 0;
+      //get motor id
+      i = 8;
+      get_motor_measure(&motor_chassis[i], rx_data);
+      detect_hook(FRIC_RIGHT_MOTOR_TOE);
+      break;
+    }
+    case CAN_PIT_MOTOR_ID:
+    {
+      static uint8_t i = 0;
+      //get motor id
+      i = 5;
+      get_motor_measure(&motor_chassis[i], rx_data);
+      detect_hook(PITCH_GIMBAL_MOTOR_TOE);
+      break;
+    }
+    default:
+    {
+      break;
+    }
+    }
+  }
 }
-
-
 
 /**
   * @brief          send control current of motor (0x205, 0x206, 0x207, 0x208)
@@ -146,20 +198,61 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
   */
 void CAN_cmd_gimbal(int16_t yaw, int16_t pitch, int16_t shoot, int16_t rev)
 {
-    uint32_t send_mail_box;
-    gimbal_tx_message.StdId = CAN_GIMBAL_ALL_ID;
-    gimbal_tx_message.IDE = CAN_ID_STD;
-    gimbal_tx_message.RTR = CAN_RTR_DATA;
-    gimbal_tx_message.DLC = 0x08;
-    gimbal_can_send_data[0] = (yaw >> 8);
-    gimbal_can_send_data[1] = yaw;
-    gimbal_can_send_data[2] = (pitch >> 8);
-    gimbal_can_send_data[3] = pitch;
-    gimbal_can_send_data[4] = (shoot >> 8);
-    gimbal_can_send_data[5] = shoot;
-    gimbal_can_send_data[6] = (rev >> 8);
-    gimbal_can_send_data[7] = rev;
-    HAL_CAN_AddTxMessage(&GIMBAL_CAN, &gimbal_tx_message, gimbal_can_send_data, &send_mail_box);
+  uint32_t send_mail_box;
+  gimbal_tx_message.StdId = CAN_GIMBAL_ALL_ID;
+  gimbal_tx_message.IDE = CAN_ID_STD;
+  gimbal_tx_message.RTR = CAN_RTR_DATA;
+  gimbal_tx_message.DLC = 0x08;
+  gimbal_can_send_data[0] = (yaw >> 8);
+  gimbal_can_send_data[1] = yaw;
+  HAL_CAN_AddTxMessage(&hcan2, &gimbal_tx_message, gimbal_can_send_data, &send_mail_box);
+
+  gimbal_can_send_data[2] = (pitch >> 8);
+  gimbal_can_send_data[3] = pitch;
+  gimbal_can_send_data[4] = (shoot >> 8);
+  gimbal_can_send_data[5] = shoot;
+  gimbal_can_send_data[6] = (rev >> 8);
+  gimbal_can_send_data[7] = rev;
+  HAL_CAN_AddTxMessage(&hcan1, &gimbal_tx_message, gimbal_can_send_data, &send_mail_box);
+}
+/**
+  * @brief          send fric current
+  * @param[in]      none
+  * @retval         none
+  */
+/**
+  * @brief          发送摩擦轮电机电流
+  * @param[in]      none
+  * @retval         none
+  */
+void CAN_CMD_FRIC(int16_t motor1, int16_t motor2)
+{
+  uint32_t send_mail_box;
+  fric_tx_message.StdId = 0x200;
+  fric_tx_message.IDE = CAN_ID_STD;
+  fric_tx_message.RTR = CAN_RTR_DATA;
+  fric_tx_message.DLC = 0x08;
+  fric_can_send_data[0] = (motor1 >> 8);
+  fric_can_send_data[1] = motor1;
+  fric_can_send_data[2] = (motor2 >> 8);
+  fric_can_send_data[3] = motor2;
+  HAL_CAN_AddTxMessage(&hcan1, &fric_tx_message, fric_can_send_data, &send_mail_box);
+}
+
+void CAN_CMD_CAP(uint16_t power, uint16_t buffer)
+{
+	uint16_t powertx;
+	powertx = power * 100;
+  uint32_t send_mail_box;
+  cap_tx_measure.StdId = 0x210;
+  cap_tx_measure.IDE = CAN_ID_STD;
+  cap_tx_measure.RTR = CAN_RTR_DATA;
+  cap_tx_measure.DLC = 0x08;
+	cap_can_send_data[0] = powertx>>8;
+	cap_can_send_data[1] = powertx;
+	cap_can_send_data[2] = buffer>>8;
+	cap_can_send_data[3] = buffer;
+  HAL_CAN_AddTxMessage(&hcan2, &cap_tx_measure, cap_can_send_data, &send_mail_box);
 }
 
 /**
@@ -174,23 +267,22 @@ void CAN_cmd_gimbal(int16_t yaw, int16_t pitch, int16_t shoot, int16_t rev)
   */
 void CAN_cmd_chassis_reset_ID(void)
 {
-    uint32_t send_mail_box;
-    chassis_tx_message.StdId = 0x700;
-    chassis_tx_message.IDE = CAN_ID_STD;
-    chassis_tx_message.RTR = CAN_RTR_DATA;
-    chassis_tx_message.DLC = 0x08;
-    chassis_can_send_data[0] = 0;
-    chassis_can_send_data[1] = 0;
-    chassis_can_send_data[2] = 0;
-    chassis_can_send_data[3] = 0;
-    chassis_can_send_data[4] = 0;
-    chassis_can_send_data[5] = 0;
-    chassis_can_send_data[6] = 0;
-    chassis_can_send_data[7] = 0;
+  uint32_t send_mail_box;
+  chassis_tx_message.StdId = 0x700;
+  chassis_tx_message.IDE = CAN_ID_STD;
+  chassis_tx_message.RTR = CAN_RTR_DATA;
+  chassis_tx_message.DLC = 0x08;
+  chassis_can_send_data[0] = 0;
+  chassis_can_send_data[1] = 0;
+  chassis_can_send_data[2] = 0;
+  chassis_can_send_data[3] = 0;
+  chassis_can_send_data[4] = 0;
+  chassis_can_send_data[5] = 0;
+  chassis_can_send_data[6] = 0;
+  chassis_can_send_data[7] = 0;
 
-    HAL_CAN_AddTxMessage(&CHASSIS_CAN, &chassis_tx_message, chassis_can_send_data, &send_mail_box);
+  HAL_CAN_AddTxMessage(&hcan2, &chassis_tx_message, chassis_can_send_data, &send_mail_box);
 }
-
 
 /**
   * @brief          send control current of motor (0x201, 0x202, 0x203, 0x204)
@@ -210,22 +302,23 @@ void CAN_cmd_chassis_reset_ID(void)
   */
 void CAN_cmd_chassis(int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4)
 {
-    uint32_t send_mail_box;
-    chassis_tx_message.StdId = CAN_CHASSIS_ALL_ID;
-    chassis_tx_message.IDE = CAN_ID_STD;
-    chassis_tx_message.RTR = CAN_RTR_DATA;
-    chassis_tx_message.DLC = 0x08;
-    chassis_can_send_data[0] = motor1 >> 8;
-    chassis_can_send_data[1] = motor1;
-    chassis_can_send_data[2] = motor2 >> 8;
-    chassis_can_send_data[3] = motor2;
-    chassis_can_send_data[4] = motor3 >> 8;
-    chassis_can_send_data[5] = motor3;
-    chassis_can_send_data[6] = motor4 >> 8;
-    chassis_can_send_data[7] = motor4;
+  uint32_t send_mail_box;
+  chassis_tx_message.StdId = CAN_CHASSIS_ALL_ID;
+  chassis_tx_message.IDE = CAN_ID_STD;
+  chassis_tx_message.RTR = CAN_RTR_DATA;
+  chassis_tx_message.DLC = 0x08;
+  chassis_can_send_data[0] = motor1 >> 8;
+  chassis_can_send_data[1] = motor1;
+  chassis_can_send_data[2] = motor2 >> 8;
+  chassis_can_send_data[3] = motor2;
+  chassis_can_send_data[4] = motor3 >> 8;
+  chassis_can_send_data[5] = motor3;
+  chassis_can_send_data[6] = motor4 >> 8;
+  chassis_can_send_data[7] = motor4;
 
-    HAL_CAN_AddTxMessage(&CHASSIS_CAN, &chassis_tx_message, chassis_can_send_data, &send_mail_box);
+  HAL_CAN_AddTxMessage(&hcan2, &chassis_tx_message, chassis_can_send_data, &send_mail_box);
 }
+
 
 /**
   * @brief          return the yaw 6020 motor data point
@@ -239,7 +332,7 @@ void CAN_cmd_chassis(int16_t motor1, int16_t motor2, int16_t motor3, int16_t mot
   */
 const motor_measure_t *get_yaw_gimbal_motor_measure_point(void)
 {
-    return &motor_chassis[4];
+  return &motor_chassis[4];
 }
 
 /**
@@ -254,9 +347,8 @@ const motor_measure_t *get_yaw_gimbal_motor_measure_point(void)
   */
 const motor_measure_t *get_pitch_gimbal_motor_measure_point(void)
 {
-    return &motor_chassis[5];
+  return &motor_chassis[5];
 }
-
 
 /**
   * @brief          return the trigger 2006 motor data point
@@ -270,9 +362,8 @@ const motor_measure_t *get_pitch_gimbal_motor_measure_point(void)
   */
 const motor_measure_t *get_trigger_motor_measure_point(void)
 {
-    return &motor_chassis[6];
+  return &motor_chassis[6];
 }
-
 
 /**
   * @brief          return the chassis 3508 motor data point
@@ -286,21 +377,28 @@ const motor_measure_t *get_trigger_motor_measure_point(void)
   */
 const motor_measure_t *get_chassis_motor_measure_point(uint8_t i)
 {
-    return &motor_chassis[(i & 0x03)];
+  return &motor_chassis[(i & 0x03)];
 }
-
 /**
-  * @brief          return the gimbal scope 2006 motor data point
-  * @param[in]      i: motor number,range [0,3]
+  * @brief          return the fric 3508 motor data point
+  * @param[in]      i: motor number,range [1,2]
   * @retval         motor data point
   */
+/**
+  * @brief          返回摩擦轮电机 3508电机数据指针
+  * @param[in]      i: 电机编号,范围[1,2]
+  * @retval         电机数据指针
+  */
+const motor_measure_t *get_fric_motor_measure_point(uint8_t i)
+{
+  return &motor_chassis[i + 6];
+}
 
+/*Addtional functions*/
 const motor_measure_t *get_scope_gimbal_motor_measure_point(void)
 {
     return &motor_chassis[7];
 }
-
-/*Addtional functions*/
 
 static CAN_TxHeaderTypeDef  chassis_board_tx_message;
 static uint8_t              chassis_board_can_send_data[8]={0};

@@ -2,7 +2,7 @@
 #define REFEREE_H
 
 #include "main.h"
-#include "CAN_receive.h"
+
 #include "protocol.h"
 
 typedef enum
@@ -42,7 +42,7 @@ typedef __packed struct //0002
 {
     uint8_t winner;
 } ext_game_result_t;
-typedef __packed struct //0003
+typedef __packed struct
 {
     uint16_t red_1_robot_HP;
     uint16_t red_2_robot_HP;
@@ -80,34 +80,41 @@ typedef __packed struct //0x0103
     uint8_t supply_num;
 } ext_supply_projectile_booking_t;
 
-typedef __packed struct //0x0104
+typedef __packed struct
 {
     uint8_t level;
     uint8_t foul_robot_id;
 } ext_referee_warning_t;
 typedef __packed struct //0x0201
 {
-    uint8_t robot_id;
-    uint8_t robot_level;
-    uint16_t remain_HP;
-    uint16_t max_HP;
-    uint16_t shooter_heat0_cooling_rate;
-    uint16_t shooter_heat0_cooling_limit;
-    uint16_t shooter_heat1_cooling_rate;
-    uint16_t shooter_heat1_cooling_limit;
-    uint8_t mains_power_gimbal_output : 1;
-    uint8_t mains_power_chassis_output : 1;
-    uint8_t mains_power_shooter_output : 1;
+uint8_t robot_id;
+uint8_t robot_level;
+uint16_t remain_HP;
+uint16_t max_HP;
+uint16_t shooter_id1_17mm_cooling_rate;
+uint16_t shooter_id1_17mm_cooling_limit;
+uint16_t shooter_id1_17mm_speed_limit;
+uint16_t shooter_id2_17mm_cooling_rate;
+uint16_t shooter_id2_17mm_cooling_limit;
+uint16_t shooter_id2_17mm_speed_limit;
+uint16_t shooter_id1_42mm_cooling_rate;
+uint16_t shooter_id1_42mm_cooling_limit;
+uint16_t shooter_id1_42mm_speed_limit;
+uint16_t chassis_power_limit;
+uint8_t mains_power_gimbal_output : 1;
+uint8_t mains_power_chassis_output : 1;
+uint8_t mains_power_shooter_output : 1;
 } ext_game_robot_state_t;
 
-typedef __packed struct //0x0202
+typedef __packed struct
 {
-    uint16_t chassis_volt;
-    uint16_t chassis_current;
-    float chassis_power;
-    uint16_t chassis_power_buffer;
-    uint16_t shooter_heat0;
-    uint16_t shooter_heat1;
+uint16_t chassis_volt;
+uint16_t chassis_current;
+float chassis_power;
+uint16_t chassis_power_buffer;
+uint16_t shooter_id1_17mm_cooling_heat;
+uint16_t shooter_id2_17mm_cooling_heat;
+uint16_t shooter_id1_42mm_cooling_heat;
 } ext_power_heat_data_t;
 
 typedef __packed struct //0x0203
@@ -138,10 +145,11 @@ typedef __packed struct //0x0206
 typedef __packed struct //0x0207
 {
     uint8_t bullet_type;
+		uint8_t shooter_id;
     uint8_t bullet_freq;
     float bullet_speed;
 } ext_shoot_data_t;
-typedef __packed struct //0208
+typedef __packed struct
 {
     uint8_t bullet_remaining_num;
 } ext_bullet_remaining_t;
@@ -182,6 +190,10 @@ extern void get_chassis_power_and_buffer(fp32 *power, fp32 *buffer);
 
 extern uint8_t get_robot_id(void);
 
-extern void get_shoot_heat0_limit_and_heat0(uint16_t *heat0_limit, uint16_t *heat0);
-extern void get_shoot_heat1_limit_and_heat1(uint16_t *heat1_limit, uint16_t *heat1);
+extern void get_shoot_heat1_limit_and_heat0(uint16_t *heat0_limit, uint16_t *heat0);
+extern void get_shoot_heat2_limit_and_heat1(uint16_t *heat1_limit, uint16_t *heat1);
+extern void get_chassis_max_power(uint16_t *max_power);
+ext_robot_hurt_t *get_hurt_point(void);
+ext_game_robot_state_t *get_robot_status_point(void);
+fp32 get_bullet_speed(void);
 #endif

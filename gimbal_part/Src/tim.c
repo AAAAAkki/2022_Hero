@@ -250,7 +250,7 @@ void MX_TIM8_Init(void)
   htim8.Instance = TIM8;
   htim8.Init.Prescaler = 167;
   htim8.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim8.Init.Period = 19999;
+  htim8.Init.Period = 50;
   htim8.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim8.Init.RepetitionCounter = 0;
   htim8.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -300,7 +300,8 @@ void MX_TIM8_Init(void)
     Error_Handler();
   }
   HAL_TIM_MspPostInit(&htim8);
-
+    __HAL_TIM_CLEAR_FLAG(&htim8, TIM_SR_UIF);//添加这条语句解决问题
+    HAL_TIM_Base_Start_IT(&htim8);
 }
 /* TIM10 init function */
 void MX_TIM10_Init(void)
@@ -390,7 +391,8 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
     /* TIM8 clock enable */
     __HAL_RCC_TIM8_CLK_ENABLE();
   /* USER CODE BEGIN TIM8_MspInit 1 */
-
+    HAL_NVIC_SetPriority(TIM8_UP_TIM13_IRQn, 0,0);
+    HAL_NVIC_EnableIRQ(TIM8_UP_TIM13_IRQn);
   /* USER CODE END TIM8_MspInit 1 */
   }
   else if(tim_baseHandle->Instance==TIM10)

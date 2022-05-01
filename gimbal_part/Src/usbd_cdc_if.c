@@ -21,9 +21,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_cdc_if.h"
-
+#include "detect_task.h"
 /* USER CODE BEGIN INCLUDE */
-
+#include "FreeRTOS.h"
 /* USER CODE END INCLUDE */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -65,7 +65,7 @@
 /* USER CODE BEGIN PRIVATE_DEFINES */
 /* Define size for the receive and transmit buffer over CDC */
 /* It's up to user to redefine and/or remove those define */
-#define APP_RX_DATA_SIZE  2048
+#define APP_RX_DATA_SIZE  32
 #define APP_TX_DATA_SIZE  2048
 /* USER CODE END PRIVATE_DEFINES */
 
@@ -112,7 +112,10 @@ uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
   */
 
 extern USBD_HandleTypeDef hUsbDeviceFS;
-
+uint32_t BuffLength;
+uint32_t nRxLength;
+uint8_t uRxBufIndex = 0;				
+uint8_t uLastRxBufIndex = 0;		
 /* USER CODE BEGIN EXPORTED_VARIABLES */
 
 /* USER CODE END EXPORTED_VARIABLES */
@@ -246,6 +249,13 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
   /* USER CODE END 5 */
 }
 
+#include "FreeRTOS.h"
+#include "task.h"
+#include "cmsis_os.h"
+extern TaskHandle_t vision_task_handle, vision_unpack_handle;
+static BaseType_t xHigherPriorityTaskWoken;
+extern void Vision_Unpack_Callback(void);
+extern void Vision_AutoShoot_Computation_Query_Callback(void);
 /**
   * @brief  Data received over USB OUT endpoint are sent over CDC interface
   *         through this function.
@@ -263,8 +273,28 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
 static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 {
   /* USER CODE BEGIN 6 */
-  USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
-  USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+  nRxLength = *Len;
+	// uRxBufIndex++;
+	// uRxBufIndex &= 0x01;
+   if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
+  {
+    switch(UserRxBufferFS[0])
+    {
+      case 0xF6:
+        vTaskNotifyGiveFromISR(vision_unpack_handle, &xHigherPriorityTaskWoken);
+        Vision_Unpack_Callback();
+        break;
+      case 0xF8:
+        vTaskNotifyGiveFromISR(vision_task_handle, &xHigherPriorityTaskWoken);
+        Vision_AutoShoot_Computation_Query_Callback();
+        break;
+      default:
+        break;
+    }
+  }
+   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+   portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+  //USBD_CDC_ReceivePacket(&hUsbDeviceFS);
   return (USBD_OK);
   /* USER CODE END 6 */
 }

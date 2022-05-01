@@ -33,51 +33,57 @@
 #include "remote_control.h"
 //pitch speed close-loop PID params, max out and max iout
 //pitch 速度环 PID参数以及 PID最大输出，积分输出
-#define PITCH_SPEED_PID_KP        2900.0f
-#define PITCH_SPEED_PID_KI        60.0f
-#define PITCH_SPEED_PID_KD        0.0f
+// #define PITCH_SPEED_PID_KP        6000.0f
+// #define PITCH_SPEED_PID_KI        45.0f
+// #define PITCH_SPEED_PID_KD        35000000.0f
+// #define PITCH_SPEED_PID_MAX_OUT   30000.0f
+// #define PITCH_SPEED_PID_MAX_IOUT  15000.0f
+
+#define PITCH_SPEED_PID_KP        3000.0f
+#define PITCH_SPEED_PID_KI        45.0f
+#define PITCH_SPEED_PID_KD        40000000.0f
 #define PITCH_SPEED_PID_MAX_OUT   30000.0f
-#define PITCH_SPEED_PID_MAX_IOUT  10000.0f
+#define PITCH_SPEED_PID_MAX_IOUT  15000.0f
 
 //yaw speed close-loop PID params, max out and max iout
 //yaw 速度环 PID参数以及 PID最大输出，积分输出
-#define YAW_SPEED_PID_KP        3600.0f
-#define YAW_SPEED_PID_KI        20.0f
-#define YAW_SPEED_PID_KD        0.0f
+#define YAW_SPEED_PID_KP        3000.0f
+#define YAW_SPEED_PID_KI        60.0f
+#define YAW_SPEED_PID_KD        80000000.0f
 #define YAW_SPEED_PID_MAX_OUT   30000.0f
-#define YAW_SPEED_PID_MAX_IOUT  5000.0f
+#define YAW_SPEED_PID_MAX_IOUT  15000.0f
 
 //pitch gyro angle close-loop PID params, max out and max iout
 //pitch 角度环 角度由陀螺仪解算 PID参数以及 PID最大输出，积分输出
-#define PITCH_GYRO_ABSOLUTE_PID_KP 15.0f
+#define PITCH_GYRO_ABSOLUTE_PID_KP 24.0f
 #define PITCH_GYRO_ABSOLUTE_PID_KI 0.0f
-#define PITCH_GYRO_ABSOLUTE_PID_KD 0.0f
-
+#define PITCH_GYRO_ABSOLUTE_PID_KD -0.7f
 #define PITCH_GYRO_ABSOLUTE_PID_MAX_OUT 10.0f
 #define PITCH_GYRO_ABSOLUTE_PID_MAX_IOUT 0.0f
 
 //yaw gyro angle close-loop PID params, max out and max iout
 //yaw 角度环 角度由陀螺仪解算 PID参数以及 PID最大输出，积分输出
-#define YAW_GYRO_ABSOLUTE_PID_KP        26.0f
+#define YAW_GYRO_ABSOLUTE_PID_KP        24.0f
 #define YAW_GYRO_ABSOLUTE_PID_KI        0.0f
-#define YAW_GYRO_ABSOLUTE_PID_KD        0.3f
+#define YAW_GYRO_ABSOLUTE_PID_KD        -0.6f
+#define YAW_GYRO_ABSOLUTE_PID_KD_INC    -0.95f 
 #define YAW_GYRO_ABSOLUTE_PID_MAX_OUT   10.0f
 #define YAW_GYRO_ABSOLUTE_PID_MAX_IOUT  0.0f
 
 //pitch encode angle close-loop PID params, max out and max iout
 //pitch 角度环 角度由编码器 PID参数以及 PID最大输出，积分输出
-#define PITCH_ENCODE_RELATIVE_PID_KP 15.0f
-#define PITCH_ENCODE_RELATIVE_PID_KI 0.00f
-#define PITCH_ENCODE_RELATIVE_PID_KD 0.0f
+#define PITCH_ENCODE_RELATIVE_PID_KP 2.0f
+#define PITCH_ENCODE_RELATIVE_PID_KI 0.001f
+#define PITCH_ENCODE_RELATIVE_PID_KD 0.02f
 
-#define PITCH_ENCODE_RELATIVE_PID_MAX_OUT 10.0f
+#define PITCH_ENCODE_RELATIVE_PID_MAX_OUT 8.0f
 #define PITCH_ENCODE_RELATIVE_PID_MAX_IOUT 0.0f
 
 //yaw encode angle close-loop PID params, max out and max iout
 //yaw 角度环 角度由编码器 PID参数以及 PID最大输出，积分输出
-#define YAW_ENCODE_RELATIVE_PID_KP        8.0f
+#define YAW_ENCODE_RELATIVE_PID_KP        12.0f
 #define YAW_ENCODE_RELATIVE_PID_KI        0.0f
-#define YAW_ENCODE_RELATIVE_PID_KD        0.0f
+#define YAW_ENCODE_RELATIVE_PID_KD        -0.6f
 #define YAW_ENCODE_RELATIVE_PID_MAX_OUT   10.0f
 #define YAW_ENCODE_RELATIVE_PID_MAX_IOUT  0.0f
 
@@ -106,7 +112,7 @@
 #define PITCH_RC_SEN  -0.000006f //0.005
 
 #define YAW_MOUSE_SEN   0.00005f
-#define PITCH_MOUSE_SEN 0.00015f
+#define PITCH_MOUSE_SEN -0.00005f
 
 #define YAW_ENCODE_SEN    0.01f
 #define PITCH_ENCODE_SEN  0.01f
@@ -117,26 +123,26 @@
 //云台测试模式 宏定义 0 为不使用测试模式
 #define GIMBAL_TEST_MODE 0
 
-#define PITCH_TURN  1
+#define PITCH_TURN  0
 #define YAW_TURN    0
 
 //电机码盘值最大以及中值
 #define HALF_ECD_RANGE  4096
 #define ECD_RANGE       8191
 //云台初始化回中值，允许的误差,并且在误差范围内停止一段时间以及最大时间6s后解除初始化状态，
-#define GIMBAL_INIT_ANGLE_ERROR     0.1f
+#define GIMBAL_INIT_ANGLE_ERROR     0.5f
 #define GIMBAL_INIT_STOP_TIME       100
 #define GIMBAL_INIT_TIME            6000
 #define GIMBAL_CALI_REDUNDANT_ANGLE 0.1f
 //云台初始化回中值的速度以及控制到的角度
-#define GIMBAL_INIT_PITCH_SPEED     0.004f
+#define GIMBAL_INIT_PITCH_SPEED     0.009f
 #define GIMBAL_INIT_YAW_SPEED       0.005f
 
 #define INIT_YAW_SET    0.0f
 #define INIT_PITCH_SET  0.0f
 
 //云台校准中值的时候，发送原始电流值，以及堵转时间，通过陀螺仪判断堵转
-#define GIMBAL_CALI_MOTOR_SET   8000
+#define GIMBAL_CALI_MOTOR_SET   10000
 #define GIMBAL_CALI_STEP_TIME   2000
 #define GIMBAL_CALI_GYRO_LIMIT  0.1f
 
@@ -157,15 +163,12 @@
 #define MOTOR_ECD_TO_RAD 0.000766990394f //      2*  PI  /8192
 #endif
 
-//scope control
-#define SCOPE_ON 1
-#define SCOPE_OFF 0
-
 typedef enum
 {
     GIMBAL_MOTOR_RAW = 0, //电机原始值控制
     GIMBAL_MOTOR_GYRO,    //电机陀螺仪角度控制
     GIMBAL_MOTOR_ENCONDE, //电机编码值角度控制
+    GIMBAL_MOTOR_VISION_PID,
 } gimbal_motor_mode_e;
 
 typedef struct
@@ -173,14 +176,15 @@ typedef struct
     fp32 kp;
     fp32 ki;
     fp32 kd;
-
+    
     fp32 set;
     fp32 get;
     fp32 err;
 
     fp32 max_out;
     fp32 max_iout;
-
+		fp32 derivative_output_filter_coefficient;
+    fp32 proportion_output_filter_coefficient;
     fp32 Pout;
     fp32 Iout;
     fp32 Dout;
@@ -204,7 +208,10 @@ typedef struct
     fp32 relative_angle_set; //rad
     fp32 absolute_angle;     //rad
     fp32 absolute_angle_set; //rad
+	  fp32 absolute_angle_degree;   
+    fp32 absolute_angle_set_degree; 
     fp32 motor_gyro;         //rad/s
+    fp32 vision_angle;
     fp32 motor_gyro_set;
     fp32 motor_speed;
     fp32 raw_cmd_current;
@@ -213,6 +220,10 @@ typedef struct
 
 } gimbal_motor_t;
 
+//scope state
+#define SCOPE_ON 1
+#define SCOPE_OFF 0
+//scope motor
 typedef struct
 {
 		const motor_measure_t *gimbal_motor_measure;
@@ -245,6 +256,8 @@ typedef struct
     gimbal_motor_t gimbal_yaw_motor;
     gimbal_motor_t gimbal_pitch_motor;
     gimbal_step_cali_t gimbal_cali;
+    uint8_t vision_mode;
+    fp32 vision_angle_set[2];
 		scope_motor_t gimbal_scope_motor;
 } gimbal_control_t;
 
@@ -330,11 +343,9 @@ extern bool_t cmd_cali_gimbal_hook(uint16_t *yaw_offset, uint16_t *pitch_offset,
   * @waring         这个函数使用到gimbal_control 静态变量导致函数不适用以上通用指针复用
   */
 extern void set_cali_gimbal_hook(const uint16_t yaw_offset, const uint16_t pitch_offset, const fp32 max_yaw, const fp32 min_yaw, const fp32 max_pitch, const fp32 min_pitch);
-#endif
+gimbal_control_t *get_gimbal_point(void);
 
-
-
-
+//additional define
 void gimbal_scope_control(gimbal_control_t *scope_toggle);
 
 void gimbal_scope_cmd(gimbal_control_t *scope_toggle, uint8_t state);
@@ -342,3 +353,4 @@ void gimbal_scope_cmd(gimbal_control_t *scope_toggle, uint8_t state);
 void scope_position_limit(gimbal_control_t *scope);
 
 uint16_t scope_support(uint8_t time);
+#endif

@@ -2,9 +2,10 @@
 #define BSP_FRIC_H
 #include "struct_typedef.h"
 
-#define FRIC_UP 1400
-#define FRIC_DOWN 1320
-#define FRIC_OFF 1000
+#define FRIC_15 9200
+#define FRIC_18 4500
+#define FRIC_30 9400
+#define FRIC_OFF 0
 
 extern void fric_off(void);
 extern void fric1_on(uint16_t cmd);

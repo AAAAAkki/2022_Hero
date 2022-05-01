@@ -22,7 +22,7 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H
-
+#define NAME Ranran
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -22,6 +22,7 @@ Section Cross References
     startup_stm32f407xx.o(RESET) refers to remote_control.o(i.USART3_IRQHandler) for USART3_IRQHandler
     startup_stm32f407xx.o(RESET) refers to bsp_i2c.o(i.DMA1_Stream7_IRQHandler) for DMA1_Stream7_IRQHandler
     startup_stm32f407xx.o(RESET) refers to stm32f4xx_it.o(i.DMA2_Stream1_IRQHandler) for DMA2_Stream1_IRQHandler
+    startup_stm32f407xx.o(RESET) refers to ins_task.o(i.DMA2_Stream2_IRQHandler) for DMA2_Stream2_IRQHandler
     startup_stm32f407xx.o(RESET) refers to stm32f4xx_it.o(i.CAN2_RX0_IRQHandler) for CAN2_RX0_IRQHandler
     startup_stm32f407xx.o(RESET) refers to stm32f4xx_it.o(i.OTG_FS_IRQHandler) for OTG_FS_IRQHandler
     startup_stm32f407xx.o(RESET) refers to stm32f4xx_it.o(i.DMA2_Stream6_IRQHandler) for DMA2_Stream6_IRQHandler
@@ -70,9 +71,9 @@ Section Cross References
     freertos.o(i.MX_FREERTOS_Init) refers to cmsis_os.o(i.osThreadCreate) for osThreadCreate
     freertos.o(i.MX_FREERTOS_Init) refers to freertos.o(.constdata) for .constdata
     freertos.o(i.MX_FREERTOS_Init) refers to freertos.o(.data) for .data
-    freertos.o(i.stats_task) refers to usb_device.o(i.MX_USB_DEVICE_Init) for MX_USB_DEVICE_Init
-    freertos.o(i.stats_task) refers to malloc.o(i.malloc) for malloc
-    freertos.o(i.stats_task) refers to tasks.o(i.vTaskDelay) for vTaskDelay
+    freertos.o(i.test_task) refers to usb_device.o(i.MX_USB_DEVICE_Init) for MX_USB_DEVICE_Init
+    freertos.o(i.test_task) refers to malloc.o(i.malloc) for malloc
+    freertos.o(i.test_task) refers to tasks.o(i.vTaskDelay) for vTaskDelay
     freertos.o(i.vApplicationGetIdleTaskMemory) refers to freertos.o(.bss) for .bss
     freertos.o(i.vApplicationGetTimerTaskMemory) refers to freertos.o(.bss) for .bss
     freertos.o(.constdata) refers to freertos.o(.conststring) for .conststring
@@ -464,7 +465,7 @@ Section Cross References
     stm32f4xx_hal_flash_ex.o(i.HAL_FLASHEx_Erase_IT) refers to stm32f4xx_hal_flash.o(.bss) for pFlash
     stm32f4xx_hal_flash_ex.o(i.HAL_FLASHEx_OBProgram) refers to stm32f4xx_hal_flash.o(i.FLASH_WaitForLastOperation) for FLASH_WaitForLastOperation
     stm32f4xx_hal_flash_ex.o(i.HAL_FLASHEx_OBProgram) refers to stm32f4xx_hal_flash.o(.bss) for pFlash
-    stm32f4xx_hal_gpio.o(i.HAL_GPIO_EXTI_IRQHandler) refers to stm32f4xx_hal_gpio.o(i.HAL_GPIO_EXTI_Callback) for HAL_GPIO_EXTI_Callback
+    stm32f4xx_hal_gpio.o(i.HAL_GPIO_EXTI_IRQHandler) refers to ins_task.o(i.HAL_GPIO_EXTI_Callback) for HAL_GPIO_EXTI_Callback
     stm32f4xx_hal_dma_ex.o(i.HAL_DMAEx_MultiBufferStart) refers to stm32f4xx_hal_dma_ex.o(i.DMA_MultiBufferSetConfig) for DMA_MultiBufferSetConfig
     stm32f4xx_hal_dma_ex.o(i.HAL_DMAEx_MultiBufferStart_IT) refers to stm32f4xx_hal_dma_ex.o(i.DMA_MultiBufferSetConfig) for DMA_MultiBufferSetConfig
     stm32f4xx_hal_dma.o(i.DMA_CalcBaseAndBitshift) refers to stm32f4xx_hal_dma.o(.constdata) for .constdata
@@ -1860,8 +1861,12 @@ Section Cross References
     calibrate_task.o(i.cali_data_write) refers to port.o(i.vPortExitCritical) for vPortExitCritical
     calibrate_task.o(i.cali_data_write) refers to calibrate_task.o(.bss) for .bss
     calibrate_task.o(i.cali_data_write) refers to calibrate_task.o(.data) for .data
+    calibrate_task.o(i.cali_gimbal_hook) refers to gimbal_task.o(i.set_cali_gimbal_hook) for set_cali_gimbal_hook
+    calibrate_task.o(i.cali_gimbal_hook) refers to gimbal_task.o(i.cmd_cali_gimbal_hook) for cmd_cali_gimbal_hook
     calibrate_task.o(i.cali_gimbal_hook) refers to bsp_buzzer.o(i.buzzer_off) for buzzer_off
     calibrate_task.o(i.cali_gimbal_hook) refers to bsp_buzzer.o(i.buzzer_on) for buzzer_on
+    calibrate_task.o(i.cali_gyro_hook) refers to ins_task.o(i.INS_set_cali_gyro) for INS_set_cali_gyro
+    calibrate_task.o(i.cali_gyro_hook) refers to ins_task.o(i.INS_cali_gyro) for INS_cali_gyro
     calibrate_task.o(i.cali_gyro_hook) refers to bsp_buzzer.o(i.buzzer_off) for buzzer_off
     calibrate_task.o(i.cali_gyro_hook) refers to bsp_rc.o(i.RC_restart) for RC_restart
     calibrate_task.o(i.cali_gyro_hook) refers to bsp_rc.o(i.RC_unable) for RC_unable
@@ -1942,6 +1947,7 @@ Section Cross References
     chassis_behaviour.o(i.chassis_behaviour_control_set) refers to chassis_task.o(i.chassis_rc_to_control_vector) for chassis_rc_to_control_vector
     chassis_behaviour.o(i.chassis_behaviour_control_set) refers to user_lib.o(i.loop_fp32_constrain) for loop_fp32_constrain
     chassis_behaviour.o(i.chassis_behaviour_control_set) refers to chassis_behaviour.o(.data) for .data
+    chassis_behaviour.o(i.chassis_behaviour_mode_set) refers to gimbal_behaviour.o(i.gimbal_cmd_to_chassis_stop) for gimbal_cmd_to_chassis_stop
     chassis_behaviour.o(i.chassis_behaviour_mode_set) refers to chassis_behaviour.o(.data) for .data
     chassis_behaviour.o(i.chassis_infantry_follow_gimbal_yaw_control) refers to chassis_task.o(i.chassis_rc_to_control_vector) for chassis_rc_to_control_vector
     chassis_power_control.o(i.chassis_power_control) refers to referee.o(i.get_robot_id) for get_robot_id
@@ -1957,6 +1963,9 @@ Section Cross References
     chassis_task.o(i.chassis_control_loop) refers to chassis_power_control.o(i.chassis_power_control) for chassis_power_control
     chassis_task.o(i.chassis_feedback_update) refers to user_lib.o(i.loop_fp32_constrain) for loop_fp32_constrain
     chassis_task.o(i.chassis_init) refers to remote_control.o(i.get_remote_control_point) for get_remote_control_point
+    chassis_task.o(i.chassis_init) refers to ins_task.o(i.get_INS_angle_point) for get_INS_angle_point
+    chassis_task.o(i.chassis_init) refers to gimbal_task.o(i.get_yaw_motor_point) for get_yaw_motor_point
+    chassis_task.o(i.chassis_init) refers to gimbal_task.o(i.get_pitch_motor_point) for get_pitch_motor_point
     chassis_task.o(i.chassis_init) refers to can_receive.o(i.get_chassis_motor_measure_point) for get_chassis_motor_measure_point
     chassis_task.o(i.chassis_init) refers to pid.o(i.PID_init) for PID_init
     chassis_task.o(i.chassis_init) refers to user_lib.o(i.first_order_filter_init) for first_order_filter_init
@@ -1965,6 +1974,8 @@ Section Cross References
     chassis_task.o(i.chassis_rc_to_control_vector) refers to user_lib.o(i.first_order_filter_cali) for first_order_filter_cali
     chassis_task.o(i.chassis_set_contorl) refers to chassis_behaviour.o(i.chassis_behaviour_control_set) for chassis_behaviour_control_set
     chassis_task.o(i.chassis_set_contorl) refers to referee.o(i.get_chassis_max_power) for get_chassis_max_power
+    chassis_task.o(i.chassis_set_contorl) refers to arm_sin_f32.o(.text) for arm_sin_f32
+    chassis_task.o(i.chassis_set_contorl) refers to arm_cos_f32.o(.text) for arm_cos_f32
     chassis_task.o(i.chassis_set_contorl) refers to user_lib.o(i.loop_fp32_constrain) for loop_fp32_constrain
     chassis_task.o(i.chassis_set_contorl) refers to pid.o(i.PID_calc) for PID_calc
     chassis_task.o(i.chassis_set_contorl) refers to user_lib.o(i.fp32_constrain) for fp32_constrain
@@ -2065,22 +2076,291 @@ Section Cross References
     voltage_task.o(i.battery_voltage_task) refers to voltage_task.o(i.calc_battery_percentage) for calc_battery_percentage
     voltage_task.o(i.battery_voltage_task) refers to voltage_task.o(.data) for .data
     voltage_task.o(i.get_battery_percentage) refers to voltage_task.o(.data) for .data
+    gimbal_task.o(i.calc_gimbal_cali) refers to gimbal_task.o(i.motor_ecd_to_angle_change) for motor_ecd_to_angle_change
+    gimbal_task.o(i.cmd_cali_gimbal_hook) refers to gimbal_task.o(i.calc_gimbal_cali) for calc_gimbal_cali
+    gimbal_task.o(i.cmd_cali_gimbal_hook) refers to gimbal_task.o(.bss) for .bss
+    gimbal_task.o(i.get_gimbal_point) refers to gimbal_task.o(.bss) for .bss
+    gimbal_task.o(i.get_pitch_motor_point) refers to gimbal_task.o(.bss) for .bss
+    gimbal_task.o(i.get_yaw_motor_point) refers to gimbal_task.o(.bss) for .bss
+    gimbal_task.o(i.gimbal_PID_calc) refers to user_lib.o(i.loop_fp32_constrain) for loop_fp32_constrain
+    gimbal_task.o(i.gimbal_PID_calc) refers to user_lib.o(i.abs_limit) for abs_limit
+    gimbal_task.o(i.gimbal_absolute_angle_limit) refers to user_lib.o(i.loop_fp32_constrain) for loop_fp32_constrain
+    gimbal_task.o(i.gimbal_absolute_angle_limit) refers to gimbal_task.o(.data) for .data
+    gimbal_task.o(i.gimbal_feedback_update) refers to gimbal_task.o(i.motor_ecd_to_angle_change) for motor_ecd_to_angle_change
+    gimbal_task.o(i.gimbal_feedback_update) refers to arm_cos_f32.o(.text) for arm_cos_f32
+    gimbal_task.o(i.gimbal_feedback_update) refers to arm_sin_f32.o(.text) for arm_sin_f32
+    gimbal_task.o(i.gimbal_init) refers to can_receive.o(i.get_yaw_gimbal_motor_measure_point) for get_yaw_gimbal_motor_measure_point
+    gimbal_task.o(i.gimbal_init) refers to can_receive.o(i.get_pitch_gimbal_motor_measure_point) for get_pitch_gimbal_motor_measure_point
+    gimbal_task.o(i.gimbal_init) refers to ins_task.o(i.get_INS_angle_point) for get_INS_angle_point
+    gimbal_task.o(i.gimbal_init) refers to ins_task.o(i.get_gyro_data_point) for get_gyro_data_point
+    gimbal_task.o(i.gimbal_init) refers to remote_control.o(i.get_remote_control_point) for get_remote_control_point
+    gimbal_task.o(i.gimbal_init) refers to gimbal_task.o(i.gimbal_PID_init) for gimbal_PID_init
+    gimbal_task.o(i.gimbal_init) refers to pid.o(i.PID_init) for PID_init
+    gimbal_task.o(i.gimbal_init) refers to exp.o(i.__hardfp_exp) for __hardfp_exp
+    gimbal_task.o(i.gimbal_init) refers to d2f.o(.text) for __aeabi_d2f
+    gimbal_task.o(i.gimbal_init) refers to gimbal_task.o(i.gimbal_PID_clear) for gimbal_PID_clear
+    gimbal_task.o(i.gimbal_init) refers to pid.o(i.PID_clear) for PID_clear
+    gimbal_task.o(i.gimbal_init) refers to gimbal_task.o(i.gimbal_feedback_update) for gimbal_feedback_update
+    gimbal_task.o(i.gimbal_init) refers to pid.o(i.NominalDOB_Init) for NominalDOB_Init
+    gimbal_task.o(i.gimbal_init) refers to gimbal_task.o(.constdata) for .constdata
+    gimbal_task.o(i.gimbal_init) refers to gimbal_task.o(i.input_cal) for input_cal
+    gimbal_task.o(i.gimbal_init) refers to gimbal_task.o(.bss) for .bss
+    gimbal_task.o(i.gimbal_motor_absolute_angle_control) refers to pid.o(i.NominalDOB_Update) for NominalDOB_Update
+    gimbal_task.o(i.gimbal_motor_absolute_angle_control) refers to gimbal_task.o(i.gimbal_PID_calc) for gimbal_PID_calc
+    gimbal_task.o(i.gimbal_motor_absolute_angle_control) refers to pid.o(i.PID_calc) for PID_calc
+    gimbal_task.o(i.gimbal_motor_absolute_angle_control) refers to gimbal_task.o(.bss) for .bss
+    gimbal_task.o(i.gimbal_motor_relative_angle_control) refers to gimbal_task.o(i.gimbal_PID_calc) for gimbal_PID_calc
+    gimbal_task.o(i.gimbal_motor_relative_angle_control) refers to pid.o(i.PID_calc) for PID_calc
+    gimbal_task.o(i.gimbal_set_control) refers to gimbal_behaviour.o(i.gimbal_behaviour_control_set) for gimbal_behaviour_control_set
+    gimbal_task.o(i.gimbal_set_control) refers to gimbal_task.o(i.gimbal_absolute_angle_limit) for gimbal_absolute_angle_limit
+    gimbal_task.o(i.gimbal_set_control) refers to vision.o(.bss) for vision_control
+    gimbal_task.o(i.gimbal_task) refers to tasks.o(i.vTaskDelay) for vTaskDelay
+    gimbal_task.o(i.gimbal_task) refers to gimbal_task.o(i.gimbal_init) for gimbal_init
+    gimbal_task.o(i.gimbal_task) refers to shoot.o(i.shoot_init) for shoot_init
+    gimbal_task.o(i.gimbal_task) refers to gimbal_task.o(i.gimbal_feedback_update) for gimbal_feedback_update
+    gimbal_task.o(i.gimbal_task) refers to detect_task.o(i.toe_is_error) for toe_is_error
+    gimbal_task.o(i.gimbal_task) refers to gimbal_behaviour.o(i.gimbal_behaviour_mode_set) for gimbal_behaviour_mode_set
+    gimbal_task.o(i.gimbal_task) refers to gimbal_task.o(i.gimbal_mode_change_control_transit) for gimbal_mode_change_control_transit
+    gimbal_task.o(i.gimbal_task) refers to gimbal_task.o(i.gimbal_set_control) for gimbal_set_control
+    gimbal_task.o(i.gimbal_task) refers to gimbal_task.o(i.gimbal_motor_raw_angle_control) for gimbal_motor_raw_angle_control
+    gimbal_task.o(i.gimbal_task) refers to gimbal_task.o(i.gimbal_yaw_motor_absolute_angle_control) for gimbal_yaw_motor_absolute_angle_control
+    gimbal_task.o(i.gimbal_task) refers to gimbal_task.o(i.gimbal_motor_relative_angle_control) for gimbal_motor_relative_angle_control
+    gimbal_task.o(i.gimbal_task) refers to gimbal_task.o(i.gimbal_motor_absolute_angle_control) for gimbal_motor_absolute_angle_control
+    gimbal_task.o(i.gimbal_task) refers to shoot.o(i.shoot_control_loop) for shoot_control_loop
+    gimbal_task.o(i.gimbal_task) refers to can_receive.o(i.CAN_cmd_gimbal) for CAN_cmd_gimbal
+    gimbal_task.o(i.gimbal_task) refers to tasks.o(i.uxTaskGetStackHighWaterMark) for uxTaskGetStackHighWaterMark
+    gimbal_task.o(i.gimbal_task) refers to gimbal_task.o(.bss) for .bss
+    gimbal_task.o(i.gimbal_task) refers to gimbal_task.o(.data) for .data
+    gimbal_task.o(i.gimbal_yaw_motor_absolute_angle_control) refers to f2d.o(.text) for __aeabi_f2d
+    gimbal_task.o(i.gimbal_yaw_motor_absolute_angle_control) refers to pow.o(i.__hardfp_pow) for __hardfp_pow
+    gimbal_task.o(i.gimbal_yaw_motor_absolute_angle_control) refers to fmin.o(i.__hardfp_fmin) for __hardfp_fmin
+    gimbal_task.o(i.gimbal_yaw_motor_absolute_angle_control) refers to dmul.o(.text) for __aeabi_dmul
+    gimbal_task.o(i.gimbal_yaw_motor_absolute_angle_control) refers to dadd.o(.text) for __aeabi_dadd
+    gimbal_task.o(i.gimbal_yaw_motor_absolute_angle_control) refers to d2f.o(.text) for __aeabi_d2f
+    gimbal_task.o(i.gimbal_yaw_motor_absolute_angle_control) refers to gimbal_task.o(i.gimbal_PID_calc) for gimbal_PID_calc
+    gimbal_task.o(i.gimbal_yaw_motor_absolute_angle_control) refers to pid.o(i.PID_calc) for PID_calc
+    gimbal_task.o(i.gimbal_yaw_motor_absolute_angle_control) refers to gimbal_task.o(.bss) for .bss
+    gimbal_task.o(i.gimbal_yaw_motor_absolute_angle_control) refers to gimbal_task.o(.data) for .data
+    gimbal_task.o(i.input_cal) refers to f2d.o(.text) for __aeabi_f2d
+    gimbal_task.o(i.input_cal) refers to dmul.o(.text) for __aeabi_dmul
+    gimbal_task.o(i.input_cal) refers to dadd.o(.text) for __aeabi_dsub
+    gimbal_task.o(i.input_cal) refers to ddiv.o(.text) for __aeabi_ddiv
+    gimbal_task.o(i.input_cal) refers to d2f.o(.text) for __aeabi_d2f
+    gimbal_task.o(i.set_cali_gimbal_hook) refers to gimbal_task.o(.bss) for .bss
+    gimbal_behaviour.o(i.gimbal_absolute_angle_control) refers to user_lib.o(i.loop_fp32_constrain) for loop_fp32_constrain
+    gimbal_behaviour.o(i.gimbal_absolute_angle_control) refers to gimbal_behaviour.o(.data) for .data
+    gimbal_behaviour.o(i.gimbal_behaviour_control_set) refers to gimbal_behaviour.o(i.gimbal_cali_control) for gimbal_cali_control
+    gimbal_behaviour.o(i.gimbal_behaviour_control_set) refers to gimbal_behaviour.o(i.gimbal_absolute_angle_control) for gimbal_absolute_angle_control
+    gimbal_behaviour.o(i.gimbal_behaviour_control_set) refers to gimbal_behaviour.o(i.gimbal_relative_angle_control) for gimbal_relative_angle_control
+    gimbal_behaviour.o(i.gimbal_behaviour_control_set) refers to gimbal_behaviour.o(.data) for .data
+    gimbal_behaviour.o(i.gimbal_behaviour_mode_set) refers to gimbal_behaviour.o(i.gimbal_behavour_set) for gimbal_behavour_set
+    gimbal_behaviour.o(i.gimbal_behaviour_mode_set) refers to gimbal_behaviour.o(.data) for .data
+    gimbal_behaviour.o(i.gimbal_behavour_set) refers to detect_task.o(i.toe_is_error) for toe_is_error
+    gimbal_behaviour.o(i.gimbal_behavour_set) refers to gimbal_behaviour.o(.data) for .data
+    gimbal_behaviour.o(i.gimbal_cali_control) refers to gimbal_behaviour.o(.data) for .data
+    gimbal_behaviour.o(i.gimbal_cmd_to_chassis_stop) refers to gimbal_behaviour.o(.data) for .data
+    gimbal_behaviour.o(i.gimbal_cmd_to_shoot_stop) refers to gimbal_behaviour.o(.data) for .data
+    gimbal_behaviour.o(i.gimbal_relative_angle_control) refers to gimbal_behaviour.o(.data) for .data
+    ins_task.o(i.DMA2_Stream2_IRQHandler) refers to stm32f4xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
+    ins_task.o(i.DMA2_Stream2_IRQHandler) refers to ins_task.o(i.imu_cmd_spi_dma) for imu_cmd_spi_dma
+    ins_task.o(i.DMA2_Stream2_IRQHandler) refers to spi.o(.bss) for hspi1
+    ins_task.o(i.DMA2_Stream2_IRQHandler) refers to ins_task.o(.data) for .data
+    ins_task.o(i.HAL_GPIO_EXTI_Callback) refers to tasks.o(i.xTaskGetSchedulerState) for xTaskGetSchedulerState
+    ins_task.o(i.HAL_GPIO_EXTI_Callback) refers to tasks.o(i.vTaskNotifyGiveFromISR) for vTaskNotifyGiveFromISR
+    ins_task.o(i.HAL_GPIO_EXTI_Callback) refers to detect_task.o(i.detect_hook) for detect_hook
+    ins_task.o(i.HAL_GPIO_EXTI_Callback) refers to ins_task.o(i.imu_cmd_spi_dma) for imu_cmd_spi_dma
+    ins_task.o(i.HAL_GPIO_EXTI_Callback) refers to ins_task.o(.data) for .data
+    ins_task.o(i.INS_cali_gyro) refers to ins_task.o(i.gyro_offset_calc) for gyro_offset_calc
+    ins_task.o(i.INS_cali_gyro) refers to ins_task.o(.bss) for .bss
+    ins_task.o(i.INS_set_cali_gyro) refers to ins_task.o(.bss) for .bss
+    ins_task.o(i.INS_task) refers to cmsis_os.o(i.osDelay) for osDelay
+    ins_task.o(i.INS_task) refers to bmi088driver.o(i.BMI088_init) for BMI088_init
+    ins_task.o(i.INS_task) refers to ist8310driver.o(i.ist8310_init) for ist8310_init
+    ins_task.o(i.INS_task) refers to bmi088driver.o(i.BMI088_read) for BMI088_read
+    ins_task.o(i.INS_task) refers to ins_task.o(i.imu_cali_slove) for imu_cali_slove
+    ins_task.o(i.INS_task) refers to pid.o(i.PID_init) for PID_init
+    ins_task.o(i.INS_task) refers to ahrs.o(i.AHRS_init) for AHRS_init
+    ins_task.o(i.INS_task) refers to tasks.o(i.pcTaskGetName) for pcTaskGetName
+    ins_task.o(i.INS_task) refers to tasks.o(i.xTaskGetHandle) for xTaskGetHandle
+    ins_task.o(i.INS_task) refers to stm32f4xx_hal_spi.o(i.HAL_SPI_Init) for HAL_SPI_Init
+    ins_task.o(i.INS_task) refers to main.o(i.Error_Handler) for Error_Handler
+    ins_task.o(i.INS_task) refers to bsp_spi.o(i.SPI1_DMA_init) for SPI1_DMA_init
+    ins_task.o(i.INS_task) refers to tasks.o(i.ulTaskNotifyTake) for ulTaskNotifyTake
+    ins_task.o(i.INS_task) refers to bmi088driver.o(i.BMI088_gyro_read_over) for BMI088_gyro_read_over
+    ins_task.o(i.INS_task) refers to bmi088driver.o(i.BMI088_accel_read_over) for BMI088_accel_read_over
+    ins_task.o(i.INS_task) refers to bmi088driver.o(i.BMI088_temperature_read_over) for BMI088_temperature_read_over
+    ins_task.o(i.INS_task) refers to ins_task.o(i.imu_temp_control) for imu_temp_control
+    ins_task.o(i.INS_task) refers to ahrs.o(i.AHRS_update) for AHRS_update
+    ins_task.o(i.INS_task) refers to ahrs.o(i.get_angle) for get_angle
+    ins_task.o(i.INS_task) refers to ins_task.o(.bss) for .bss
+    ins_task.o(i.INS_task) refers to ins_task.o(.constdata) for .constdata
+    ins_task.o(i.INS_task) refers to ins_task.o(.data) for .data
+    ins_task.o(i.INS_task) refers to spi.o(.bss) for hspi1
+    ins_task.o(i.get_INS_angle_point) refers to ins_task.o(.bss) for .bss
+    ins_task.o(i.get_INS_quat_point) refers to ins_task.o(.bss) for .bss
+    ins_task.o(i.get_accel_data_point) refers to ins_task.o(.bss) for .bss
+    ins_task.o(i.get_gyro_data_point) refers to ins_task.o(.bss) for .bss
+    ins_task.o(i.get_mag_data_point) refers to ins_task.o(.bss) for .bss
+    ins_task.o(i.imu_cali_slove) refers to ins_task.o(.data) for .data
+    ins_task.o(i.imu_cali_slove) refers to ins_task.o(.bss) for .bss
+    ins_task.o(i.imu_cmd_spi_dma) refers to stm32f4xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
+    ins_task.o(i.imu_cmd_spi_dma) refers to bsp_spi.o(i.SPI1_DMA_enable) for SPI1_DMA_enable
+    ins_task.o(i.imu_cmd_spi_dma) refers to ins_task.o(.data) for .data
+    ins_task.o(i.imu_cmd_spi_dma) refers to spi.o(.bss) for hspi1
+    ins_task.o(i.imu_cmd_spi_dma) refers to ins_task.o(.bss) for .bss
+    ins_task.o(i.imu_temp_control) refers to calibrate_task.o(i.get_control_temperature) for get_control_temperature
+    ins_task.o(i.imu_temp_control) refers to pid.o(i.PID_calc) for PID_calc
+    ins_task.o(i.imu_temp_control) refers to bsp_imu_pwm.o(i.imu_pwm_set) for imu_pwm_set
+    ins_task.o(i.imu_temp_control) refers to ins_task.o(.data) for .data
+    ins_task.o(i.imu_temp_control) refers to ins_task.o(.bss) for .bss
+    shoot.o(i.get_shoot_point) refers to shoot.o(.bss) for .bss
+    shoot.o(i.shoot_bullet_control) refers to user_lib.o(i.loop_fp32_constrain) for loop_fp32_constrain
+    shoot.o(i.shoot_bullet_control) refers to shoot.o(i.trigger_motor_turn_back) for trigger_motor_turn_back
+    shoot.o(i.shoot_bullet_control) refers to shoot.o(.bss) for .bss
+    shoot.o(i.shoot_control_loop) refers to shoot.o(i.shoot_set_mode) for shoot_set_mode
+    shoot.o(i.shoot_control_loop) refers to shoot.o(i.shoot_feedback_update) for shoot_feedback_update
+    shoot.o(i.shoot_control_loop) refers to detect_task.o(i.toe_is_error) for toe_is_error
+    shoot.o(i.shoot_control_loop) refers to shoot.o(i.trigger_motor_turn_back) for trigger_motor_turn_back
+    shoot.o(i.shoot_control_loop) refers to shoot.o(i.shoot_bullet_control) for shoot_bullet_control
+    shoot.o(i.shoot_control_loop) refers to bsp_laser.o(i.laser_on) for laser_on
+    shoot.o(i.shoot_control_loop) refers to pid.o(i.PID_calc) for PID_calc
+    shoot.o(i.shoot_control_loop) refers to user_lib.o(i.ramp_calc) for ramp_calc
+    shoot.o(i.shoot_control_loop) refers to can_receive.o(i.CAN_CMD_FRIC) for CAN_CMD_FRIC
+    shoot.o(i.shoot_control_loop) refers to bsp_laser.o(i.laser_off) for laser_off
+    shoot.o(i.shoot_control_loop) refers to shoot.o(.data) for .data
+    shoot.o(i.shoot_control_loop) refers to shoot.o(.bss) for .bss
+    shoot.o(i.shoot_control_loop) refers to referee.o(.bss) for robot_state
+    shoot.o(i.shoot_feedback_update) refers to stm32f4xx_hal_gpio.o(i.HAL_GPIO_ReadPin) for HAL_GPIO_ReadPin
+    shoot.o(i.shoot_feedback_update) refers to detect_task.o(i.toe_is_error) for toe_is_error
+    shoot.o(i.shoot_feedback_update) refers to shoot.o(.data) for .data
+    shoot.o(i.shoot_feedback_update) refers to shoot.o(.bss) for .bss
+    shoot.o(i.shoot_init) refers to remote_control.o(i.get_remote_control_point) for get_remote_control_point
+    shoot.o(i.shoot_init) refers to referee.o(i.get_robot_status_point) for get_robot_status_point
+    shoot.o(i.shoot_init) refers to can_receive.o(i.get_trigger_motor_measure_point) for get_trigger_motor_measure_point
+    shoot.o(i.shoot_init) refers to can_receive.o(i.get_fric_motor_measure_point) for get_fric_motor_measure_point
+    shoot.o(i.shoot_init) refers to pid.o(i.PID_init) for PID_init
+    shoot.o(i.shoot_init) refers to shoot.o(i.shoot_feedback_update) for shoot_feedback_update
+    shoot.o(i.shoot_init) refers to user_lib.o(i.ramp_init) for ramp_init
+    shoot.o(i.shoot_init) refers to shoot.o(.bss) for .bss
+    shoot.o(i.shoot_init) refers to shoot.o(.constdata) for .constdata
+    shoot.o(i.shoot_set_mode) refers to referee.o(i.get_shoot_heat1_limit_and_heat0) for get_shoot_heat1_limit_and_heat0
+    shoot.o(i.shoot_set_mode) refers to gimbal_behaviour.o(i.gimbal_cmd_to_shoot_stop) for gimbal_cmd_to_shoot_stop
+    shoot.o(i.shoot_set_mode) refers to shoot.o(.bss) for .bss
+    shoot.o(i.shoot_set_mode) refers to shoot.o(.data) for .data
+    shoot.o(i.trigger_motor_turn_back) refers to shoot.o(.bss) for .bss
+    vision.o(i.Future_Predict) refers to f2d.o(.text) for __aeabi_f2d
+    vision.o(i.Future_Predict) refers to dmul.o(.text) for __aeabi_dmul
+    vision.o(i.Future_Predict) refers to d2f.o(.text) for __aeabi_d2f
+    vision.o(i.Future_Predict) refers to arm_mat_mult_f32.o(.text) for arm_mat_mult_f32
+    vision.o(i.Future_Predict) refers to atan2f.o(i.__hardfp_atan2f) for __hardfp_atan2f
+    vision.o(i.Future_Predict) refers to vision.o(i.arm_sqrt_f32) for arm_sqrt_f32
+    vision.o(i.Future_Predict) refers to vision.o(.data) for .data
+    vision.o(i.Future_Predict) refers to vision.o(.bss) for .bss
+    vision.o(i.IMU_Pose_Update) refers to vision.o(i.queue_update) for queue_update
+    vision.o(i.IMU_Pose_Update) refers to gimbal_task.o(.bss) for gimbal_control
+    vision.o(i.IMU_Pose_Update) refers to vision.o(.bss) for .bss
+    vision.o(i.Initialize_Observer_With_Target) refers to vision.o(.bss) for .bss
+    vision.o(i.Motion_Pause) refers to gimbal_task.o(.bss) for gimbal_control
+    vision.o(i.Observer_Matrix_Update) refers to f2d.o(.text) for __aeabi_f2d
+    vision.o(i.Observer_Matrix_Update) refers to dmul.o(.text) for __aeabi_dmul
+    vision.o(i.Observer_Matrix_Update) refers to d2f.o(.text) for __aeabi_d2f
+    vision.o(i.Observer_Matrix_Update) refers to vision.o(.bss) for .bss
+    vision.o(i.Sync_Pose) refers to vision.o(i.queue_access) for queue_access
+    vision.o(i.Sync_Pose) refers to arm_sin_cos_f32.o(.text) for arm_sin_cos_f32
+    vision.o(i.Sync_Pose) refers to arm_mat_mult_f32.o(.text) for arm_mat_mult_f32
+    vision.o(i.Sync_Pose) refers to vision.o(i.arm_sqrt_f32) for arm_sqrt_f32
+    vision.o(i.Sync_Pose) refers to vision.o(.data) for .data
+    vision.o(i.Sync_Pose) refers to vision.o(.bss) for .bss
+    vision.o(i.Update_Current_State) refers to arm_mat_mult_f32.o(.text) for arm_mat_mult_f32
+    vision.o(i.Update_Current_State) refers to vision.o(i.arm_sqrt_f32) for arm_sqrt_f32
+    vision.o(i.Update_Current_State) refers to vision.o(.data) for .data
+    vision.o(i.Update_Current_State) refers to vision.o(.bss) for .bss
+    vision.o(i.Update_Observer_With_Target) refers to kalman_filter.o(i.Kalman_Filter_Update) for Kalman_Filter_Update
+    vision.o(i.Update_Observer_With_Target) refers to vision.o(.bss) for .bss
+    vision.o(i.Vision_AutoShoot_Computation_Query) refers to referee.o(i.get_bullet_speed) for get_bullet_speed
+    vision.o(i.Vision_AutoShoot_Computation_Query) refers to usbd_cdc_if.o(i.CDC_Transmit_FS) for CDC_Transmit_FS
+    vision.o(i.Vision_AutoShoot_Computation_Query) refers to tasks.o(i.vTaskPrioritySet) for vTaskPrioritySet
+    vision.o(i.Vision_AutoShoot_Computation_Query) refers to tasks.o(i.ulTaskNotifyTake) for ulTaskNotifyTake
+    vision.o(i.Vision_AutoShoot_Computation_Query) refers to vision.o(.bss) for .bss
+    vision.o(i.Vision_AutoShoot_Computation_Query) refers to gimbal_task.o(.bss) for gimbal_control
+    vision.o(i.Vision_AutoShoot_Computation_Query) refers to freertos.o(.data) for vision_task_handle
+    vision.o(i.Vision_AutoShoot_Computation_Query_Callback) refers to vision.o(.bss) for .bss
+    vision.o(i.Vision_AutoShoot_Computation_Query_Callback) refers to usbd_cdc_if.o(.bss) for UserRxBufferFS
+    vision.o(i.Vision_AutoShoot_Predict) refers to vision.o(i.IMU_Pose_Update) for IMU_Pose_Update
+    vision.o(i.Vision_AutoShoot_Predict) refers to vision.o(i.Sync_Pose) for Sync_Pose
+    vision.o(i.Vision_AutoShoot_Predict) refers to dfltui.o(.text) for __aeabi_ui2d
+    vision.o(i.Vision_AutoShoot_Predict) refers to dmul.o(.text) for __aeabi_dmul
+    vision.o(i.Vision_AutoShoot_Predict) refers to d2f.o(.text) for __aeabi_d2f
+    vision.o(i.Vision_AutoShoot_Predict) refers to vision.o(i.Observer_Matrix_Update) for Observer_Matrix_Update
+    vision.o(i.Vision_AutoShoot_Predict) refers to vision.o(i.Update_Observer_With_Target) for Update_Observer_With_Target
+    vision.o(i.Vision_AutoShoot_Predict) refers to vision.o(i.Initialize_Observer_With_Target) for Initialize_Observer_With_Target
+    vision.o(i.Vision_AutoShoot_Predict) refers to kalman_filter.o(i.Kalman_Filter_Reset) for Kalman_Filter_Reset
+    vision.o(i.Vision_AutoShoot_Predict) refers to memcpya.o(.text) for __aeabi_memcpy4
+    vision.o(i.Vision_AutoShoot_Predict) refers to f2d.o(.text) for __aeabi_f2d
+    vision.o(i.Vision_AutoShoot_Predict) refers to dadd.o(.text) for __aeabi_dadd
+    vision.o(i.Vision_AutoShoot_Predict) refers to vision.o(i.Future_Predict) for Future_Predict
+    vision.o(i.Vision_AutoShoot_Predict) refers to vision.o(i.Vision_AutoShoot_Computation_Query) for Vision_AutoShoot_Computation_Query
+    vision.o(i.Vision_AutoShoot_Predict) refers to vision.o(i.Update_Current_State) for Update_Current_State
+    vision.o(i.Vision_AutoShoot_Predict) refers to vision.o(i.Motion_Pause) for Motion_Pause
+    vision.o(i.Vision_AutoShoot_Predict) refers to vision.o(.data) for .data
+    vision.o(i.Vision_AutoShoot_Predict) refers to vision.o(.bss) for .bss
+    vision.o(i.Vision_AutoShoot_Predict) refers to gimbal_task.o(.bss) for gimbal_control
+    vision.o(i.Vision_Init) refers to remote_control.o(i.get_remote_control_point) for get_remote_control_point
+    vision.o(i.Vision_Init) refers to arm_mat_init_f32.o(.text) for arm_mat_init_f32
+    vision.o(i.Vision_Init) refers to kalman_filter.o(i.Kalman_Filter_Create) for Kalman_Filter_Create
+    vision.o(i.Vision_Init) refers to memcpya.o(.text) for __aeabi_memcpy4
+    vision.o(i.Vision_Init) refers to vision.o(.bss) for .bss
+    vision.o(i.Vision_Init) refers to vision.o(.data) for .data
+    vision.o(i.Vision_Unpack) refers to tasks.o(i.ulTaskNotifyTake) for ulTaskNotifyTake
+    vision.o(i.Vision_Unpack) refers to queue.o(i.xQueueSemaphoreTake) for xQueueSemaphoreTake
+    vision.o(i.Vision_Unpack) refers to queue.o(i.xQueueGenericSend) for xQueueGenericSend
+    vision.o(i.Vision_Unpack) refers to detect_task.o(i.detect_hook) for detect_hook
+    vision.o(i.Vision_Unpack) refers to vision.o(.bss) for .bss
+    vision.o(i.Vision_Unpack) refers to vision.o(.data) for .data
+    vision.o(i.Vision_Unpack_Callback) refers to vision.o(.bss) for .bss
+    vision.o(i.Vision_Unpack_Callback) refers to usbd_cdc_if.o(.bss) for UserRxBufferFS
+    vision.o(i.Vision_mode_switch) refers to usbd_cdc_if.o(i.CDC_Transmit_FS) for CDC_Transmit_FS
+    vision.o(i.Vision_mode_switch) refers to vision.o(.data) for .data
+    vision.o(i.Vision_task) refers to vision.o(i.Vision_Init) for Vision_Init
+    vision.o(i.Vision_task) refers to queue.o(i.xQueueCreateMutex) for xQueueCreateMutex
+    vision.o(i.Vision_task) refers to memcpya.o(.text) for __aeabi_memcpy4
+    vision.o(i.Vision_task) refers to cmsis_os.o(i.osThreadCreate) for osThreadCreate
+    vision.o(i.Vision_task) refers to queue.o(i.xQueueSemaphoreTake) for xQueueSemaphoreTake
+    vision.o(i.Vision_task) refers to queue.o(i.xQueueGenericSend) for xQueueGenericSend
+    vision.o(i.Vision_task) refers to vision.o(i.Vision_mode_switch) for Vision_mode_switch
+    vision.o(i.Vision_task) refers to vision.o(i.Vision_AutoShoot_Predict) for Vision_AutoShoot_Predict
+    vision.o(i.Vision_task) refers to tasks.o(i.vTaskDelay) for vTaskDelay
+    vision.o(i.Vision_task) refers to vision.o(.bss) for .bss
+    vision.o(i.Vision_task) refers to vision.o(.data) for .data
+    vision.o(i.Vision_task) refers to vision.o(.constdata) for .constdata
+    vision.o(i.get_vision_data) refers to vision.o(.bss) for .bss
+    vision.o(i.queue_init) refers to memseta.o(.text) for __aeabi_memclr4
+    vision.o(.constdata) refers to vision.o(.conststring) for .conststring
+    vision.o(.constdata) refers to vision.o(i.Vision_Unpack) for Vision_Unpack
     ahrs_middleware.o(i.AHRS_acosf) refers to acosf.o(i.__hardfp_acosf) for __hardfp_acosf
     ahrs_middleware.o(i.AHRS_asinf) refers to asinf.o(i.__hardfp_asinf) for __hardfp_asinf
     ahrs_middleware.o(i.AHRS_atan2f) refers to atan2f.o(i.__hardfp_atan2f) for __hardfp_atan2f
-    ahrs_middleware.o(i.AHRS_invSqrt) refers to sqrtf.o(i.__hardfp_sqrtf) for __hardfp_sqrtf
+    ahrs_middleware.o(i.AHRS_cosf) refers to arm_cos_f32.o(.text) for arm_cos_f32
+    ahrs_middleware.o(i.AHRS_invSqrt) refers to sqrtf_full.o(i.__hardfp_sqrtf) for __hardfp_sqrtf
+    ahrs_middleware.o(i.AHRS_sinf) refers to arm_sin_f32.o(.text) for arm_sin_f32
     ahrs_middleware.o(i.AHRS_tanf) refers to tanf.o(i.__hardfp_tanf) for __hardfp_tanf
     kalman_filter.o(i.H_K_R_Adjustment) refers to memcpya.o(.text) for __aeabi_memcpy4
     kalman_filter.o(i.H_K_R_Adjustment) refers to memseta.o(.text) for __aeabi_memclr4
     kalman_filter.o(i.H_K_R_Adjustment) refers to kalman_filter.o(.data) for .data
     kalman_filter.o(i.Kalman_Filter_Create) refers to malloc.o(i.malloc) for malloc
     kalman_filter.o(i.Kalman_Filter_Create) refers to memseta.o(.text) for __aeabi_memclr
+    kalman_filter.o(i.Kalman_Filter_Create) refers to arm_mat_init_f32.o(.text) for arm_mat_init_f32
     kalman_filter.o(i.Kalman_Filter_Create) refers to kalman_filter.o(.data) for .data
     kalman_filter.o(i.Kalman_Filter_Reset) refers to memseta.o(.text) for __aeabi_memclr4
     kalman_filter.o(i.Kalman_Filter_Reset) refers to kalman_filter.o(.data) for .data
     kalman_filter.o(i.Kalman_Filter_Update) refers to kalman_filter.o(i.H_K_R_Adjustment) for H_K_R_Adjustment
     kalman_filter.o(i.Kalman_Filter_Update) refers to memcpya.o(.text) for __aeabi_memcpy4
     kalman_filter.o(i.Kalman_Filter_Update) refers to memseta.o(.text) for __aeabi_memclr4
+    kalman_filter.o(i.Kalman_Filter_Update) refers to arm_mat_mult_f32.o(.text) for arm_mat_mult_f32
+    kalman_filter.o(i.Kalman_Filter_Update) refers to arm_mat_add_f32.o(.text) for arm_mat_add_f32
+    kalman_filter.o(i.Kalman_Filter_Update) refers to arm_mat_trans_f32.o(.text) for arm_mat_trans_f32
+    kalman_filter.o(i.Kalman_Filter_Update) refers to arm_mat_inverse_f32.o(.text) for arm_mat_inverse_f32
+    kalman_filter.o(i.Kalman_Filter_Update) refers to arm_mat_sub_f32.o(.text) for arm_mat_sub_f32
     kalman_filter.o(i.Kalman_Filter_Update) refers to kalman_filter.o(.data) for .data
     user_lib.o(i.theta_format) refers to user_lib.o(i.loop_fp32_constrain) for loop_fp32_constrain
     cpu_utils.o(i.EndIdleMonitor) refers to tasks.o(i.xTaskGetCurrentTaskHandle) for xTaskGetCurrentTaskHandle
@@ -2130,8 +2410,136 @@ Section Cross References
     mem_mang4.o(i.heap_malloc) refers to mem_mang4.o(.data) for .data
     mem_mang4.o(i.heap_print_block) refers to mem_mang4.o(.data) for .data
     mem_mang4.o(i.insert_into_free_list) refers to mem_mang4.o(.data) for .data
+    bmi088driver.o(i.BMI088_accel_read_over) refers to bmi088driver.o(.data) for .data
+    bmi088driver.o(i.BMI088_gyro_read_over) refers to bmi088driver.o(.data) for .data
+    bmi088driver.o(i.BMI088_init) refers to bmi088middleware.o(i.BMI088_GPIO_init) for BMI088_GPIO_init
+    bmi088driver.o(i.BMI088_init) refers to bmi088middleware.o(i.BMI088_com_init) for BMI088_com_init
+    bmi088driver.o(i.BMI088_init) refers to bmi088driver.o(i.bmi088_accel_self_test) for bmi088_accel_self_test
+    bmi088driver.o(i.BMI088_init) refers to bmi088driver.o(i.bmi088_accel_init) for bmi088_accel_init
+    bmi088driver.o(i.BMI088_init) refers to bmi088driver.o(i.bmi088_gyro_self_test) for bmi088_gyro_self_test
+    bmi088driver.o(i.BMI088_init) refers to bmi088driver.o(i.bmi088_gyro_init) for bmi088_gyro_init
+    bmi088driver.o(i.BMI088_read) refers to bmi088middleware.o(i.BMI088_ACCEL_NS_L) for BMI088_ACCEL_NS_L
+    bmi088driver.o(i.BMI088_read) refers to bmi088middleware.o(i.BMI088_read_write_byte) for BMI088_read_write_byte
+    bmi088driver.o(i.BMI088_read) refers to bmi088driver.o(i.BMI088_read_muli_reg) for BMI088_read_muli_reg
+    bmi088driver.o(i.BMI088_read) refers to bmi088middleware.o(i.BMI088_ACCEL_NS_H) for BMI088_ACCEL_NS_H
+    bmi088driver.o(i.BMI088_read) refers to bmi088middleware.o(i.BMI088_GYRO_NS_L) for BMI088_GYRO_NS_L
+    bmi088driver.o(i.BMI088_read) refers to bmi088middleware.o(i.BMI088_GYRO_NS_H) for BMI088_GYRO_NS_H
+    bmi088driver.o(i.BMI088_read) refers to bmi088driver.o(.data) for .data
+    bmi088driver.o(i.BMI088_read_accel_who_am_i) refers to bmi088middleware.o(i.BMI088_ACCEL_NS_L) for BMI088_ACCEL_NS_L
+    bmi088driver.o(i.BMI088_read_accel_who_am_i) refers to bmi088middleware.o(i.BMI088_read_write_byte) for BMI088_read_write_byte
+    bmi088driver.o(i.BMI088_read_accel_who_am_i) refers to bmi088middleware.o(i.BMI088_ACCEL_NS_H) for BMI088_ACCEL_NS_H
+    bmi088driver.o(i.BMI088_read_gyro_who_am_i) refers to bmi088middleware.o(i.BMI088_GYRO_NS_L) for BMI088_GYRO_NS_L
+    bmi088driver.o(i.BMI088_read_gyro_who_am_i) refers to bmi088driver.o(i.BMI088_read_single_reg) for BMI088_read_single_reg
+    bmi088driver.o(i.BMI088_read_gyro_who_am_i) refers to bmi088middleware.o(i.BMI088_GYRO_NS_H) for BMI088_GYRO_NS_H
+    bmi088driver.o(i.BMI088_read_muli_reg) refers to bmi088middleware.o(i.BMI088_read_write_byte) for BMI088_read_write_byte
+    bmi088driver.o(i.BMI088_read_single_reg) refers to bmi088middleware.o(i.BMI088_read_write_byte) for BMI088_read_write_byte
+    bmi088driver.o(i.BMI088_write_single_reg) refers to bmi088middleware.o(i.BMI088_read_write_byte) for BMI088_read_write_byte
+    bmi088driver.o(i.bmi088_accel_init) refers to bmi088middleware.o(i.BMI088_ACCEL_NS_L) for BMI088_ACCEL_NS_L
+    bmi088driver.o(i.bmi088_accel_init) refers to bmi088middleware.o(i.BMI088_read_write_byte) for BMI088_read_write_byte
+    bmi088driver.o(i.bmi088_accel_init) refers to bmi088middleware.o(i.BMI088_ACCEL_NS_H) for BMI088_ACCEL_NS_H
+    bmi088driver.o(i.bmi088_accel_init) refers to bmi088middleware.o(i.BMI088_delay_us) for BMI088_delay_us
+    bmi088driver.o(i.bmi088_accel_init) refers to bmi088driver.o(i.BMI088_write_single_reg) for BMI088_write_single_reg
+    bmi088driver.o(i.bmi088_accel_init) refers to bmi088middleware.o(i.BMI088_delay_ms) for BMI088_delay_ms
+    bmi088driver.o(i.bmi088_accel_init) refers to bmi088driver.o(.data) for .data
+    bmi088driver.o(i.bmi088_accel_self_test) refers to bmi088middleware.o(i.BMI088_ACCEL_NS_L) for BMI088_ACCEL_NS_L
+    bmi088driver.o(i.bmi088_accel_self_test) refers to bmi088middleware.o(i.BMI088_read_write_byte) for BMI088_read_write_byte
+    bmi088driver.o(i.bmi088_accel_self_test) refers to bmi088middleware.o(i.BMI088_ACCEL_NS_H) for BMI088_ACCEL_NS_H
+    bmi088driver.o(i.bmi088_accel_self_test) refers to bmi088middleware.o(i.BMI088_delay_us) for BMI088_delay_us
+    bmi088driver.o(i.bmi088_accel_self_test) refers to bmi088driver.o(i.BMI088_write_single_reg) for BMI088_write_single_reg
+    bmi088driver.o(i.bmi088_accel_self_test) refers to bmi088middleware.o(i.BMI088_delay_ms) for BMI088_delay_ms
+    bmi088driver.o(i.bmi088_accel_self_test) refers to bmi088driver.o(i.BMI088_read_muli_reg) for BMI088_read_muli_reg
+    bmi088driver.o(i.bmi088_accel_self_test) refers to bmi088driver.o(.constdata) for .constdata
+    bmi088driver.o(i.bmi088_gyro_init) refers to bmi088middleware.o(i.BMI088_GYRO_NS_L) for BMI088_GYRO_NS_L
+    bmi088driver.o(i.bmi088_gyro_init) refers to bmi088driver.o(i.BMI088_read_single_reg) for BMI088_read_single_reg
+    bmi088driver.o(i.bmi088_gyro_init) refers to bmi088middleware.o(i.BMI088_GYRO_NS_H) for BMI088_GYRO_NS_H
+    bmi088driver.o(i.bmi088_gyro_init) refers to bmi088middleware.o(i.BMI088_delay_us) for BMI088_delay_us
+    bmi088driver.o(i.bmi088_gyro_init) refers to bmi088driver.o(i.BMI088_write_single_reg) for BMI088_write_single_reg
+    bmi088driver.o(i.bmi088_gyro_init) refers to bmi088middleware.o(i.BMI088_delay_ms) for BMI088_delay_ms
+    bmi088driver.o(i.bmi088_gyro_init) refers to bmi088driver.o(.data) for .data
+    bmi088driver.o(i.bmi088_gyro_self_test) refers to bmi088middleware.o(i.BMI088_GYRO_NS_L) for BMI088_GYRO_NS_L
+    bmi088driver.o(i.bmi088_gyro_self_test) refers to bmi088driver.o(i.BMI088_read_single_reg) for BMI088_read_single_reg
+    bmi088driver.o(i.bmi088_gyro_self_test) refers to bmi088middleware.o(i.BMI088_GYRO_NS_H) for BMI088_GYRO_NS_H
+    bmi088driver.o(i.bmi088_gyro_self_test) refers to bmi088middleware.o(i.BMI088_delay_us) for BMI088_delay_us
+    bmi088driver.o(i.bmi088_gyro_self_test) refers to bmi088driver.o(i.BMI088_write_single_reg) for BMI088_write_single_reg
+    bmi088driver.o(i.bmi088_gyro_self_test) refers to bmi088middleware.o(i.BMI088_delay_ms) for BMI088_delay_ms
+    bmi088driver.o(i.get_BMI088_accel) refers to bmi088middleware.o(i.BMI088_ACCEL_NS_L) for BMI088_ACCEL_NS_L
+    bmi088driver.o(i.get_BMI088_accel) refers to bmi088middleware.o(i.BMI088_read_write_byte) for BMI088_read_write_byte
+    bmi088driver.o(i.get_BMI088_accel) refers to bmi088driver.o(i.BMI088_read_muli_reg) for BMI088_read_muli_reg
+    bmi088driver.o(i.get_BMI088_accel) refers to bmi088middleware.o(i.BMI088_ACCEL_NS_H) for BMI088_ACCEL_NS_H
+    bmi088driver.o(i.get_BMI088_accel) refers to bmi088driver.o(.data) for .data
+    bmi088driver.o(i.get_BMI088_gyro) refers to bmi088middleware.o(i.BMI088_GYRO_NS_L) for BMI088_GYRO_NS_L
+    bmi088driver.o(i.get_BMI088_gyro) refers to bmi088driver.o(i.BMI088_read_muli_reg) for BMI088_read_muli_reg
+    bmi088driver.o(i.get_BMI088_gyro) refers to bmi088middleware.o(i.BMI088_GYRO_NS_H) for BMI088_GYRO_NS_H
+    bmi088driver.o(i.get_BMI088_sensor_time) refers to bmi088middleware.o(i.BMI088_ACCEL_NS_L) for BMI088_ACCEL_NS_L
+    bmi088driver.o(i.get_BMI088_sensor_time) refers to bmi088middleware.o(i.BMI088_read_write_byte) for BMI088_read_write_byte
+    bmi088driver.o(i.get_BMI088_sensor_time) refers to bmi088driver.o(i.BMI088_read_muli_reg) for BMI088_read_muli_reg
+    bmi088driver.o(i.get_BMI088_sensor_time) refers to bmi088middleware.o(i.BMI088_ACCEL_NS_H) for BMI088_ACCEL_NS_H
+    bmi088driver.o(i.get_BMI088_temperate) refers to bmi088middleware.o(i.BMI088_ACCEL_NS_L) for BMI088_ACCEL_NS_L
+    bmi088driver.o(i.get_BMI088_temperate) refers to bmi088middleware.o(i.BMI088_read_write_byte) for BMI088_read_write_byte
+    bmi088driver.o(i.get_BMI088_temperate) refers to bmi088driver.o(i.BMI088_read_muli_reg) for BMI088_read_muli_reg
+    bmi088driver.o(i.get_BMI088_temperate) refers to bmi088middleware.o(i.BMI088_ACCEL_NS_H) for BMI088_ACCEL_NS_H
+    bmi088middleware.o(i.BMI088_ACCEL_NS_H) refers to stm32f4xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
+    bmi088middleware.o(i.BMI088_ACCEL_NS_L) refers to stm32f4xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
+    bmi088middleware.o(i.BMI088_GYRO_NS_H) refers to stm32f4xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
+    bmi088middleware.o(i.BMI088_GYRO_NS_L) refers to stm32f4xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
+    bmi088middleware.o(i.BMI088_delay_ms) refers to cmsis_os.o(i.osDelay) for osDelay
+    bmi088middleware.o(i.BMI088_delay_us) refers to bsp_delay.o(i.delay_us) for delay_us
+    bmi088middleware.o(i.BMI088_read_write_byte) refers to stm32f4xx_hal_spi.o(i.HAL_SPI_TransmitReceive) for HAL_SPI_TransmitReceive
+    bmi088middleware.o(i.BMI088_read_write_byte) refers to spi.o(.bss) for hspi1
+    ist8310driver.o(i.ist8310_init) refers to ist8310driver_middleware.o(i.ist8310_GPIO_init) for ist8310_GPIO_init
+    ist8310driver.o(i.ist8310_init) refers to ist8310driver_middleware.o(i.ist8310_com_init) for ist8310_com_init
+    ist8310driver.o(i.ist8310_init) refers to ist8310driver_middleware.o(i.ist8310_RST_L) for ist8310_RST_L
+    ist8310driver.o(i.ist8310_init) refers to ist8310driver_middleware.o(i.ist8310_delay_ms) for ist8310_delay_ms
+    ist8310driver.o(i.ist8310_init) refers to ist8310driver_middleware.o(i.ist8310_RST_H) for ist8310_RST_H
+    ist8310driver.o(i.ist8310_init) refers to ist8310driver_middleware.o(i.ist8310_IIC_read_single_reg) for ist8310_IIC_read_single_reg
+    ist8310driver.o(i.ist8310_init) refers to ist8310driver_middleware.o(i.ist8310_IIC_write_single_reg) for ist8310_IIC_write_single_reg
+    ist8310driver.o(i.ist8310_init) refers to ist8310driver.o(.constdata) for .constdata
+    ist8310driver.o(i.ist8310_read_mag) refers to ist8310driver_middleware.o(i.ist8310_IIC_read_muli_reg) for ist8310_IIC_read_muli_reg
+    ist8310driver_middleware.o(i.ist8310_IIC_read_muli_reg) refers to stm32f4xx_hal_i2c.o(i.HAL_I2C_Mem_Read) for HAL_I2C_Mem_Read
+    ist8310driver_middleware.o(i.ist8310_IIC_read_muli_reg) refers to i2c.o(.bss) for hi2c3
+    ist8310driver_middleware.o(i.ist8310_IIC_read_single_reg) refers to stm32f4xx_hal_i2c.o(i.HAL_I2C_Mem_Read) for HAL_I2C_Mem_Read
+    ist8310driver_middleware.o(i.ist8310_IIC_read_single_reg) refers to i2c.o(.bss) for hi2c3
+    ist8310driver_middleware.o(i.ist8310_IIC_write_muli_reg) refers to stm32f4xx_hal_i2c.o(i.HAL_I2C_Mem_Write) for HAL_I2C_Mem_Write
+    ist8310driver_middleware.o(i.ist8310_IIC_write_muli_reg) refers to i2c.o(.bss) for hi2c3
+    ist8310driver_middleware.o(i.ist8310_IIC_write_single_reg) refers to stm32f4xx_hal_i2c.o(i.HAL_I2C_Mem_Write) for HAL_I2C_Mem_Write
+    ist8310driver_middleware.o(i.ist8310_IIC_write_single_reg) refers to i2c.o(.bss) for hi2c3
+    ist8310driver_middleware.o(i.ist8310_RST_H) refers to stm32f4xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
+    ist8310driver_middleware.o(i.ist8310_RST_L) refers to stm32f4xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
+    ist8310driver_middleware.o(i.ist8310_delay_ms) refers to cmsis_os.o(i.osDelay) for osDelay
+    ist8310driver_middleware.o(i.ist8310_delay_us) refers to bsp_delay.o(i.delay_us) for delay_us
+    ahrs.o(i.AHRS_init) refers to ahrs_middleware.o(i.AHRS_get_height) for AHRS_get_height
+    ahrs.o(i.AHRS_init) refers to ahrs_middleware.o(i.AHRS_get_latitude) for AHRS_get_latitude
+    ahrs.o(i.AHRS_init) refers to ahrs_middleware.o(i.AHRS_sinf) for AHRS_sinf
+    ahrs.o(i.AHRS_init) refers to ahrs_middleware.o(i.AHRS_invSqrt) for AHRS_invSqrt
+    ahrs.o(i.AHRS_init) refers to ahrs_middleware.o(i.AHRS_asinf) for AHRS_asinf
+    ahrs.o(i.AHRS_init) refers to ahrs_middleware.o(i.AHRS_atan2f) for AHRS_atan2f
+    ahrs.o(i.AHRS_init) refers to ahrs_middleware.o(i.AHRS_cosf) for AHRS_cosf
+    ahrs.o(i.AHRS_init) refers to ahrs.o(i.angle_to_quat) for angle_to_quat
+    ahrs.o(i.AHRS_init) refers to ahrs.o(.data) for local_hight
+    ahrs.o(i.AHRS_update) refers to ahrs.o(i.accel_comple_filter) for accel_comple_filter
+    ahrs.o(i.AHRS_update) refers to memseta.o(.text) for __aeabi_memclr4
+    ahrs.o(i.AHRS_update) refers to ahrs.o(i.update_w) for update_w
+    ahrs.o(i.AHRS_update) refers to ahrs.o(i.quat_normalization) for quat_normalization
+    ahrs.o(i.accel_comple_filter) refers to ahrs.o(i.accel_update_kp_ki) for accel_update_kp_ki
+    ahrs.o(i.accel_comple_filter) refers to ahrs_middleware.o(i.AHRS_invSqrt) for AHRS_invSqrt
+    ahrs.o(i.accel_comple_filter) refers to ahrs.o(.constdata) for .constdata
+    ahrs.o(i.accel_update_kp_ki) refers to ahrs_middleware.o(i.AHRS_invSqrt) for AHRS_invSqrt
+    ahrs.o(i.accel_update_kp_ki) refers to ahrs.o(i.AHRS_fabs) for AHRS_fabs
+    ahrs.o(i.accel_update_kp_ki) refers to ahrs.o(.data) for carrier_gravity
+    ahrs.o(i.angle_to_quat) refers to ahrs_middleware.o(i.AHRS_cosf) for AHRS_cosf
+    ahrs.o(i.angle_to_quat) refers to ahrs_middleware.o(i.AHRS_sinf) for AHRS_sinf
+    ahrs.o(i.get_angle) refers to ahrs_middleware.o(i.AHRS_asinf) for AHRS_asinf
+    ahrs.o(i.get_angle) refers to ahrs_middleware.o(i.AHRS_atan2f) for AHRS_atan2f
+    ahrs.o(i.get_carrier_gravity) refers to ahrs.o(.data) for carrier_gravity
+    ahrs.o(i.get_pitch) refers to ahrs_middleware.o(i.AHRS_asinf) for AHRS_asinf
+    ahrs.o(i.get_roll) refers to ahrs_middleware.o(i.AHRS_atan2f) for AHRS_atan2f
+    ahrs.o(i.get_yaw) refers to ahrs_middleware.o(i.AHRS_atan2f) for AHRS_atan2f
+    ahrs.o(i.quat_normalization) refers to ahrs_middleware.o(i.AHRS_invSqrt) for AHRS_invSqrt
+    arm_cos_f32.o(.text) refers to arm_common_tables.o(.constdata) for sinTable_f32
+    arm_sin_f32.o(.text) refers to arm_common_tables.o(.constdata) for sinTable_f32
+    arm_sin_cos_f32.o(.text) refers to arm_common_tables.o(.constdata) for sinTable_f32
     acosf.o(i.__hardfp_acosf) refers (Special) to iusefp.o(.text) for __I$use$fp
-    acosf.o(i.__hardfp_acosf) refers to sqrtf.o(i.sqrtf) for sqrtf
+    acosf.o(i.__hardfp_acosf) refers to sqrtf_full.o(i.sqrtf) for sqrtf
     acosf.o(i.__hardfp_acosf) refers to funder.o(i.__mathlib_flt_infnan) for __mathlib_flt_infnan
     acosf.o(i.__hardfp_acosf) refers to errno.o(i.__set_errno) for __set_errno
     acosf.o(i.__hardfp_acosf) refers to funder.o(i.__mathlib_flt_invalid) for __mathlib_flt_invalid
@@ -2140,7 +2548,7 @@ Section Cross References
     acosf.o(i.acosf) refers (Special) to iusefp.o(.text) for __I$use$fp
     acosf.o(i.acosf) refers to acosf.o(i.__hardfp_acosf) for __hardfp_acosf
     acosf_x.o(i.____hardfp_acosf$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
-    acosf_x.o(i.____hardfp_acosf$lsc) refers to sqrtf.o(i.sqrtf) for sqrtf
+    acosf_x.o(i.____hardfp_acosf$lsc) refers to sqrtf_full.o(i.sqrtf) for sqrtf
     acosf_x.o(i.____hardfp_acosf$lsc) refers to funder.o(i.__mathlib_flt_infnan) for __mathlib_flt_infnan
     acosf_x.o(i.____hardfp_acosf$lsc) refers to errno.o(i.__set_errno) for __set_errno
     acosf_x.o(i.____softfp_acosf$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
@@ -2148,7 +2556,7 @@ Section Cross References
     acosf_x.o(i.__acosf$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
     acosf_x.o(i.__acosf$lsc) refers to acosf_x.o(i.____hardfp_acosf$lsc) for ____hardfp_acosf$lsc
     asinf.o(i.__hardfp_asinf) refers (Special) to iusefp.o(.text) for __I$use$fp
-    asinf.o(i.__hardfp_asinf) refers to sqrtf.o(i.sqrtf) for sqrtf
+    asinf.o(i.__hardfp_asinf) refers to sqrtf_full.o(i.sqrtf) for sqrtf
     asinf.o(i.__hardfp_asinf) refers to fpclassifyf.o(i.__ARM_fpclassifyf) for __ARM_fpclassifyf
     asinf.o(i.__hardfp_asinf) refers to funder.o(i.__mathlib_flt_underflow) for __mathlib_flt_underflow
     asinf.o(i.__hardfp_asinf) refers to funder.o(i.__mathlib_flt_infnan) for __mathlib_flt_infnan
@@ -2159,7 +2567,7 @@ Section Cross References
     asinf.o(i.asinf) refers (Special) to iusefp.o(.text) for __I$use$fp
     asinf.o(i.asinf) refers to asinf.o(i.__hardfp_asinf) for __hardfp_asinf
     asinf_x.o(i.____hardfp_asinf$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
-    asinf_x.o(i.____hardfp_asinf$lsc) refers to sqrtf.o(i.sqrtf) for sqrtf
+    asinf_x.o(i.____hardfp_asinf$lsc) refers to sqrtf_full.o(i.sqrtf) for sqrtf
     asinf_x.o(i.____hardfp_asinf$lsc) refers to funder.o(i.__mathlib_flt_infnan) for __mathlib_flt_infnan
     asinf_x.o(i.____hardfp_asinf$lsc) refers to errno.o(i.__set_errno) for __set_errno
     asinf_x.o(i.____softfp_asinf$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
@@ -2183,21 +2591,90 @@ Section Cross References
     atan2f_x.o(i.____softfp_atan2f$lsc) refers to atan2f_x.o(i.____hardfp_atan2f$lsc) for ____hardfp_atan2f$lsc
     atan2f_x.o(i.__atan2f$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
     atan2f_x.o(i.__atan2f$lsc) refers to atan2f_x.o(i.____hardfp_atan2f$lsc) for ____hardfp_atan2f$lsc
+    exp.o(i.__hardfp_exp) refers (Special) to iusefp.o(.text) for __I$use$fp
+    exp.o(i.__hardfp_exp) refers to dunder.o(i.__mathlib_dbl_infnan) for __mathlib_dbl_infnan
+    exp.o(i.__hardfp_exp) refers to cdrcmple.o(.text) for __aeabi_cdrcmple
+    exp.o(i.__hardfp_exp) refers to errno.o(i.__set_errno) for __set_errno
+    exp.o(i.__hardfp_exp) refers to dunder.o(i.__mathlib_dbl_overflow) for __mathlib_dbl_overflow
+    exp.o(i.__hardfp_exp) refers to cdcmple.o(.text) for __aeabi_cdcmple
+    exp.o(i.__hardfp_exp) refers to dunder.o(i.__mathlib_dbl_underflow) for __mathlib_dbl_underflow
+    exp.o(i.__hardfp_exp) refers to dadd.o(.text) for __aeabi_dsub
+    exp.o(i.__hardfp_exp) refers to dmul.o(.text) for __aeabi_dmul
+    exp.o(i.__hardfp_exp) refers to dfixi.o(.text) for __aeabi_d2iz
+    exp.o(i.__hardfp_exp) refers to dflti.o(.text) for __aeabi_i2d
+    exp.o(i.__hardfp_exp) refers to poly.o(i.__kernel_poly) for __kernel_poly
+    exp.o(i.__hardfp_exp) refers to ddiv.o(.text) for __aeabi_ddiv
+    exp.o(i.__hardfp_exp) refers to fpclassify.o(i.__ARM_fpclassify) for __ARM_fpclassify
+    exp.o(i.__hardfp_exp) refers to exp.o(.constdata) for .constdata
+    exp.o(i.__softfp_exp) refers (Special) to iusefp.o(.text) for __I$use$fp
+    exp.o(i.__softfp_exp) refers to exp.o(i.__hardfp_exp) for __hardfp_exp
+    exp.o(i.exp) refers (Special) to iusefp.o(.text) for __I$use$fp
+    exp.o(i.exp) refers to exp.o(i.__hardfp_exp) for __hardfp_exp
+    exp.o(.constdata) refers (Special) to iusefp.o(.text) for __I$use$fp
+    exp_x.o(i.____hardfp_exp$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
+    exp_x.o(i.____hardfp_exp$lsc) refers to dunder.o(i.__mathlib_dbl_infnan) for __mathlib_dbl_infnan
+    exp_x.o(i.____hardfp_exp$lsc) refers to cdrcmple.o(.text) for __aeabi_cdrcmple
+    exp_x.o(i.____hardfp_exp$lsc) refers to errno.o(i.__set_errno) for __set_errno
+    exp_x.o(i.____hardfp_exp$lsc) refers to cdcmple.o(.text) for __aeabi_cdcmple
+    exp_x.o(i.____hardfp_exp$lsc) refers to dadd.o(.text) for __aeabi_dsub
+    exp_x.o(i.____hardfp_exp$lsc) refers to dmul.o(.text) for __aeabi_dmul
+    exp_x.o(i.____hardfp_exp$lsc) refers to dfixi.o(.text) for __aeabi_d2iz
+    exp_x.o(i.____hardfp_exp$lsc) refers to dflti.o(.text) for __aeabi_i2d
+    exp_x.o(i.____hardfp_exp$lsc) refers to poly.o(i.__kernel_poly) for __kernel_poly
+    exp_x.o(i.____hardfp_exp$lsc) refers to ddiv.o(.text) for __aeabi_ddiv
+    exp_x.o(i.____hardfp_exp$lsc) refers to qnan.o(.constdata) for __mathlib_zero
+    exp_x.o(i.____hardfp_exp$lsc) refers to exp_x.o(.constdata) for .constdata
+    exp_x.o(i.____softfp_exp$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
+    exp_x.o(i.____softfp_exp$lsc) refers to exp_x.o(i.____hardfp_exp$lsc) for ____hardfp_exp$lsc
+    exp_x.o(i.__exp$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
+    exp_x.o(i.__exp$lsc) refers to exp_x.o(i.____hardfp_exp$lsc) for ____hardfp_exp$lsc
+    exp_x.o(.constdata) refers (Special) to iusefp.o(.text) for __I$use$fp
     floorf.o(i.__hardfp_floorf) refers (Special) to iusefp.o(.text) for __I$use$fp
     floorf.o(i.__softfp_floorf) refers (Special) to iusefp.o(.text) for __I$use$fp
     floorf.o(i.floorf) refers (Special) to iusefp.o(.text) for __I$use$fp
-    sqrtf.o(i.__hardfp_sqrtf) refers (Special) to iusefp.o(.text) for __I$use$fp
-    sqrtf.o(i.__hardfp_sqrtf) refers to errno.o(i.__set_errno) for __set_errno
-    sqrtf.o(i.__softfp_sqrtf) refers (Special) to iusefp.o(.text) for __I$use$fp
-    sqrtf.o(i.__softfp_sqrtf) refers to errno.o(i.__set_errno) for __set_errno
-    sqrtf.o(i.sqrtf) refers (Special) to iusefp.o(.text) for __I$use$fp
-    sqrtf.o(i.sqrtf) refers to errno.o(i.__set_errno) for __set_errno
-    sqrtf_x.o(i.____hardfp_sqrtf$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
-    sqrtf_x.o(i.____hardfp_sqrtf$lsc) refers to errno.o(i.__set_errno) for __set_errno
-    sqrtf_x.o(i.____softfp_sqrtf$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
-    sqrtf_x.o(i.____softfp_sqrtf$lsc) refers to errno.o(i.__set_errno) for __set_errno
-    sqrtf_x.o(i.__sqrtf$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
-    sqrtf_x.o(i.__sqrtf$lsc) refers to errno.o(i.__set_errno) for __set_errno
+    pow.o(i.__hardfp_pow) refers (Special) to iusefp.o(.text) for __I$use$fp
+    pow.o(i.__hardfp_pow) refers to dunder.o(i.__mathlib_dbl_infnan2) for __mathlib_dbl_infnan2
+    pow.o(i.__hardfp_pow) refers to errno.o(i.__set_errno) for __set_errno
+    pow.o(i.__hardfp_pow) refers to dunder.o(i.__mathlib_dbl_divzero) for __mathlib_dbl_divzero
+    pow.o(i.__hardfp_pow) refers to dunder.o(i.__mathlib_dbl_overflow) for __mathlib_dbl_overflow
+    pow.o(i.__hardfp_pow) refers to ddiv.o(.text) for __aeabi_ddiv
+    pow.o(i.__hardfp_pow) refers to sqrt_full.o(i.sqrt) for sqrt
+    pow.o(i.__hardfp_pow) refers to fabs.o(i.fabs) for fabs
+    pow.o(i.__hardfp_pow) refers to dflti.o(.text) for __aeabi_i2d
+    pow.o(i.__hardfp_pow) refers to dunder.o(i.__mathlib_dbl_invalid) for __mathlib_dbl_invalid
+    pow.o(i.__hardfp_pow) refers to dmul.o(.text) for __aeabi_dmul
+    pow.o(i.__hardfp_pow) refers to dunder.o(i.__mathlib_dbl_underflow) for __mathlib_dbl_underflow
+    pow.o(i.__hardfp_pow) refers to dadd.o(.text) for __aeabi_dsub
+    pow.o(i.__hardfp_pow) refers to qnan.o(.constdata) for __mathlib_zero
+    pow.o(i.__hardfp_pow) refers to poly.o(i.__kernel_poly) for __kernel_poly
+    pow.o(i.__hardfp_pow) refers to pow.o(.constdata) for .constdata
+    pow.o(i.__hardfp_pow) refers to cdrcmple.o(.text) for __aeabi_cdrcmple
+    pow.o(i.__hardfp_pow) refers to dscalb.o(.text) for __ARM_scalbn
+    pow.o(i.__hardfp_pow) refers to fpclassify.o(i.__ARM_fpclassify) for __ARM_fpclassify
+    pow.o(i.__softfp_pow) refers (Special) to iusefp.o(.text) for __I$use$fp
+    pow.o(i.__softfp_pow) refers to pow.o(i.__hardfp_pow) for __hardfp_pow
+    pow.o(i.pow) refers (Special) to iusefp.o(.text) for __I$use$fp
+    pow.o(i.pow) refers to pow.o(i.__hardfp_pow) for __hardfp_pow
+    pow.o(.constdata) refers (Special) to iusefp.o(.text) for __I$use$fp
+    pow_x.o(i.____hardfp_pow$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
+    pow_x.o(i.____hardfp_pow$lsc) refers to dunder.o(i.__mathlib_dbl_infnan2) for __mathlib_dbl_infnan2
+    pow_x.o(i.____hardfp_pow$lsc) refers to errno.o(i.__set_errno) for __set_errno
+    pow_x.o(i.____hardfp_pow$lsc) refers to ddiv.o(.text) for __aeabi_ddiv
+    pow_x.o(i.____hardfp_pow$lsc) refers to sqrt_full.o(i.sqrt) for sqrt
+    pow_x.o(i.____hardfp_pow$lsc) refers to fabs.o(i.fabs) for fabs
+    pow_x.o(i.____hardfp_pow$lsc) refers to dflti.o(.text) for __aeabi_i2d
+    pow_x.o(i.____hardfp_pow$lsc) refers to dmul.o(.text) for __aeabi_dmul
+    pow_x.o(i.____hardfp_pow$lsc) refers to dadd.o(.text) for __aeabi_dsub
+    pow_x.o(i.____hardfp_pow$lsc) refers to qnan.o(.constdata) for __mathlib_zero
+    pow_x.o(i.____hardfp_pow$lsc) refers to poly.o(i.__kernel_poly) for __kernel_poly
+    pow_x.o(i.____hardfp_pow$lsc) refers to pow_x.o(.constdata) for .constdata
+    pow_x.o(i.____hardfp_pow$lsc) refers to cdrcmple.o(.text) for __aeabi_cdrcmple
+    pow_x.o(i.____hardfp_pow$lsc) refers to dscalb.o(.text) for __ARM_scalbn
+    pow_x.o(i.____softfp_pow$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
+    pow_x.o(i.____softfp_pow$lsc) refers to pow_x.o(i.____hardfp_pow$lsc) for ____hardfp_pow$lsc
+    pow_x.o(i.__pow$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
+    pow_x.o(i.__pow$lsc) refers to pow_x.o(i.____hardfp_pow$lsc) for ____hardfp_pow$lsc
+    pow_x.o(.constdata) refers (Special) to iusefp.o(.text) for __I$use$fp
     tanf.o(i.__hardfp_tanf) refers (Special) to iusefp.o(.text) for __I$use$fp
     tanf.o(i.__hardfp_tanf) refers to rredf.o(i.__mathlib_rredf2) for __mathlib_rredf2
     tanf.o(i.__hardfp_tanf) refers to fpclassifyf.o(i.__ARM_fpclassifyf) for __ARM_fpclassifyf
@@ -2217,6 +2694,25 @@ Section Cross References
     tanf_x.o(i.____softfp_tanf$lsc) refers to tanf_x.o(i.____hardfp_tanf$lsc) for ____hardfp_tanf$lsc
     tanf_x.o(i.__tanf$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
     tanf_x.o(i.__tanf$lsc) refers to tanf_x.o(i.____hardfp_tanf$lsc) for ____hardfp_tanf$lsc
+    fmin.o(i.__hardfp_fmin) refers (Special) to iusefp.o(.text) for __I$use$fp
+    fmin.o(i.__hardfp_fmin) refers to dcmp4.o(.text) for __ARM_dcmp4
+    fmin.o(i.fmin) refers (Special) to iusefp.o(.text) for __I$use$fp
+    fmin.o(i.fmin) refers to dcmp4.o(.text) for __ARM_dcmp4
+    sqrtf_full.o(i.__hardfp_sqrtf) refers (Special) to iusefp.o(.text) for __I$use$fp
+    sqrtf_full.o(i.__hardfp_sqrtf) refers to errno.o(i.__set_errno) for __set_errno
+    sqrtf_full.o(i.__softfp_sqrtf) refers (Special) to iusefp.o(.text) for __I$use$fp
+    sqrtf_full.o(i.__softfp_sqrtf) refers to errno.o(i.__set_errno) for __set_errno
+    sqrtf_full.o(i.sqrtf) refers (Special) to iusefp.o(.text) for __I$use$fp
+    sqrtf_full.o(i.sqrtf) refers to errno.o(i.__set_errno) for __set_errno
+    sqrtf_full_x.o(i.____hardfp_sqrtf$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
+    sqrtf_full_x.o(i.____hardfp_sqrtf$lsc) refers to errno.o(i.__set_errno) for __set_errno
+    sqrtf_full_x.o(i.____hardfp_sqrtf$lsc) refers to d2f.o(.text) for __aeabi_d2f
+    sqrtf_full_x.o(i.____softfp_sqrtf$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
+    sqrtf_full_x.o(i.____softfp_sqrtf$lsc) refers to errno.o(i.__set_errno) for __set_errno
+    sqrtf_full_x.o(i.____softfp_sqrtf$lsc) refers to d2f.o(.text) for __aeabi_d2f
+    sqrtf_full_x.o(i.__sqrtf$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
+    sqrtf_full_x.o(i.__sqrtf$lsc) refers to errno.o(i.__set_errno) for __set_errno
+    sqrtf_full_x.o(i.__sqrtf$lsc) refers to d2f.o(.text) for __aeabi_d2f
     entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry10a.o(.ARM.Collect$$$$0000000F) for __rt_final_cpp
     entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry11a.o(.ARM.Collect$$$$00000011) for __rt_final_exit
     entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry12b.o(.ARM.Collect$$$$0000000E) for __rt_lib_shutdown_fini
@@ -2259,16 +2755,59 @@ Section Cross References
     mallocra.o(i.__realloc$memalign) refers to mvars.o(.data) for __microlib_freelist
     mallocra.o(i.internal_alloc) refers to memcpya.o(.text) for __aeabi_memcpy
     mallocra.o(i.internal_alloc) refers to mvars.o(.data) for __microlib_freelist
+    dadd.o(.text) refers (Special) to iusefp.o(.text) for __I$use$fp
+    dadd.o(.text) refers to llshl.o(.text) for __aeabi_llsl
+    dadd.o(.text) refers to llsshr.o(.text) for __aeabi_lasr
+    dadd.o(.text) refers to depilogue.o(.text) for _double_epilogue
     dmul.o(.text) refers (Special) to iusefp.o(.text) for __I$use$fp
     dmul.o(.text) refers to depilogue.o(.text) for _double_epilogue
+    ddiv.o(.text) refers (Special) to iusefp.o(.text) for __I$use$fp
+    ddiv.o(.text) refers to depilogue.o(.text) for _double_round
     dfltui.o(.text) refers (Special) to iusefp.o(.text) for __I$use$fp
     dfltui.o(.text) refers to depilogue.o(.text) for _double_epilogue
+    f2d.o(.text) refers (Special) to iusefp.o(.text) for __I$use$fp
     d2f.o(.text) refers (Special) to iusefp.o(.text) for __I$use$fp
     d2f.o(.text) refers to fepilogue.o(.text) for _float_round
+    dunder.o(i.__mathlib_dbl_divzero) refers to ddiv.o(.text) for __aeabi_ddiv
+    dunder.o(i.__mathlib_dbl_infnan) refers to dadd.o(.text) for __aeabi_dadd
+    dunder.o(i.__mathlib_dbl_infnan2) refers to dadd.o(.text) for __aeabi_dadd
+    dunder.o(i.__mathlib_dbl_invalid) refers to ddiv.o(.text) for __aeabi_ddiv
+    dunder.o(i.__mathlib_dbl_overflow) refers to dmul.o(.text) for __aeabi_dmul
+    dunder.o(i.__mathlib_dbl_posinfnan) refers to dmul.o(.text) for __aeabi_dmul
+    dunder.o(i.__mathlib_dbl_underflow) refers to dmul.o(.text) for __aeabi_dmul
+    fabs.o(i.__hardfp_fabs) refers (Special) to iusefp.o(.text) for __I$use$fp
+    fabs.o(i.__softfp_fabs) refers (Special) to iusefp.o(.text) for __I$use$fp
+    fabs.o(i.fabs) refers (Special) to iusefp.o(.text) for __I$use$fp
+    fpclassify.o(i.__ARM_fpclassify) refers (Special) to iusefp.o(.text) for __I$use$fp
     fpclassifyf.o(i.__ARM_fpclassifyf) refers (Special) to iusefp.o(.text) for __I$use$fp
+    poly.o(i.__kernel_poly) refers (Special) to iusefp.o(.text) for __I$use$fp
+    poly.o(i.__kernel_poly) refers to dmul.o(.text) for __aeabi_dmul
+    poly.o(i.__kernel_poly) refers to dadd.o(.text) for __aeabi_dadd
+    qnan.o(.constdata) refers (Special) to iusefp.o(.text) for __I$use$fp
     rredf.o(i.__mathlib_rredf2) refers (Special) to iusefp.o(.text) for __I$use$fp
     rredf.o(i.__mathlib_rredf2) refers to rredf.o(.constdata) for .constdata
     rredf.o(.constdata) refers (Special) to iusefp.o(.text) for __I$use$fp
+    sqrt_full.o(i.__hardfp_sqrt) refers (Special) to iusefp.o(.text) for __I$use$fp
+    sqrt_full.o(i.__hardfp_sqrt) refers to dsqrt.o(.text) for _dsqrt
+    sqrt_full.o(i.__hardfp_sqrt) refers to errno.o(i.__set_errno) for __set_errno
+    sqrt_full.o(i.__softfp_sqrt) refers (Special) to iusefp.o(.text) for __I$use$fp
+    sqrt_full.o(i.__softfp_sqrt) refers to dsqrt.o(.text) for _dsqrt
+    sqrt_full.o(i.__softfp_sqrt) refers to errno.o(i.__set_errno) for __set_errno
+    sqrt_full.o(i.sqrt) refers (Special) to iusefp.o(.text) for __I$use$fp
+    sqrt_full.o(i.sqrt) refers to dsqrt.o(.text) for _dsqrt
+    sqrt_full.o(i.sqrt) refers to errno.o(i.__set_errno) for __set_errno
+    sqrt_full_x.o(i.____hardfp_sqrt$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
+    sqrt_full_x.o(i.____hardfp_sqrt$lsc) refers to cdcmple.o(.text) for __aeabi_cdcmple
+    sqrt_full_x.o(i.____hardfp_sqrt$lsc) refers to errno.o(i.__set_errno) for __set_errno
+    sqrt_full_x.o(i.____hardfp_sqrt$lsc) refers to dsqrt.o(.text) for _dsqrt
+    sqrt_full_x.o(i.____softfp_sqrt$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
+    sqrt_full_x.o(i.____softfp_sqrt$lsc) refers to cdcmple.o(.text) for __aeabi_cdcmple
+    sqrt_full_x.o(i.____softfp_sqrt$lsc) refers to errno.o(i.__set_errno) for __set_errno
+    sqrt_full_x.o(i.____softfp_sqrt$lsc) refers to dsqrt.o(.text) for _dsqrt
+    sqrt_full_x.o(i.__sqrt$lsc) refers (Special) to iusefp.o(.text) for __I$use$fp
+    sqrt_full_x.o(i.__sqrt$lsc) refers to cdcmple.o(.text) for __aeabi_cdcmple
+    sqrt_full_x.o(i.__sqrt$lsc) refers to errno.o(i.__set_errno) for __set_errno
+    sqrt_full_x.o(i.__sqrt$lsc) refers to dsqrt.o(.text) for _dsqrt
     entry2.o(.ARM.Collect$$$$00000001) refers to entry2.o(.ARM.Collect$$$$00002712) for __lit__00000000
     entry2.o(.ARM.Collect$$$$00002712) refers to startup_stm32f407xx.o(STACK) for __initial_sp
     entry2.o(__vectab_stack_and_reset_area) refers to startup_stm32f407xx.o(STACK) for __initial_sp
@@ -2281,7 +2820,11 @@ Section Cross References
     errno.o(i.__set_errno) refers to errno.o(.data) for .data
     depilogue.o(.text) refers to llshl.o(.text) for __aeabi_llsl
     depilogue.o(.text) refers to llushr.o(.text) for __aeabi_llsr
+    dflti.o(.text) refers to depilogue.o(.text) for _double_epilogue
+    dfixi.o(.text) refers to llushr.o(.text) for __aeabi_llsr
     init.o(.text) refers to entry5.o(.ARM.Collect$$$$00000004) for __main_after_scatterload
+    dsqrt.o(.text) refers to llushr.o(.text) for __aeabi_llsr
+    dsqrt.o(.text) refers to depilogue.o(.text) for _double_round
 
 
 ==============================================================================
@@ -2299,7 +2842,8 @@ Removing Unused input sections from the image.
     Removing freertos.o(.revsh_text), (4 bytes).
     Removing freertos.o(.rrx_text), (6 bytes).
     Removing freertos.o(i.ConfigureTimeForRunTimeStats), (16 bytes).
-    Removing freertos.o(i.stats_task), (52 bytes).
+    Removing freertos.o(i.test_task), (54 bytes).
+    Removing freertos.o(.data), (4 bytes).
     Removing freertos.o(.data), (4 bytes).
     Removing freertos.o(.data), (4 bytes).
     Removing adc.o(.rev16_text), (4 bytes).
@@ -2502,6 +3046,7 @@ Removing Unused input sections from the image.
     Removing stm32f4xx_hal_gpio.o(.revsh_text), (4 bytes).
     Removing stm32f4xx_hal_gpio.o(.rrx_text), (6 bytes).
     Removing stm32f4xx_hal_gpio.o(i.HAL_GPIO_DeInit), (360 bytes).
+    Removing stm32f4xx_hal_gpio.o(i.HAL_GPIO_EXTI_Callback), (2 bytes).
     Removing stm32f4xx_hal_gpio.o(i.HAL_GPIO_LockPin), (34 bytes).
     Removing stm32f4xx_hal_gpio.o(i.HAL_GPIO_ReadPin), (10 bytes).
     Removing stm32f4xx_hal_gpio.o(i.HAL_GPIO_TogglePin), (16 bytes).
@@ -3176,7 +3721,6 @@ Removing Unused input sections from the image.
     Removing tasks.o(i.vTaskDelayUntil), (140 bytes).
     Removing tasks.o(i.vTaskDelete), (172 bytes).
     Removing tasks.o(i.vTaskEndScheduler), (28 bytes).
-    Removing tasks.o(i.vTaskNotifyGiveFromISR), (180 bytes).
     Removing tasks.o(i.vTaskPlaceOnUnorderedEventList), (80 bytes).
     Removing tasks.o(i.vTaskPriorityDisinheritAfterTimeout), (160 bytes).
     Removing tasks.o(i.vTaskPrioritySet), (196 bytes).
@@ -3383,7 +3927,6 @@ Removing Unused input sections from the image.
     Removing bsp_spi.o(.rev16_text), (4 bytes).
     Removing bsp_spi.o(.revsh_text), (4 bytes).
     Removing bsp_spi.o(.rrx_text), (6 bytes).
-    Removing bsp_spi.o(i.SPI1_DMA_enable), (4724 bytes).
     Removing bsp_spi.o(i.SPI1_DMA_init), (240 bytes).
     Removing bsp_usart.o(.rev16_text), (4 bytes).
     Removing bsp_usart.o(.revsh_text), (4 bytes).
@@ -3443,6 +3986,101 @@ Removing Unused input sections from the image.
     Removing voltage_task.o(.revsh_text), (4 bytes).
     Removing voltage_task.o(.rrx_text), (6 bytes).
     Removing voltage_task.o(i.get_battery_percentage), (36 bytes).
+    Removing gimbal_task.o(.rev16_text), (4 bytes).
+    Removing gimbal_task.o(.revsh_text), (4 bytes).
+    Removing gimbal_task.o(.rrx_text), (6 bytes).
+    Removing gimbal_task.o(i.get_gimbal_point), (8 bytes).
+    Removing gimbal_task.o(i.gimbal_PID_calc), (184 bytes).
+    Removing gimbal_task.o(i.gimbal_PID_clear), (44 bytes).
+    Removing gimbal_task.o(i.gimbal_PID_init), (44 bytes).
+    Removing gimbal_task.o(i.gimbal_absolute_angle_limit), (168 bytes).
+    Removing gimbal_task.o(i.gimbal_feedback_update), (196 bytes).
+    Removing gimbal_task.o(i.gimbal_init), (516 bytes).
+    Removing gimbal_task.o(i.gimbal_mode_change_control_transit), (166 bytes).
+    Removing gimbal_task.o(i.gimbal_motor_absolute_angle_control), (92 bytes).
+    Removing gimbal_task.o(i.gimbal_motor_raw_angle_control), (26 bytes).
+    Removing gimbal_task.o(i.gimbal_motor_relative_angle_control), (64 bytes).
+    Removing gimbal_task.o(i.gimbal_set_control), (336 bytes).
+    Removing gimbal_task.o(i.gimbal_task), (268 bytes).
+    Removing gimbal_task.o(i.gimbal_yaw_motor_absolute_angle_control), (256 bytes).
+    Removing gimbal_task.o(i.input_cal), (92 bytes).
+    Removing gimbal_task.o(.constdata), (24 bytes).
+    Removing gimbal_task.o(.data), (4 bytes).
+    Removing gimbal_task.o(.data), (4 bytes).
+    Removing gimbal_task.o(.data), (20 bytes).
+    Removing gimbal_behaviour.o(.rev16_text), (4 bytes).
+    Removing gimbal_behaviour.o(.revsh_text), (4 bytes).
+    Removing gimbal_behaviour.o(.rrx_text), (6 bytes).
+    Removing gimbal_behaviour.o(i.gimbal_absolute_angle_control), (368 bytes).
+    Removing gimbal_behaviour.o(i.gimbal_behaviour_control_set), (148 bytes).
+    Removing gimbal_behaviour.o(i.gimbal_behaviour_mode_set), (84 bytes).
+    Removing gimbal_behaviour.o(i.gimbal_behavour_set), (232 bytes).
+    Removing gimbal_behaviour.o(i.gimbal_cali_control), (292 bytes).
+    Removing gimbal_behaviour.o(i.gimbal_cmd_to_shoot_stop), (28 bytes).
+    Removing gimbal_behaviour.o(i.gimbal_relative_angle_control), (168 bytes).
+    Removing ins_task.o(.rev16_text), (4 bytes).
+    Removing ins_task.o(.revsh_text), (4 bytes).
+    Removing ins_task.o(.rrx_text), (6 bytes).
+    Removing ins_task.o(i.INS_task), (588 bytes).
+    Removing ins_task.o(i.get_INS_quat_point), (8 bytes).
+    Removing ins_task.o(i.get_accel_data_point), (8 bytes).
+    Removing ins_task.o(i.get_gyro_data_point), (8 bytes).
+    Removing ins_task.o(i.get_mag_data_point), (8 bytes).
+    Removing ins_task.o(i.imu_cali_slove), (236 bytes).
+    Removing ins_task.o(i.imu_temp_control), (152 bytes).
+    Removing ins_task.o(.bss), (12 bytes).
+    Removing ins_task.o(.bss), (12 bytes).
+    Removing ins_task.o(.constdata), (12 bytes).
+    Removing ins_task.o(.constdata), (12 bytes).
+    Removing shoot.o(.rev16_text), (4 bytes).
+    Removing shoot.o(.revsh_text), (4 bytes).
+    Removing shoot.o(.rrx_text), (6 bytes).
+    Removing shoot.o(i.get_shoot_point), (8 bytes).
+    Removing shoot.o(i.shoot_bullet_control), (144 bytes).
+    Removing shoot.o(i.shoot_control_loop), (464 bytes).
+    Removing shoot.o(i.shoot_feedback_update), (380 bytes).
+    Removing shoot.o(i.shoot_init), (280 bytes).
+    Removing shoot.o(i.shoot_set_mode), (220 bytes).
+    Removing shoot.o(i.trigger_motor_turn_back), (100 bytes).
+    Removing shoot.o(.bss), (352 bytes).
+    Removing shoot.o(.constdata), (24 bytes).
+    Removing shoot.o(.constdata), (12 bytes).
+    Removing shoot.o(.data), (20 bytes).
+    Removing vision.o(.rev16_text), (4 bytes).
+    Removing vision.o(.revsh_text), (4 bytes).
+    Removing vision.o(.rrx_text), (6 bytes).
+    Removing vision.o(i.Future_Predict), (256 bytes).
+    Removing vision.o(i.IMU_Pose_Update), (40 bytes).
+    Removing vision.o(i.Initialize_Observer_With_Target), (48 bytes).
+    Removing vision.o(i.Motion_Pause), (24 bytes).
+    Removing vision.o(i.Observer_Matrix_Update), (144 bytes).
+    Removing vision.o(i.Sync_Pose), (332 bytes).
+    Removing vision.o(i.Update_Current_State), (84 bytes).
+    Removing vision.o(i.Update_Horizon_Base_With_Shoot_Delay), (2 bytes).
+    Removing vision.o(i.Update_Observer_With_Target), (76 bytes).
+    Removing vision.o(i.Vision_AutoShoot_Computation_Query), (144 bytes).
+    Removing vision.o(i.Vision_AutoShoot_Computation_Query_Callback), (32 bytes).
+    Removing vision.o(i.Vision_AutoShoot_Predict), (328 bytes).
+    Removing vision.o(i.Vision_Config_Send), (2 bytes).
+    Removing vision.o(i.Vision_Init), (560 bytes).
+    Removing vision.o(i.Vision_Unpack), (84 bytes).
+    Removing vision.o(i.Vision_Unpack_Callback), (32 bytes).
+    Removing vision.o(i.Vision_mode_switch), (60 bytes).
+    Removing vision.o(i.Vision_task), (132 bytes).
+    Removing vision.o(i.arm_sqrt_f32), (40 bytes).
+    Removing vision.o(i.get_vision_data), (8 bytes).
+    Removing vision.o(i.queue_access), (28 bytes).
+    Removing vision.o(i.queue_init), (22 bytes).
+    Removing vision.o(i.queue_update), (30 bytes).
+    Removing vision.o(.bss), (2762 bytes).
+    Removing vision.o(.constdata), (28 bytes).
+    Removing vision.o(.conststring), (19 bytes).
+    Removing vision.o(.data), (436 bytes).
+    Removing vision.o(.data), (4 bytes).
+    Removing vision.o(.data), (4 bytes).
+    Removing vision.o(.data), (4 bytes).
+    Removing vision.o(.data), (4 bytes).
+    Removing vision.o(.data), (4 bytes).
     Removing ahrs_middleware.o(.rev16_text), (4 bytes).
     Removing ahrs_middleware.o(.revsh_text), (4 bytes).
     Removing ahrs_middleware.o(.rrx_text), (6 bytes).
@@ -3537,5 +4175,178 @@ Removing Unused input sections from the image.
     Removing pid.o(i.NominalDOB_Init), (24 bytes).
     Removing pid.o(i.NominalDOB_Update), (78 bytes).
     Removing pid.o(i.PID_clear), (64 bytes).
+    Removing bmi088driver.o(.rev16_text), (4 bytes).
+    Removing bmi088driver.o(.revsh_text), (4 bytes).
+    Removing bmi088driver.o(.rrx_text), (6 bytes).
+    Removing bmi088driver.o(i.BMI088_accel_read_over), (136 bytes).
+    Removing bmi088driver.o(i.BMI088_gyro_read_over), (96 bytes).
+    Removing bmi088driver.o(i.BMI088_init), (46 bytes).
+    Removing bmi088driver.o(i.BMI088_read), (344 bytes).
+    Removing bmi088driver.o(i.BMI088_read_accel_who_am_i), (40 bytes).
+    Removing bmi088driver.o(i.BMI088_read_gyro_who_am_i), (20 bytes).
+    Removing bmi088driver.o(i.BMI088_read_muli_reg), (36 bytes).
+    Removing bmi088driver.o(i.BMI088_read_single_reg), (22 bytes).
+    Removing bmi088driver.o(i.BMI088_temperature_read_over), (46 bytes).
+    Removing bmi088driver.o(i.BMI088_write_single_reg), (18 bytes).
+    Removing bmi088driver.o(i.bmi088_accel_init), (296 bytes).
+    Removing bmi088driver.o(i.bmi088_accel_self_test), (704 bytes).
+    Removing bmi088driver.o(i.bmi088_gyro_init), (220 bytes).
+    Removing bmi088driver.o(i.bmi088_gyro_self_test), (202 bytes).
+    Removing bmi088driver.o(i.get_BMI088_accel), (140 bytes).
+    Removing bmi088driver.o(i.get_BMI088_gyro), (72 bytes).
+    Removing bmi088driver.o(i.get_BMI088_sensor_time), (48 bytes).
+    Removing bmi088driver.o(i.get_BMI088_temperate), (72 bytes).
+    Removing bmi088driver.o(.constdata), (18 bytes).
+    Removing bmi088driver.o(.data), (44 bytes).
+    Removing bmi088middleware.o(.rev16_text), (4 bytes).
+    Removing bmi088middleware.o(.revsh_text), (4 bytes).
+    Removing bmi088middleware.o(.rrx_text), (6 bytes).
+    Removing bmi088middleware.o(i.BMI088_ACCEL_NS_H), (16 bytes).
+    Removing bmi088middleware.o(i.BMI088_ACCEL_NS_L), (16 bytes).
+    Removing bmi088middleware.o(i.BMI088_GPIO_init), (2 bytes).
+    Removing bmi088middleware.o(i.BMI088_GYRO_NS_H), (16 bytes).
+    Removing bmi088middleware.o(i.BMI088_GYRO_NS_L), (16 bytes).
+    Removing bmi088middleware.o(i.BMI088_com_init), (2 bytes).
+    Removing bmi088middleware.o(i.BMI088_delay_ms), (4 bytes).
+    Removing bmi088middleware.o(i.BMI088_delay_us), (4 bytes).
+    Removing bmi088middleware.o(i.BMI088_read_write_byte), (32 bytes).
+    Removing ist8310driver.o(i.ist8310_init), (128 bytes).
+    Removing ist8310driver.o(i.ist8310_read_mag), (84 bytes).
+    Removing ist8310driver.o(i.ist8310_read_over), (92 bytes).
+    Removing ist8310driver.o(.constdata), (12 bytes).
+    Removing ist8310driver_middleware.o(.rev16_text), (4 bytes).
+    Removing ist8310driver_middleware.o(.revsh_text), (4 bytes).
+    Removing ist8310driver_middleware.o(.rrx_text), (6 bytes).
+    Removing ist8310driver_middleware.o(i.ist8310_GPIO_init), (2 bytes).
+    Removing ist8310driver_middleware.o(i.ist8310_IIC_read_muli_reg), (28 bytes).
+    Removing ist8310driver_middleware.o(i.ist8310_IIC_read_single_reg), (36 bytes).
+    Removing ist8310driver_middleware.o(i.ist8310_IIC_write_muli_reg), (28 bytes).
+    Removing ist8310driver_middleware.o(i.ist8310_IIC_write_single_reg), (36 bytes).
+    Removing ist8310driver_middleware.o(i.ist8310_RST_H), (16 bytes).
+    Removing ist8310driver_middleware.o(i.ist8310_RST_L), (16 bytes).
+    Removing ist8310driver_middleware.o(i.ist8310_com_init), (2 bytes).
+    Removing ist8310driver_middleware.o(i.ist8310_delay_ms), (4 bytes).
+    Removing ist8310driver_middleware.o(i.ist8310_delay_us), (4 bytes).
+    Removing ahrs.o(i.AHRS_fabs), (26 bytes).
+    Removing ahrs.o(i.AHRS_init), (668 bytes).
+    Removing ahrs.o(i.AHRS_update), (314 bytes).
+    Removing ahrs.o(i.accel_comple_filter), (464 bytes).
+    Removing ahrs.o(i.accel_update_kp_ki), (396 bytes).
+    Removing ahrs.o(i.angle_to_quat), (364 bytes).
+    Removing ahrs.o(i.get_angle), (232 bytes).
+    Removing ahrs.o(i.get_carrier_gravity), (12 bytes).
+    Removing ahrs.o(i.get_pitch), (46 bytes).
+    Removing ahrs.o(i.get_roll), (82 bytes).
+    Removing ahrs.o(i.get_yaw), (82 bytes).
+    Removing ahrs.o(i.quat_normalization), (132 bytes).
+    Removing ahrs.o(i.update_w), (122 bytes).
+    Removing ahrs.o(.constdata), (12 bytes).
+    Removing ahrs.o(.data), (16 bytes).
+    Removing arm_cos_f32.o(.rev16_text), (4 bytes).
+    Removing arm_cos_f32.o(.revsh_text), (4 bytes).
+    Removing arm_cos_f32.o(.rrx_text), (6 bytes).
+    Removing arm_sin_f32.o(.rev16_text), (4 bytes).
+    Removing arm_sin_f32.o(.revsh_text), (4 bytes).
+    Removing arm_sin_f32.o(.rrx_text), (6 bytes).
+    Removing arm_mat_add_f32.o(.rev16_text), (4 bytes).
+    Removing arm_mat_add_f32.o(.revsh_text), (4 bytes).
+    Removing arm_mat_add_f32.o(.rrx_text), (6 bytes).
+    Removing arm_mat_add_f32.o(.text), (264 bytes).
+    Removing arm_mat_init_f32.o(.rev16_text), (4 bytes).
+    Removing arm_mat_init_f32.o(.revsh_text), (4 bytes).
+    Removing arm_mat_init_f32.o(.rrx_text), (6 bytes).
+    Removing arm_mat_init_f32.o(.text), (8 bytes).
+    Removing arm_mat_inverse_f32.o(.rev16_text), (4 bytes).
+    Removing arm_mat_inverse_f32.o(.revsh_text), (4 bytes).
+    Removing arm_mat_inverse_f32.o(.rrx_text), (6 bytes).
+    Removing arm_mat_inverse_f32.o(.text), (1328 bytes).
+    Removing arm_mat_mult_f32.o(.rev16_text), (4 bytes).
+    Removing arm_mat_mult_f32.o(.revsh_text), (4 bytes).
+    Removing arm_mat_mult_f32.o(.rrx_text), (6 bytes).
+    Removing arm_mat_mult_f32.o(.text), (316 bytes).
+    Removing arm_mat_sub_f32.o(.rev16_text), (4 bytes).
+    Removing arm_mat_sub_f32.o(.revsh_text), (4 bytes).
+    Removing arm_mat_sub_f32.o(.rrx_text), (6 bytes).
+    Removing arm_mat_sub_f32.o(.text), (264 bytes).
+    Removing arm_mat_trans_f32.o(.rev16_text), (4 bytes).
+    Removing arm_mat_trans_f32.o(.revsh_text), (4 bytes).
+    Removing arm_mat_trans_f32.o(.rrx_text), (6 bytes).
+    Removing arm_mat_trans_f32.o(.text), (276 bytes).
+    Removing arm_sin_cos_f32.o(.rev16_text), (4 bytes).
+    Removing arm_sin_cos_f32.o(.revsh_text), (4 bytes).
+    Removing arm_sin_cos_f32.o(.rrx_text), (6 bytes).
+    Removing arm_sin_cos_f32.o(.text), (260 bytes).
+    Removing arm_common_tables.o(.rev16_text), (4 bytes).
+    Removing arm_common_tables.o(.revsh_text), (4 bytes).
+    Removing arm_common_tables.o(.rrx_text), (6 bytes).
+    Removing arm_common_tables.o(.constdata), (2048 bytes).
+    Removing arm_common_tables.o(.constdata), (128 bytes).
+    Removing arm_common_tables.o(.constdata), (256 bytes).
+    Removing arm_common_tables.o(.constdata), (512 bytes).
+    Removing arm_common_tables.o(.constdata), (1024 bytes).
+    Removing arm_common_tables.o(.constdata), (2048 bytes).
+    Removing arm_common_tables.o(.constdata), (4096 bytes).
+    Removing arm_common_tables.o(.constdata), (8192 bytes).
+    Removing arm_common_tables.o(.constdata), (16384 bytes).
+    Removing arm_common_tables.o(.constdata), (32768 bytes).
+    Removing arm_common_tables.o(.constdata), (96 bytes).
+    Removing arm_common_tables.o(.constdata), (192 bytes).
+    Removing arm_common_tables.o(.constdata), (384 bytes).
+    Removing arm_common_tables.o(.constdata), (768 bytes).
+    Removing arm_common_tables.o(.constdata), (1536 bytes).
+    Removing arm_common_tables.o(.constdata), (3072 bytes).
+    Removing arm_common_tables.o(.constdata), (6144 bytes).
+    Removing arm_common_tables.o(.constdata), (12288 bytes).
+    Removing arm_common_tables.o(.constdata), (24576 bytes).
+    Removing arm_common_tables.o(.constdata), (48 bytes).
+    Removing arm_common_tables.o(.constdata), (96 bytes).
+    Removing arm_common_tables.o(.constdata), (192 bytes).
+    Removing arm_common_tables.o(.constdata), (384 bytes).
+    Removing arm_common_tables.o(.constdata), (768 bytes).
+    Removing arm_common_tables.o(.constdata), (1536 bytes).
+    Removing arm_common_tables.o(.constdata), (3072 bytes).
+    Removing arm_common_tables.o(.constdata), (6144 bytes).
+    Removing arm_common_tables.o(.constdata), (12288 bytes).
+    Removing arm_common_tables.o(.constdata), (128 bytes).
+    Removing arm_common_tables.o(.constdata), (256 bytes).
+    Removing arm_common_tables.o(.constdata), (40 bytes).
+    Removing arm_common_tables.o(.constdata), (96 bytes).
+    Removing arm_common_tables.o(.constdata), (112 bytes).
+    Removing arm_common_tables.o(.constdata), (416 bytes).
+    Removing arm_common_tables.o(.constdata), (880 bytes).
+    Removing arm_common_tables.o(.constdata), (896 bytes).
+    Removing arm_common_tables.o(.constdata), (3600 bytes).
+    Removing arm_common_tables.o(.constdata), (7616 bytes).
+    Removing arm_common_tables.o(.constdata), (8064 bytes).
+    Removing arm_common_tables.o(.constdata), (24 bytes).
+    Removing arm_common_tables.o(.constdata), (48 bytes).
+    Removing arm_common_tables.o(.constdata), (112 bytes).
+    Removing arm_common_tables.o(.constdata), (224 bytes).
+    Removing arm_common_tables.o(.constdata), (480 bytes).
+    Removing arm_common_tables.o(.constdata), (960 bytes).
+    Removing arm_common_tables.o(.constdata), (1984 bytes).
+    Removing arm_common_tables.o(.constdata), (3968 bytes).
+    Removing arm_common_tables.o(.constdata), (8064 bytes).
+    Removing arm_common_tables.o(.constdata), (128 bytes).
+    Removing arm_common_tables.o(.constdata), (256 bytes).
+    Removing arm_common_tables.o(.constdata), (512 bytes).
+    Removing arm_common_tables.o(.constdata), (1024 bytes).
+    Removing arm_common_tables.o(.constdata), (2048 bytes).
+    Removing arm_common_tables.o(.constdata), (4096 bytes).
+    Removing arm_common_tables.o(.constdata), (8192 bytes).
+    Removing arm_common_tables.o(.constdata), (16384 bytes).
+    Removing arm_common_tables.o(.constdata), (2052 bytes).
+    Removing arm_common_tables.o(.constdata), (1026 bytes).
+    Removing dadd.o(.text), (334 bytes).
+    Removing ddiv.o(.text), (222 bytes).
+    Removing f2d.o(.text), (38 bytes).
+    Removing dneg.o(.text), (6 bytes).
+    Removing dscalb.o(.text), (46 bytes).
+    Removing dflti.o(.text), (34 bytes).
+    Removing dfixi.o(.text), (62 bytes).
+    Removing cdcmple.o(.text), (48 bytes).
+    Removing cdrcmple.o(.text), (48 bytes).
+    Removing dcmp4.o(.text), (96 bytes).
+    Removing dsqrt.o(.text), (162 bytes).
 
-1249 unused section(s) (total 162606 bytes) removed from the image.
+1517 unused section(s) (total 395349 bytes) removed from the image.

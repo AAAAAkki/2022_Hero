@@ -22,38 +22,26 @@ Dialog DLL:      TCM.DLL V1.53.0.0
  
 <h2>Project:</h2>
 D:\01_Study\0.2_GM\Hero 2022 Spring\chassis_part\MDK-ARM\standard_robot.uvprojx
-Project File Date:  04/29/2022
+Project File Date:  04/30/2022
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\04_GMaster\Keil\ARM\ARMCC\Bin'
 Build target 'standard_robot'
-compiling freertos.c...
-../Src/freertos.c(219): warning:  #111-D: statement is unreachable
-          free(pcWriteBuffer);
-../Src/freertos.c: 1 warning, 0 errors
+compiling vision.c...
+..\application\vision.c(38): warning:  #144-D: a value of type "void (*)(void)" cannot be used to initialize an entity of type "os_pthread"
+      osThreadDef(VISION_UNPACK_TASK, Vision_Unpack, osPriorityHigh, 0, 128);
+..\application\vision.c(157): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      vision_kf[0].F_data[6] = vision_kf[2].F_data[6] = vision_kf[1].F_data[6] = 0.5 * Ts * Ts;
+..\application\vision.c(182): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      delay_trans_matrix_data[6] = 0.5 * horizon * horizon;
+..\application\vision.c: 3 warnings, 0 errors
 linking...
 standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol vTaskGetRunTimeStats (referred from freertos.o).
 standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol vTaskList (referred from freertos.o).
-standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol INS_cali_gyro (referred from calibrate_task.o).
-standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol INS_set_cali_gyro (referred from calibrate_task.o).
-standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol cmd_cali_gimbal_hook (referred from calibrate_task.o).
-standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol set_cali_gimbal_hook (referred from calibrate_task.o).
-standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol gimbal_cmd_to_chassis_stop (referred from chassis_behaviour.o).
-standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol arm_cos_f32 (referred from chassis_task.o).
-standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol arm_sin_f32 (referred from chassis_task.o).
-standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol get_INS_angle_point (referred from chassis_task.o).
-standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol get_pitch_motor_point (referred from chassis_task.o).
-standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol get_yaw_motor_point (referred from chassis_task.o).
-standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol arm_mat_add_f32 (referred from kalman_filter.o).
-standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol arm_mat_init_f32 (referred from kalman_filter.o).
-standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol arm_mat_inverse_f32 (referred from kalman_filter.o).
-standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol arm_mat_mult_f32 (referred from kalman_filter.o).
-standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol arm_mat_sub_f32 (referred from kalman_filter.o).
-standard_robot\standard_robot.axf: Error: L6218E: Undefined symbol arm_mat_trans_f32 (referred from kalman_filter.o).
 Not enough information to list image symbols.
 Not enough information to list load addresses in the image map.
-Finished: 2 information, 0 warning and 18 error messages.
-"standard_robot\standard_robot.axf" - 18 Error(s), 1 Warning(s).
+Finished: 2 information, 0 warning and 2 error messages.
+"standard_robot\standard_robot.axf" - 2 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 

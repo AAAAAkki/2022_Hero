@@ -3,6 +3,7 @@
 #include "stdio.h"
 #include "CRC8_CRC16.h"
 #include "protocol.h"
+#include "CAN_receive.h"
 
 
 frame_header_struct_t referee_receive_header;
@@ -58,10 +59,9 @@ void init_referee_struct_data(void)
 
 
     memset(&student_interactive_data_t, 0, sizeof(ext_student_interactive_data_t));
-
-
-
 }
+
+
 
 void referee_data_solve(uint8_t *frame)
 {
@@ -93,8 +93,6 @@ void referee_data_solve(uint8_t *frame)
             memcpy(&game_robot_HP_t, frame + index, sizeof(ext_game_robot_HP_t));
         }
         break;
-
-
         case FIELD_EVENTS_CMD_ID:
         {
             memcpy(&field_event, frame + index, sizeof(field_event));
@@ -168,6 +166,8 @@ void referee_data_solve(uint8_t *frame)
     }
 }
 
+extern chassis_data_t chassis_data_receive;
+
 void get_chassis_power_and_buffer(fp32 *power, fp32 *buffer)
 {
     *power = power_heat_data_t.chassis_power;
@@ -175,22 +175,50 @@ void get_chassis_power_and_buffer(fp32 *power, fp32 *buffer)
 
 }
 
-extern chassis_data_t chassis_data_receive;
+void get_chassis_max_power(uint16_t *max_power)
+{
+    *max_power = robot_state.chassis_power_limit;
+}
 
 uint8_t get_robot_id(void)
 {
     return robot_state.robot_id;
 }
 
-void get_shoot_heat0_limit_and_heat0(uint16_t *heat0_limit, uint16_t *heat0)
+void get_shoot_heat1_limit_and_heat0(uint16_t *heat0_limit, uint16_t *heat0)
 {
     *heat0_limit = chassis_data_receive.shooter_heat0_limit;
     *heat0 = chassis_data_receive.shooter_heat0;
 }
 
-void get_shoot_heat1_limit_and_heat1(uint16_t *heat1_limit, uint16_t *heat1)
+void get_shoot_heat2_limit_and_heat1(uint16_t *heat1_limit, uint16_t *heat1)
 {
-    *heat1_limit = robot_state.shooter_heat1_cooling_limit;
-    *heat1 = power_heat_data_t.shooter_heat1;
+    *heat1_limit = robot_state.shooter_id2_17mm_cooling_limit;
+    *heat1 = power_heat_data_t.shooter_id2_17mm_cooling_heat;
 }
+ext_robot_hurt_t *get_hurt_point(void)
+{
+    return &robot_hurt_t;
+}
+ext_game_robot_state_t *get_robot_status_point(void)
+{
+    return &robot_state;
+}
+
+fp32 get_bullet_speed(void)
+{
+	if(robot_state.shooter_id1_17mm_speed_limit ==15)
+{
+return 13.8f;
+}
+if(robot_state.shooter_id1_17mm_speed_limit == 18)
+{
+return 16.0f;
+}
+if(robot_state.shooter_id1_17mm_speed_limit == 30)
+{
+return 26.0f;
+}else return 13.8;
+}
+
 

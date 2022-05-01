@@ -22,8 +22,8 @@
 #include "CAN_receive.h"
 #include "gimbal_task.h"
 #include "remote_control.h"
-//#include "user_lib.h"
-//#include "referee.h"
+#include "user_lib.h"
+#include "referee.h"
 
 
 //射击发射开关通道数据
@@ -109,9 +109,9 @@ typedef struct
     const RC_ctrl_t *shoot_rc;
     const motor_measure_t *shoot_motor_measure;
     const motor_measure_t *fric_motor_measure[2];
-    
+    ramp_function_source_t fric1_ramp;
     uint16_t fric_can1;
-   
+    ramp_function_source_t fric2_ramp;
     uint16_t fric_can2;
     pid_type_def trigger_motor_pid;
     pid_type_def fric_motor_pid[2];
@@ -137,7 +137,7 @@ typedef struct
 
     uint16_t heat_limit;
     uint16_t heat;
-  
+		ext_game_robot_state_t *shoot_state;
 } shoot_control_t;
 
 //由于射击和云台使用同一个can的id故也射击任务在云台任务中执行

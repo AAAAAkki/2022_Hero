@@ -67,7 +67,10 @@
 #define configUSE_MUTEXES                        1
 #define configQUEUE_REGISTRY_SIZE                8
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION  1
-
+#define configUSE_TRACE_FACILITY  1
+#define configUSE_STATS_FORMATTING_FUNCTIONS 1 
+#define portGET_RUN_TIME_COUNTER_VALUE() FreeRTOSRunTimeTicks
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() ConfigureTimeForRunTimeStats()
 /* Co-routine definitions. */
 #define configUSE_CO_ROUTINES                    0
 #define configMAX_CO_ROUTINE_PRIORITIES          ( 2 )
@@ -77,6 +80,7 @@
 #define configTIMER_TASK_PRIORITY                ( 2 )
 #define configTIMER_QUEUE_LENGTH                 10
 #define configTIMER_TASK_STACK_DEPTH             256
+#define configGENERATE_RUN_TIME_STATS               1
 
 /* Set the following definitions to 1 to include the API function, or zero
 to exclude the API function. */
@@ -139,7 +143,12 @@ standard names. */
               to prevent overwriting SysTick_Handler defined within STM32Cube HAL */
 /* #define xPortSysTickHandler SysTick_Handler */
 
-/* USER CODE BEGIN Defines */   	      
+/* USER CODE BEGIN Defines */   
+
+//#define traceTASK_SWITCHED_IN()  extern void StartIdleMonitor(void); \
+//                                 StartIdleMonitor()
+//#define traceTASK_SWITCHED_OUT() extern void EndIdleMonitor(void); \
+//                                         EndIdleMonitor()
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
 /* USER CODE END Defines */ 
 

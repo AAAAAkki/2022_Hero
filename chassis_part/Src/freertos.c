@@ -57,7 +57,7 @@ osThreadId battery_voltage_handle;
 
 //osThreadId servo_task_handle;
 //osThreadId user_task_handle;
-//osThreadId vision_task_handle;
+osThreadId vision_task_handle;
 //osThreadId gimbalTaskHandle;
 //osThreadId imuTaskHandle;
 //osThreadId usb_task_handle;
@@ -195,7 +195,7 @@ void ConfigureTimeForRunTimeStats(){
   * @retval None
   */
 /* USER CODE END Header_test_task */
-void stats_task(void const * argument)
+__weak void test_task(void const * argument)
 {
   /* init code for USB_DEVICE */
   MX_USB_DEVICE_Init();

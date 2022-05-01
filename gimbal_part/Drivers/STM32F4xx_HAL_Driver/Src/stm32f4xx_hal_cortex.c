@@ -203,6 +203,7 @@ void HAL_NVIC_EnableIRQ(IRQn_Type IRQn)
 void HAL_NVIC_DisableIRQ(IRQn_Type IRQn)
 {
   /* Check the parameters */
+	
   assert_param(IS_NVIC_DEVICE_IRQ(IRQn));
   
   /* Disable interrupt */

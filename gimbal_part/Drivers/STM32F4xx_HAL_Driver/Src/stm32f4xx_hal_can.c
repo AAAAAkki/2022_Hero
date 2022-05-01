@@ -1276,7 +1276,7 @@ HAL_StatusTypeDef HAL_CAN_AddTxMessage(CAN_HandleTypeDef *hcan, CAN_TxHeaderType
         ((tsr & CAN_TSR_TME2) != 0U))
     {
       /* Select an empty transmit mailbox */
-      transmitmailbox = (tsr & CAN_TSR_CODE) >> CAN_TSR_CODE_Pos;//TSR_CODE==0x3UL<<24u. GET 25~26 bit of tsr
+      transmitmailbox = (tsr & CAN_TSR_CODE) >> CAN_TSR_CODE_Pos;
 
       /* Check transmit mailbox value */
       if (transmitmailbox > 2U)
@@ -1288,7 +1288,7 @@ HAL_StatusTypeDef HAL_CAN_AddTxMessage(CAN_HandleTypeDef *hcan, CAN_TxHeaderType
       }
 
       /* Store the Tx mailbox */
-      *pTxMailbox = (uint32_t)1 << transmitmailbox;// value between 1 and 4
+      *pTxMailbox = (uint32_t)1 << transmitmailbox;
 
       /* Set up the Id */
       if (pHeader->IDE == CAN_ID_STD)

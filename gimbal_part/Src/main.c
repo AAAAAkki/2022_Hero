@@ -47,7 +47,6 @@
 #include "gimbal_task.h"
 #include "INS_task.h"
 #include "led_flow_task.h"
-#include "oled_task.h"
 #include "referee_usart_task.h"
 #include "usb_task.h"
 #include "voltage_task.h"
@@ -125,10 +124,10 @@ int main(void)
   MX_CAN1_Init();
   MX_CAN2_Init();
   MX_I2C1_Init();
-  MX_SPI1_Init();
+	MX_SPI1_Init();
   MX_TIM4_Init();
   MX_TIM5_Init();
-  MX_USART3_UART_Init();
+  MX_USART3_UART_Init(); 
   MX_TIM8_Init();
   MX_CRC_Init();
   MX_RNG_Init();

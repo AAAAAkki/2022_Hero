@@ -17,7 +17,7 @@
 
 #include "pid.h"
 #include "main.h"
-
+#include <string.h>
 #define LimitMax(input, max)   \
     {                          \
         if (input > max)       \
@@ -49,7 +49,20 @@
   * @param[in]      max_out: pid最大输出
   * @param[in]      max_iout: pid最大积分输出
   * @retval         none
-  */
+  */\
+
+extern void NominalDOB_Init(NominalDOB* instance, fp32 Q_coefficient, fp32 (*Input_Fcn)(fp32,fp32)){
+    instance->last_input = instance->last_state = 0;
+    instance->Q_coefficient = Q_coefficient;
+    instance->Nominal_Input_Cal = Input_Fcn;
+}
+extern fp32 NominalDOB_Update(NominalDOB* instance, fp32 current_state, fp32 current_input){
+    instance->last_input_hat = instance->Nominal_Input_Cal(current_state, instance->last_state);
+    instance->last_state = current_state;
+    instance->d_hat = instance->Q_coefficient * instance->d_hat+ (1-instance->Q_coefficient) * (instance->last_input_hat - instance->last_input); 
+    instance->last_input = current_input;
+}
+
 void PID_init(pid_type_def *pid, uint8_t mode, const fp32 PID[3], fp32 max_out, fp32 max_iout)
 {
     if (pid == NULL || PID == NULL)
@@ -62,6 +75,8 @@ void PID_init(pid_type_def *pid, uint8_t mode, const fp32 PID[3], fp32 max_out, 
     pid->Kd = PID[2];
     pid->max_out = max_out;
     pid->max_iout = max_iout;
+		pid->derivative_output_filter_coefficient = 0;
+		pid->proportion_output_filter_coefficient = 0;
     pid->Dbuf[0] = pid->Dbuf[1] = pid->Dbuf[2] = 0.0f;
     pid->error[0] = pid->error[1] = pid->error[2] = pid->Pout = pid->Iout = pid->Dout = pid->out = 0.0f;
 }
@@ -94,12 +109,12 @@ fp32 PID_calc(pid_type_def *pid, fp32 ref, fp32 set)
     pid->error[0] = set - ref;
     if (pid->mode == PID_POSITION)
     {
-        pid->Pout = pid->Kp * pid->error[0];
+        pid->Pout = pid->proportion_output_filter_coefficient * pid->Pout + (1-pid->proportion_output_filter_coefficient) * pid->Kp * pid->error[0];
         pid->Iout += pid->Ki * pid->error[0];
         pid->Dbuf[2] = pid->Dbuf[1];
         pid->Dbuf[1] = pid->Dbuf[0];
         pid->Dbuf[0] = (pid->error[0] - pid->error[1]);
-        pid->Dout = pid->Kd * pid->Dbuf[0];
+        pid->Dout = pid->derivative_output_filter_coefficient * pid->Dout + (1-pid->derivative_output_filter_coefficient) * pid->Kd * pid->Dbuf[0];
         LimitMax(pid->Iout, pid->max_iout);
         pid->out = pid->Pout + pid->Iout + pid->Dout;
         LimitMax(pid->out, pid->max_out);

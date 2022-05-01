@@ -3,6 +3,6 @@
 #include "struct_typedef.h"
 
 
-
+void test_task(void const *argument);
 
 #endif
