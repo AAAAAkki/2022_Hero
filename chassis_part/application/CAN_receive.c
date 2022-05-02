@@ -29,10 +29,11 @@
 
 extern CAN_HandleTypeDef hcan1;
 extern CAN_HandleTypeDef hcan2;
-//extern CAN_HandleTypeDef CAN_Commucation;
 extern fp32 intermedia_chassis_speed[4];
 //motor data read
 #define CAN_Commucation hcan2
+
+//motor data read
 #define get_motor_measure(ptr, data)                               \
   {                                                                \
     (ptr)->last_ecd = (ptr)->ecd;                                  \
@@ -115,7 +116,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
   {
     switch (rx_header.StdId)
     {
-		case CAN_TRIGGER_MOTOR_ID:
+		 case CAN_TRIGGER_MOTOR_ID:
     {
       static uint8_t i = 0;
       //get motor id
@@ -151,8 +152,12 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
       detect_hook(PITCH_GIMBAL_MOTOR_TOE);
       break;
     }
-		}
-	}
+    default:
+    {
+      break;
+    }
+    }
+  }
 	if (hcan == &CAN_Commucation){
 	/*Additional Function*/		
 		switch (rx_header.StdId){
@@ -415,7 +420,6 @@ const motor_measure_t *get_fric_motor_measure_point(uint8_t i)
 static CAN_TxHeaderTypeDef  gimbal_board_heat_message;
 static uint8_t              gimbal_board_heat_send_data[8]={0};
 
-
 void CAN_heat_data_send(uint16_t shooter_heat0){
 		uint32_t send_mail_box;
 		
@@ -475,4 +479,3 @@ void CAN_state_data_send(uint16_t heat_limit){
 //	gimbal_board_can_tx_data[2] = (pitch >> 8);
 //  gimbal_board_can_tx_data[3] = pitch;
 //	gimbal_board_can_tx_data[4] = INS_angle;
-

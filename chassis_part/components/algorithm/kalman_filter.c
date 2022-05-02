@@ -444,4 +444,3 @@ void Kalman_Filter_Reset(KalmanFilter_t *kf){
     memset(kf->P_data, 0, sizeof_float * kf->xhatSize * kf->xhatSize);
     // memset(kf->Pminus_data, 0, sizeof_float * kf->xhatSize * kf->xhatSize);
 }
-

@@ -115,9 +115,6 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control);
   */
 static void chassis_control_loop(chassis_move_t *chassis_move_control_loop);
 
-///*CAN_gimbal_tx no sure*/
-//static void CAN_gimbal_transfer(uint8_t*data);
-
 #if INCLUDE_uxTaskGetStackHighWaterMark
 uint32_t chassis_high_water;
 #endif
@@ -152,9 +149,6 @@ void chassis_task(void const *pvParameters)
 
   while (1)
   {
-		void top_to_down(uint8_t*data);
-		
-	/*********************************************************************/
     //set chassis control mode
     //设置底盘控制模式
     chassis_set_mode(&chassis_move);
@@ -166,10 +160,10 @@ void chassis_task(void const *pvParameters)
     chassis_feedback_update(&chassis_move);
     //set chassis control set-point
     //底盘控制量设置
-    chassis_set_contorl(&chassis_move);
 		
 		top_down_speed_set(&chassis_move);
 		
+    chassis_set_contorl(&chassis_move);
     //chassis control pid calculate
     //底盘控制PID计算
     chassis_control_loop(&chassis_move);

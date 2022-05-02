@@ -152,7 +152,7 @@ typedef struct
 
 typedef struct
 {
-	const RC_ctrl_t *chassis_RC;               //底盘使用的遥控器指针, the point to remote control
+  const RC_ctrl_t *chassis_RC;               //底盘使用的遥控器指针, the point to remote control
   const gimbal_motor_t *chassis_yaw_motor;   //will use the relative angle of yaw gimbal motor to calculate the euler angle.底盘使用到yaw云台电机的相对角度来计算底盘的欧拉角.
   const gimbal_motor_t *chassis_pitch_motor; //will use the relative angle of pitch gimbal motor to calculate the euler angle.底盘使用到pitch云台电机的相对角度来计算底盘的欧拉角
   const fp32 *chassis_INS_angle;             //the point to the euler angle of gyro sensor.获取陀螺仪解算出的欧拉角指针
@@ -185,7 +185,6 @@ typedef struct
 
 } chassis_move_t;
 
-
 /**
   * @brief          chassis task, osDelay CHASSIS_CONTROL_TIME_MS (2ms) 
   * @param[in]      pvParameters: null
@@ -216,7 +215,6 @@ extern void chassis_task(void const *pvParameters);
   */
 extern void chassis_rc_to_control_vector(fp32 *vx_set, fp32 *vy_set, chassis_move_t *chassis_move_rc_to_vector);
 chassis_move_t  *get_chassis_point(void);
-#endif
 
 /*Additional functions begin*/
 //#define TopDownKey 0
@@ -224,3 +222,5 @@ chassis_move_t  *get_chassis_point(void);
 void top_down_speed_set(chassis_move_t *chassis_speed_set);
 
 void motor_feedback_rpm_send(chassis_move_t *motor_feedback_rpm);
+
+#endif
