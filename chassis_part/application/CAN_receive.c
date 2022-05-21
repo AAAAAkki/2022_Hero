@@ -122,7 +122,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
       //get motor id
       i = 6;
       get_motor_measure(&motor_chassis[i], rx_data);
-      detect_hook(TRIGGER_MOTOR_TOE);
+//      detect_hook(TRIGGER_MOTOR_TOE);
       break;
     }
     case CAN_FRIC_LIFT_MOTOR_ID:
@@ -131,7 +131,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
       //get motor id
       i = 7;
       get_motor_measure(&motor_chassis[i], rx_data);
-      detect_hook(FRIC_LEFT_MOTOR_TOE);
+//      detect_hook(FRIC_LEFT_MOTOR_TOE);
       break;
     }
     case CAN_FRIC_RIGHT_MOTOR_ID:
@@ -140,7 +140,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
       //get motor id
       i = 8;
       get_motor_measure(&motor_chassis[i], rx_data);
-      detect_hook(FRIC_RIGHT_MOTOR_TOE);
+//      detect_hook(FRIC_RIGHT_MOTOR_TOE);
       break;
     }
     case CAN_PIT_MOTOR_ID:
@@ -149,7 +149,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
       //get motor id
       i = 5;
       get_motor_measure(&motor_chassis[i], rx_data);
-      detect_hook(PITCH_GIMBAL_MOTOR_TOE);
+//      detect_hook(PITCH_GIMBAL_MOTOR_TOE);
       break;
     }
     default:
@@ -169,8 +169,9 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 				temp[1]=(int16_t)(rx_data[2]<<8|rx_data[3]);
 				temp[2]=(int16_t)(rx_data[4]<<8|rx_data[5]);
 				temp[3]=(int16_t)(rx_data[6]<<8|rx_data[7]);
-				for(int i=0;i<4;i++)
+				for(int i=0;i<3;i++)
 						intermedia_chassis_speed[i]=((fp32)temp[i])/transform_key;
+				intermedia_chassis_speed[3]=temp[3];
 				break;
 			}
 			default:

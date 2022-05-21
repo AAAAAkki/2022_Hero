@@ -119,6 +119,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop);
 uint32_t chassis_high_water;
 #endif
 
+fp32 intermedia_chassis_speed[4]={0,0,0,0};
 //底盘运动数据
 chassis_move_t chassis_move;
 
@@ -142,10 +143,10 @@ void chassis_task(void const *pvParameters)
   chassis_init(&chassis_move);
   //make sure all chassis motor is online,
   //判断底盘电机是否都在线
-  //    while (toe_is_error(CHASSIS_MOTOR1_TOE) || toe_is_error(CHASSIS_MOTOR2_TOE) || toe_is_error(CHASSIS_MOTOR3_TOE) || toe_is_error(CHASSIS_MOTOR4_TOE) || toe_is_error(DBUS_TOE))
-  //    {
-  //        vTaskDelay(CHASSIS_CONTROL_TIME_MS);
-  //    }
+//      while (toe_is_error(CHASSIS_MOTOR1_TOE) || toe_is_error(CHASSIS_MOTOR2_TOE) || toe_is_error(CHASSIS_MOTOR3_TOE) || toe_is_error(CHASSIS_MOTOR4_TOE))
+//      {
+//          vTaskDelay(CHASSIS_CONTROL_TIME_MS);
+//      }
 
   while (1)
   {
@@ -157,7 +158,7 @@ void chassis_task(void const *pvParameters)
     chassis_mode_change_control_transit(&chassis_move);
     //chassis data update
     //底盘数据更新
-    chassis_feedback_update(&chassis_move);
+    //chassis_feedback_update(&chassis_move);
     //set chassis control set-point
     //底盘控制量设置
 		
@@ -174,18 +175,18 @@ void chassis_task(void const *pvParameters)
     {
       //when remote control is offline, chassis motor should receive zero current.
       //当遥控器掉线的时候，发送给底盘电机零电流.
-      if (toe_is_error(DBUS_TOE))
-      {
-        CAN_cmd_chassis(0, 0, 0, 0);
-      }
-      else
-      {
-				//CAN_cmd_chassis(0, 0, 0, 0);
-        //send control current
-        //发送控制电流
-//        CAN_cmd_chassis(chassis_move.motor_chassis[0].give_current, chassis_move.motor_chassis[1].give_current,
-//                       chassis_move.motor_chassis[2].give_current, chassis_move.motor_chassis[3].give_current);
-      }
+//      if (toe_is_error(DBUS_TOE))
+//      {
+//        CAN_cmd_chassis(0, 0, 0, 0);
+//      }
+//      else
+//      {
+//				//CAN_cmd_chassis(0, 0, 0, 0);
+//        //send control current
+//        //发送控制电流
+        CAN_cmd_chassis(chassis_move.motor_chassis[0].give_current, chassis_move.motor_chassis[1].give_current,
+                       chassis_move.motor_chassis[2].give_current, chassis_move.motor_chassis[3].give_current);
+//      }
     }
     //os delay
     //系统延时
@@ -267,7 +268,8 @@ static void chassis_init(chassis_move_t *chassis_move_init)
 
   //update data
   //更新一下数据
-  chassis_feedback_update(chassis_move_init);
+  //chassis_feedback_update(chassis_move_init);
+	top_down_speed_set(chassis_move_init);
 }
 
 /**
@@ -288,6 +290,7 @@ static void chassis_set_mode(chassis_move_t *chassis_move_mode)
   }
   //in file "chassis_behaviour.c"
   chassis_behaviour_mode_set(chassis_move_mode);
+	chassis_move_mode->chassis_mode=intermedia_chassis_speed[3];
 }
 
 /**
@@ -667,7 +670,7 @@ chassis_move_t  *get_chassis_point(void)
 }
 
 /*Additional functions begin*/
-fp32 intermedia_chassis_speed[4];
+
 
 void top_down_speed_set(chassis_move_t *chassis_speed_set){
 	chassis_speed_set->vx_set=intermedia_chassis_speed[0];

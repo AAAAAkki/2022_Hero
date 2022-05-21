@@ -664,6 +664,7 @@ static void gimbal_init(gimbal_control_t *init)
     //电机数据指针获取
     init->gimbal_yaw_motor.gimbal_motor_measure = get_yaw_gimbal_motor_measure_point();
     init->gimbal_pitch_motor.gimbal_motor_measure = get_pitch_gimbal_motor_measure_point();
+		init->gimbal_scope_motor.gimbal_motor_measure = get_scope_gimbal_motor_measure_point();
     //陀螺仪数据指针获取
     init->gimbal_INT_angle_point = get_INS_angle_point();
     init->gimbal_INT_gyro_point = get_gyro_data_point();

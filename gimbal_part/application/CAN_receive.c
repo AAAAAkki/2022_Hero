@@ -94,7 +94,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
       //get motor id
       i = rx_header.StdId - CAN_3508_M1_ID;
       get_motor_measure(&motor_chassis[i], rx_data);
-      detect_hook(CHASSIS_MOTOR1_TOE + i);
+//      detect_hook(CHASSIS_MOTOR1_TOE + i);
       break;
     }
 		case CAN_CAP:
@@ -404,7 +404,7 @@ static CAN_TxHeaderTypeDef  chassis_board_tx_message;
 static uint8_t              chassis_board_can_send_data[8]={0};
 
 
-void CAN_chassis_transfer(int16_t vx_set, int16_t vy_set, int16_t wz_set){
+void CAN_chassis_transfer(int16_t vx_set, int16_t vy_set, int16_t wz_set, uint16_t chassis_mode){
 		uint32_t send_mail_box;
 		//int16_t temp[4];
     chassis_board_tx_message.StdId = chassis_motor_cmd_id;

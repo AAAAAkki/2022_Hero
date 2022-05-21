@@ -204,7 +204,10 @@ extern const motor_measure_t *get_fric_motor_measure_point(uint8_t i);
 extern void CAN_CMD_FRIC(int16_t motor1, int16_t motor2);
 void CAN_CMD_CAP(uint16_t power, uint16_t buffer);
 //additional functions
-void CAN_chassis_transfer(int16_t vx_set, int16_t vy_set, int16_t wz_set);
+void CAN_chassis_transfer(int16_t vx_set, int16_t vy_set, int16_t wz_set, uint16_t chassis_mode);
 
 void CAN_gimbal_scope_toggle(int16_t set_current);
+
+extern const motor_measure_t *get_scope_gimbal_motor_measure_point(void);
+
 #endif

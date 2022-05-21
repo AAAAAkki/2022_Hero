@@ -514,7 +514,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
     if(GPIO_Pin == INT1_ACCEL_Pin)
     {
-        detect_hook(BOARD_ACCEL_TOE);
+//        detect_hook(BOARD_ACCEL_TOE);
         accel_update_flag |= 1 << IMU_DR_SHFITS;
         accel_temp_update_flag |= 1 << IMU_DR_SHFITS;
         if(imu_start_dma_flag)
@@ -524,7 +524,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     }
     else if(GPIO_Pin == INT1_GYRO_Pin)
     {
-        detect_hook(BOARD_GYRO_TOE);
+//        detect_hook(BOARD_GYRO_TOE);
         gyro_update_flag |= 1 << IMU_DR_SHFITS;
         if(imu_start_dma_flag)
         {
@@ -533,7 +533,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     }
     else if(GPIO_Pin == DRDY_IST8310_Pin)
     {
-        detect_hook(BOARD_MAG_TOE);
+//        detect_hook(BOARD_MAG_TOE);
         mag_update_flag |= 1 << IMU_DR_SHFITS;
     }
     else if(GPIO_Pin == GPIO_PIN_0)
