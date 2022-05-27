@@ -124,7 +124,7 @@
 #define GIMBAL_TEST_MODE 0
 
 #define PITCH_TURN  0
-#define YAW_TURN    0
+#define YAW_TURN    1
 
 //电机码盘值最大以及中值
 #define HALF_ECD_RANGE  4096
@@ -142,7 +142,7 @@
 #define INIT_PITCH_SET  0.0f
 
 //云台校准中值的时候，发送原始电流值，以及堵转时间，通过陀螺仪判断堵转
-#define GIMBAL_CALI_MOTOR_SET   10000
+#define GIMBAL_CALI_MOTOR_SET   12000
 #define GIMBAL_CALI_STEP_TIME   2000
 #define GIMBAL_CALI_GYRO_LIMIT  0.1f
 

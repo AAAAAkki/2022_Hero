@@ -671,14 +671,14 @@ chassis_move_t  *get_chassis_point(void)
 }
 
 void top_down_communication(chassis_move_t *gimbal_speed_info_transfer_to_chassis){
-		fp32 vx_set=gimbal_speed_info_transfer_to_chassis->vx_set;
-		fp32 vy_set=gimbal_speed_info_transfer_to_chassis->vy_set;
-		fp32 wz_set=gimbal_speed_info_transfer_to_chassis->wz_set;
+		fp32 x_set=gimbal_speed_info_transfer_to_chassis->vx_set;
+		fp32 y_set=gimbal_speed_info_transfer_to_chassis->vy_set;
+		fp32 z_set=gimbal_speed_info_transfer_to_chassis->wz_set;
 		int16_t temp[4]={0};
 		//float to int16
-		temp[0]=floorf(vx_set*1000);
-		temp[1]=floorf(vy_set*1000);
-		temp[2]=floorf(wz_set*1000);
+		temp[0]=(int16_t)(x_set*1000);
+		temp[1]=(int16_t)(y_set*1000);
+		temp[2]=(int16_t)(z_set*1000);
 		temp[3]=gimbal_speed_info_transfer_to_chassis->chassis_mode;
 		//send int16
 		CAN_chassis_transfer(temp[0], temp[1], temp[2], temp[3]);		

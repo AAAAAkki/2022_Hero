@@ -152,21 +152,23 @@ void chassis_task(void const *pvParameters)
   {
     //set chassis control mode
     //设置底盘控制模式
-    chassis_set_mode(&chassis_move);
-    //when mode changes, some data save
-    //模式切换数据保存
-    chassis_mode_change_control_transit(&chassis_move);
+//    chassis_set_mode(&chassis_move);
+//    //when mode changes, some data save
+//    //模式切换数据保存
+//    chassis_mode_change_control_transit(&chassis_move);
     //chassis data update
     //底盘数据更新
-    //chassis_feedback_update(&chassis_move);
+    chassis_feedback_update(&chassis_move);
     //set chassis control set-point
     //底盘控制量设置
 		
-		top_down_speed_set(&chassis_move);
 		
-    chassis_set_contorl(&chassis_move);
-    //chassis control pid calculate
+		
+//    chassis_set_contorl(&chassis_move);
+    //chassis control pid calculate0
     //底盘控制PID计算
+		chassis_move.chassis_mode=intermedia_chassis_speed[3];
+		top_down_speed_set(&chassis_move);
     chassis_control_loop(&chassis_move);
 
     //make sure  one motor is online at least, so that the control CAN message can be received
@@ -265,7 +267,10 @@ static void chassis_init(chassis_move_t *chassis_move_init)
 
   chassis_move_init->vy_max_speed = NORMAL_MAX_CHASSIS_SPEED_Y;
   chassis_move_init->vy_min_speed = -NORMAL_MAX_CHASSIS_SPEED_Y;
-
+	
+//	chassis_move_init->vx_set = get_vx_set_point();
+//	chassis_move_init->vy_set = get_vy_set_point();
+//	chassis_move_init->wz_set = get_wz_set_point();
   //update data
   //更新一下数据
   //chassis_feedback_update(chassis_move_init);
@@ -290,7 +295,6 @@ static void chassis_set_mode(chassis_move_t *chassis_move_mode)
   }
   //in file "chassis_behaviour.c"
   chassis_behaviour_mode_set(chassis_move_mode);
-	chassis_move_mode->chassis_mode=intermedia_chassis_speed[3];
 }
 
 /**
@@ -468,6 +472,7 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
 
  
   //get three control set-point, 获取三个控制设置值
+
   chassis_behaviour_control_set(&vx_set, &vy_set, &angle_set, chassis_move_control);
 
   //follow gimbal mode
@@ -614,6 +619,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
   //麦轮运动分解
   chassis_vector_to_mecanum_wheel_speed(chassis_move_control_loop->vx_set,
                                         chassis_move_control_loop->vy_set, chassis_move_control_loop->wz_set, wheel_speed);
+	//logic prob
 
   if (chassis_move_control_loop->chassis_mode == CHASSIS_VECTOR_RAW)
   {
