@@ -157,7 +157,7 @@ void chassis_task(void const *pvParameters)
     chassis_mode_change_control_transit(&chassis_move);
     //chassis data update
     //底盘数据更新
-    chassis_feedback_update(&chassis_move);
+//    chassis_feedback_update(&chassis_move);
     //set chassis control set-point
     //底盘控制量设置
     chassis_set_contorl(&chassis_move);

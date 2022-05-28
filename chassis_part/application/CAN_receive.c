@@ -30,6 +30,7 @@
 extern CAN_HandleTypeDef hcan1;
 extern CAN_HandleTypeDef hcan2;
 extern fp32 intermedia_chassis_speed[4];
+extern chassis_move_t chassis_move;
 //motor data read
 #define CAN_Commucation hcan2
 
@@ -100,6 +101,10 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 				for(int i=0;i<3;i++)
 						intermedia_chassis_speed[i]=((fp32)temp[i])/transform_key;
 				intermedia_chassis_speed[3]=temp[3];
+				chassis_move.vx_set=intermedia_chassis_speed[0];
+				chassis_move.vy_set=intermedia_chassis_speed[1];
+				chassis_move.wz_set=intermedia_chassis_speed[2];
+				chassis_move.chassis_mode=intermedia_chassis_speed[3];
 				break;
 		}
 

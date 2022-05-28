@@ -167,8 +167,8 @@ void chassis_task(void const *pvParameters)
 //    chassis_set_contorl(&chassis_move);
     //chassis control pid calculate0
     //µ×ÅÌ¿ØÖÆPID¼ÆËã
-		chassis_move.chassis_mode=intermedia_chassis_speed[3];
-		top_down_speed_set(&chassis_move);
+//		chassis_move.chassis_mode=intermedia_chassis_speed[3];
+//		top_down_speed_set(&chassis_move);
     chassis_control_loop(&chassis_move);
 
     //make sure  one motor is online at least, so that the control CAN message can be received
