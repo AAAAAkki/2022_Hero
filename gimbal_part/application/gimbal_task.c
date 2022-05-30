@@ -1318,7 +1318,7 @@ gimbal_control_t *get_gimbal_point(void)
 //additional func
 void gimbal_scope_control(gimbal_control_t *scope_toggle)
 {
-		if(scope_toggle->gimbal_rc_ctrl->key.v  )	//switch button pressed, button not decided
+		if(scope_toggle->gimbal_rc_ctrl->key.v &  KEY_PRESSED_OFFSET_R)	//switch button pressed, button not decided
 		{	
 				  //toggle scope
 					scope_toggle->gimbal_scope_motor.scope_state=!scope_toggle->gimbal_scope_motor.scope_state;

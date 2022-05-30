@@ -58,7 +58,7 @@ motor data,  0:chassis motor1 3508;1:chassis motor3 3508;2:chassis motor3 3508;3
 4:yaw云台电机 6020电机; 5:pitch云台电机 6020电机; 6:拨弹电机 2006电机 7:左摩擦轮电机 3508 8：右摩擦轮电机 3508*/
  motor_measure_t motor_chassis[9];
 fp32 chassis_speed_set[4]={0};
-static cap_measure_t cap_measure;
+cap_measure_t cap_measure;
 static CAN_TxHeaderTypeDef gimbal_tx_message;
 static uint8_t gimbal_can_send_data[8];
 static CAN_TxHeaderTypeDef chassis_tx_message;
@@ -217,8 +217,9 @@ void CAN_CMD_CAP(uint16_t power, uint16_t buffer)
   cap_tx_measure.DLC = 0x08;
 	cap_can_send_data[0] = powertx>>8;
 	cap_can_send_data[1] = powertx;
-	cap_can_send_data[2] = buffer>>8;
-	cap_can_send_data[3] = buffer;
+//Mr. Wang Version
+//	cap_can_send_data[2] = buffer>>8;
+//	cap_can_send_data[3] = buffer;
   HAL_CAN_AddTxMessage(&hcan1, &cap_tx_measure, cap_can_send_data, &send_mail_box);
 }
 

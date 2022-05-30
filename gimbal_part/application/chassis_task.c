@@ -30,7 +30,7 @@
 #include "chassis_power_control.h"
 
 #include "referee.h"
-
+#define Mini_speed 0.5f
 #define rc_deadband_limit(input, output, dealine)    \
   {                                                  \
     if ((input) > (dealine) || (input) < -(dealine)) \
@@ -163,7 +163,7 @@ void chassis_task(void const *pvParameters)
     chassis_set_contorl(&chassis_move);
     //chassis control pid calculate
     //µ×ÅÌ¿ØÖÆPID¼ÆËã
-		
+//		CAN_chassis_transfer(0,0,0,2);
 		/*send speed from gimbal C board to chassis C board*/
 		if(toe_is_error(DBUS_TOE))
 				CAN_chassis_transfer(0,0,0,2);
@@ -411,24 +411,44 @@ void chassis_rc_to_control_vector(fp32 *vx_set, fp32 *vy_set, chassis_move_t *ch
 
   //keyboard set speed set-point
   //¼üÅÌ¿ØÖÆ
-  if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_FRONT_KEY)
-  {
-    vx_set_channel = chassis_move_rc_to_vector->vx_max_speed;
-  }
-  else if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_BACK_KEY)
-  {
-    vx_set_channel = chassis_move_rc_to_vector->vx_min_speed;
-  }
+	if(chassis_move_rc_to_vector->chassis_RC->key.v & KEY_PRESSED_OFFSET_CTRL){
+			if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_FRONT_KEY)
+			{
+				vx_set_channel = Mini_speed;
+			}
+			else if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_BACK_KEY)
+			{
+				vx_set_channel = -Mini_speed;
+			}
 
-  if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_LEFT_KEY)
-  {
-    vy_set_channel = chassis_move_rc_to_vector->vy_max_speed;
-  }
-  else if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_RIGHT_KEY)
-  {
-    vy_set_channel = chassis_move_rc_to_vector->vy_min_speed;
-  }
+			if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_LEFT_KEY)
+			{
+				vy_set_channel = Mini_speed;
+			}
+			else if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_RIGHT_KEY)
+			{
+				vy_set_channel = -Mini_speed;
+			}
+	}
+	else{
+			if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_FRONT_KEY)
+			{
+				vx_set_channel = chassis_move_rc_to_vector->vx_max_speed;
+			}
+			else if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_BACK_KEY)
+			{
+				vx_set_channel = chassis_move_rc_to_vector->vx_min_speed;
+			}
 
+			if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_LEFT_KEY)
+			{
+				vy_set_channel = chassis_move_rc_to_vector->vy_max_speed;
+			}
+			else if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_RIGHT_KEY)
+			{
+				vy_set_channel = chassis_move_rc_to_vector->vy_min_speed;
+			}
+	}
   //first order low-pass replace ramp function, calculate chassis speed set-point to improve control performance
   //Ò»½×µÍÍ¨ÂË²¨´úÌæĞ±²¨×÷Îªµ×ÅÌËÙ¶ÈÊäÈë
   first_order_filter_cali(&chassis_move_rc_to_vector->chassis_cmd_slow_set_vx, vx_set_channel);

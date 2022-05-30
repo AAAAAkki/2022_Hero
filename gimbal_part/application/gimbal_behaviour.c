@@ -711,40 +711,40 @@ static void gimbal_absolute_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control
 		//micro_control applied
 		key_micro_control(yaw, pitch, gimbal_control_set);
 
-    {
-        static uint16_t last_turn_keyboard = 0;
-        static uint8_t gimbal_turn_flag = 0;
-        static fp32 gimbal_end_angle = 0.0f;
+//    {
+//        static uint16_t last_turn_keyboard = 0;
+//        static uint8_t gimbal_turn_flag = 0;
+//        static fp32 gimbal_end_angle = 0.0f;
 
-        if ((gimbal_control_set->gimbal_rc_ctrl->key.v & TURN_KEYBOARD) && !(last_turn_keyboard & TURN_KEYBOARD))
-        {
-            if (gimbal_turn_flag == 0)
-            {
-                gimbal_turn_flag = 1;
-                //�����ͷ��Ŀ��ֵ
-                gimbal_end_angle = rad_format(gimbal_control_set->gimbal_yaw_motor.absolute_angle + PI);
-            }
-        }
-        last_turn_keyboard = gimbal_control_set->gimbal_rc_ctrl->key.v;
+//        if ((gimbal_control_set->gimbal_rc_ctrl->key.v & TURN_KEYBOARD) && !(last_turn_keyboard & TURN_KEYBOARD))
+//        {
+//            if (gimbal_turn_flag == 0)
+//            {
+//                gimbal_turn_flag = 1;
+//                //�����ͷ��Ŀ��ֵ
+//                gimbal_end_angle = rad_format(gimbal_control_set->gimbal_yaw_motor.absolute_angle + PI);
+//            }
+//        }
+//        last_turn_keyboard = gimbal_control_set->gimbal_rc_ctrl->key.v;
 
-        if (gimbal_turn_flag)
-        {
-            //���Ͽ��Ƶ���ͷ��Ŀ��ֵ����ת����װ�����
-            if (rad_format(gimbal_end_angle - gimbal_control_set->gimbal_yaw_motor.absolute_angle) > 0.0f)
-            {
-                *yaw += TURN_SPEED;
-            }
-            else
-            {
-                *yaw -= TURN_SPEED;
-            }
-        }
-        //����pi ��180�㣩��ֹͣ
-        if (gimbal_turn_flag && fabs(rad_format(gimbal_end_angle - gimbal_control_set->gimbal_yaw_motor.absolute_angle)) < 0.01f)
-        {
-            gimbal_turn_flag = 0;
-        }
-    }
+//        if (gimbal_turn_flag)
+//        {
+//            //���Ͽ��Ƶ���ͷ��Ŀ��ֵ����ת����װ�����
+//            if (rad_format(gimbal_end_angle - gimbal_control_set->gimbal_yaw_motor.absolute_angle) > 0.0f)
+//            {
+//                *yaw += TURN_SPEED;
+//            }
+//            else
+//            {
+//                *yaw -= TURN_SPEED;
+//            }
+//        }
+//        //����pi ��180�㣩��ֹͣ
+//        if (gimbal_turn_flag && fabs(rad_format(gimbal_end_angle - gimbal_control_set->gimbal_yaw_motor.absolute_angle)) < 0.01f)
+//        {
+//            gimbal_turn_flag = 0;
+//        }
+//    }
 }
 
 /**
@@ -837,43 +837,43 @@ static void 	gimbal_LASER_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimb
 
 void key_micro_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set)
 {
-		static uint8_t flag_r=0,flag_f=0,flag_g=0,flag_v=0;//rfgv
+		static uint8_t flag_c=0,flag_f=0,flag_b=0,flag_v=0;//rfgv
+		if(!flag_b)
+		{
+				if(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_B)
+				{
+						flag_b=CD_microcontrol;
+						*yaw-=MC_Unit_r;
+				}
+		}
+		else
+				flag_b--;
+		if(!flag_c)
+		{
+				if(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_C)
+				{
+						flag_c=CD_microcontrol;
+						*yaw+=MC_Unit_r;
+				}
+		}
+		else
+				flag_c--;
 		if(!flag_f)
 		{
 				if(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_F)
 				{
 						flag_f=CD_microcontrol;
-						*yaw+=MC_Unit_r;
-				}
-		}
-		else
-				flag_f--;
-		if(!flag_g)
-		{
-				if(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_G)
-				{
-						flag_g=CD_microcontrol;
-						*yaw-=MC_Unit_r;
-				}
-		}
-		else
-				flag_g--;
-		if(!flag_r)
-		{
-				if(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_R)
-				{
-						flag_r=CD_microcontrol;
 						*pitch+=MC_Unit_r;
 				}
 		}
 		else
-				flag_r--;
+				flag_f--;
 		if(!flag_v)
 		{
 				if(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_V)
 				{
 						flag_v=CD_microcontrol;
-						*pitch+=MC_Unit_r;
+						*pitch-=MC_Unit_r;
 				}
 		}
 		else
