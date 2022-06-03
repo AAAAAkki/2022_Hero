@@ -194,16 +194,14 @@ extern const motor_measure_t *get_fric_motor_measure_point(uint8_t i);
   * @retval         none
   */
  extern void CAN_CMD_FRIC(int16_t motor1, int16_t motor2);
-void CAN_CMD_CAP(uint16_t power, uint16_t buffer);
+void CAN_CMD_CAP(float power, float buffer);
 
 //feedback not necessary
 //void CAN_motor_feedback_send(int16_t chassis_motor1, int16_t chassis_motor2, int16_t chassis_motor3, int16_t chassis_motor4);
 
-void CAN_heat_data_send(uint16_t shooter_heat0);
+void CAN_heat_data_send(uint16_t shooter_heat, uint16_t shoot_heat_limit);
 
 void CAN_shoot_data_send(uint8_t	bullet_type, uint8_t	bullet_freq, float	bullet_speed);
-
-void CAN_state_data_send(uint16_t heat_limit);
 
 const fp32 * get_wz_set_point(void);
 

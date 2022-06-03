@@ -84,7 +84,7 @@
 #include "cmsis_os.h"
 #include "chassis_task.h"
 #include "arm_math.h"
-
+#include "shoot.h"
 #include "gimbal_behaviour.h"
 
 /**
@@ -211,6 +211,9 @@ static void chassis_open_set_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set, c
 //highlight, the variable chassis behaviour mode
 //留意，这个底盘行为模式变量
 chassis_behaviour_e chassis_behaviour_mode = CHASSIS_ZERO_FORCE;
+extern gimbal_control_t gimbal_control;
+extern shoot_control_t shoot_control;
+extern chassis_move_t chassis_move;
 
 /**
   * @brief          logical judgement to assign "chassis_behaviour_mode" variable to which mode
@@ -255,9 +258,16 @@ void chassis_behaviour_mode_set(chassis_move_t *chassis_move_mode)
 
   //add your own logic to enter the new mode
   //添加自己的逻辑判断进入新模式
-//	if(!(chassis_move_mode->chassis_RC->key.v & 0x000f)&&!(chassis_move_mode->chassis_RC->rc.ch[0] & chassis_move_mode->chassis_RC->rc.ch[1]))
-//				chassis_behaviour_mode = CHASSIS_NO_MOVE;
-		
+	if(gimbal_control.shooter_cannon_mode)
+			chassis_behaviour_mode = CHASSIS_NO_MOVE;
+	if(gimbal_control.shooter_cannon_mode&&(chassis_move.chassis_RC->key.v & 0x000f)){
+			chassis_behaviour_mode = CHASSIS_INFANTRY_FOLLOW_GIMBAL_YAW;
+			gimbal_control.shooter_cannon_mode=0;
+	}
+	
+	//for test
+	if(shoot_control.shoot_mode!=SHOOT_STOP)
+			chassis_behaviour_mode = CHASSIS_NO_MOVE;
 		
   //accord to beheviour mode, choose chassis control mode
   //根据行为模式选择一个底盘控制模式

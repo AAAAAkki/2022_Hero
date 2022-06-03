@@ -365,7 +365,7 @@ void gimbal_task(void const *pvParameters)
             }
             else
             {
-                CAN_cmd_gimbal(yaw_can_set_current, pitch_can_set_current, shoot_can_set_current, 0);
+                CAN_cmd_gimbal(yaw_can_set_current, pitch_can_set_current, shoot_can_set_current, gimbal_control.gimbal_scope_motor.current_set);
             }
         }
 
@@ -689,11 +689,10 @@ static void gimbal_init(gimbal_control_t *init)
 		init->gimbal_pitch_motor.gimbal_motor_gyro_pid.proportion_output_filter_coefficient = exp(-350*1E-3);
     //PID_init(&torque_current_pid, PID_POSITION, torque_current_pid_para, 30000, 30000);
     //scope pid  need to debug
-		static const fp32 Scope_speed_pid[3] = {2000, 0, 0};
+		static const fp32 Scope_speed_pid[3] = {10, 0, 0};
 		PID_init(&init->gimbal_scope_motor.scope_motor_pid,PID_POSITION, Scope_speed_pid, 5000, 0);
 		//scope position reset
 		init->gimbal_scope_motor.scope_state=SCOPE_OFF;
-		gimbal_scope_cmd(init,SCOPE_OFF);
 		//Çå³ýËùÓÐPID
     gimbal_total_pid_clear(init);
 
@@ -709,7 +708,7 @@ static void gimbal_init(gimbal_control_t *init)
     init->gimbal_pitch_motor.motor_gyro_set = init->gimbal_pitch_motor.motor_gyro;
  
 		init->vision_mode =0;
-
+		init->shooter_cannon_mode = 0;
 }
 
 /**
@@ -1317,43 +1316,46 @@ gimbal_control_t *get_gimbal_point(void)
 
 //additional func
 void gimbal_scope_control(gimbal_control_t *scope_toggle)
-{
-		if(scope_toggle->gimbal_rc_ctrl->key.v &  KEY_PRESSED_OFFSET_R)	//switch button pressed, button not decided
-		{	
-				  //toggle scope
-					scope_toggle->gimbal_scope_motor.scope_state=!scope_toggle->gimbal_scope_motor.scope_state;
-					gimbal_scope_cmd(scope_toggle, scope_toggle->gimbal_scope_motor.scope_state);
+{	
+		//set toggle flag, switch scope in 1s
+		if(scope_toggle->gimbal_rc_ctrl->mouse.press_r && scope_toggle->gimbal_scope_motor.toggle_flag!=1){
+				scope_toggle->gimbal_scope_motor.toggle_flag=1;
+				scope_toggle->gimbal_scope_motor.scope_state^=1;
+				scope_toggle->gimbal_scope_motor.toggle_count = 1000;
+				if(scope_toggle->gimbal_scope_motor.scope_state)
+						scope_toggle->shooter_cannon_mode=1;
 		}
-		//position limit
-		scope_toggle->gimbal_scope_motor.speed_set=0;
-		scope_position_limit(scope_toggle);
-}
-void gimbal_scope_cmd(gimbal_control_t *scope_toggle, uint8_t state)
-{
-		static uint8_t i=0;
-		while(i<10)
-		{
-				if(state==SCOPE_ON)
-						scope_toggle->gimbal_scope_motor.current_set=scope_support(i);
-				else if(state==SCOPE_OFF)
-						scope_toggle->gimbal_scope_motor.current_set=-scope_support(i);
-				
-				CAN_gimbal_scope_toggle(scope_toggle->gimbal_scope_motor.current_set);
-				i++;
+		//switch process
+		if(scope_toggle->gimbal_scope_motor.toggle_count){
+				if(scope_toggle->gimbal_scope_motor.scope_state==SCOPE_ON){
+						scope_toggle->gimbal_scope_motor.current_set=scope_support(scope_toggle->gimbal_scope_motor.toggle_count);
+						scope_toggle->gimbal_scope_motor.toggle_count--;
+				}
+				else{
+						scope_toggle->gimbal_scope_motor.current_set=-scope_support(scope_toggle->gimbal_scope_motor.toggle_count);
+						scope_toggle->gimbal_scope_motor.toggle_count--;
+				}
 		}
+		else
+				scope_position_limit(&scope_toggle->gimbal_scope_motor);
+		//enable scope switch per 0.8s
+		if(scope_toggle->gimbal_scope_motor.toggle_count<200)
+				scope_toggle->gimbal_scope_motor.toggle_flag=0;
 }
 
 //position limit
-void scope_position_limit(gimbal_control_t *scope)
+void scope_position_limit(scope_motor_t *scope)
 {
-		scope->gimbal_scope_motor.motor_speed=scope->gimbal_scope_motor.gimbal_motor_measure->speed_rpm;
-		scope->gimbal_scope_motor.current_set=PID_calc(&scope->gimbal_scope_motor.scope_motor_pid,scope->gimbal_scope_motor.motor_speed,scope->gimbal_scope_motor.speed_set);
-		CAN_gimbal_scope_toggle(scope->gimbal_scope_motor.current_set);
+		if(scope->scope_state==SCOPE_ON)
+				scope->current_set=400;
+		else
+				scope->current_set=-400;
 }
-//coefficient debug needed
-uint16_t scope_support(uint8_t time)
-{
-		fp32 exp;
-		exp= exp2f(time);
-		return (2-1*exp)*200;
+//calculate current to set
+uint16_t scope_support(uint16_t time)
+{		
+		if(time>650)
+			 return time-100;
+		else
+				return time-350;
 }

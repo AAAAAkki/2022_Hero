@@ -54,9 +54,10 @@
 #define MOTOR_ECD_TO_ANGLE          0.000021305288720633905968306772076277f
 #define FULL_COUNT                  10
 //拨弹速度
-#define TRIGGER_SPEED               4.0f
+#define TRIGGER_SPEED               6.0f
 #define CONTINUE_TRIGGER_SPEED      4.0f
 #define READY_TRIGGER_SPEED         5.0f
+#define FASTER_TRIGGER_SPEED				12.0f
 
 #define KEY_OFF_JUGUE_TIME          500
 #define SWITCH_TRIGGER_ON           0
@@ -64,7 +65,7 @@
 
 //卡单时间 以及反转时间
 #define BLOCK_TRIGGER_SPEED         1.0f
-#define BLOCK_TIME                  700
+#define BLOCK_TIME                  900
 #define REVERSE_TIME                500
 #define REVERSE_SPEED_LIMIT         13.0f
 
@@ -73,9 +74,13 @@
 #define PI_EIGHT                    0.39269908169872415480783042290994f
 
 //拨弹轮电机PID
-#define TRIGGER_ANGLE_PID_KP        800.0f
-#define TRIGGER_ANGLE_PID_KI        3.0f
-#define TRIGGER_ANGLE_PID_KD        0.0f
+#define TRIGGER_ANGLE_PID_KP        190.0f
+#define TRIGGER_ANGLE_PID_KI        0.4f
+#define TRIGGER_ANGLE_PID_KD        18.0f
+
+#define TRIGGER_FAST_SPEED_PID_KP		187.0f
+#define TRIGGER_FAST_SPEED_PID_KI		0.4f
+#define TRIGGER_FAST_SPEED_PID_KD		18.0f
 
 #define TRIGGER_BULLET_PID_MAX_OUT  16000.0f
 #define TRIGGER_BULLET_PID_MAX_IOUT 9000.0f
@@ -124,7 +129,7 @@ typedef struct
 	  int32_t ecd_count;
     fp32 set_angle;
     int16_t given_current;
-
+		uint8_t trigger_high_speed;
 
     bool_t press_l;
     bool_t last_press_l;

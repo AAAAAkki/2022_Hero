@@ -161,6 +161,7 @@ typedef struct
   chassis_motor_t motor_chassis[4];          //chassis motor data.底盘电机数据
   pid_type_def motor_speed_pid[4];             //motor speed PID.底盘电机速度pid
   pid_type_def chassis_angle_pid;              //follow angle PID.底盘跟随角度pid
+	pid_type_def buffer_pid;
 
   first_order_filter_type_t chassis_cmd_slow_set_vx;  //use first order filter to slow set-point.使用一阶低通滤波减缓设定值
   first_order_filter_type_t chassis_cmd_slow_set_vy;  //use first order filter to slow set-point.使用一阶低通滤波减缓设定值
@@ -182,6 +183,7 @@ typedef struct
   fp32 chassis_yaw;   //the yaw angle calculated by gyro sensor and gimbal motor.陀螺仪和云台电机叠加的yaw角度
   fp32 chassis_pitch; //the pitch angle calculated by gyro sensor and gimbal motor.陀螺仪和云台电机叠加的pitch角度
   fp32 chassis_roll;  //the roll angle calculated by gyro sensor and gimbal motor.陀螺仪和云台电机叠加的roll角度
+	
 
 } chassis_move_t;
 

@@ -118,7 +118,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop);
 #if INCLUDE_uxTaskGetStackHighWaterMark
 uint32_t chassis_high_water;
 #endif
-
+extern gimbal_control_t gimbal_control;
 //底盘运动数据
 chassis_move_t chassis_move;
 
@@ -409,6 +409,7 @@ void chassis_rc_to_control_vector(fp32 *vx_set, fp32 *vy_set, chassis_move_t *ch
   vx_set_channel = vx_channel * CHASSIS_VX_RC_SEN;
   vy_set_channel = vy_channel * -CHASSIS_VY_RC_SEN;
 
+	
   //keyboard set speed set-point
   //键盘控制
 	if(chassis_move_rc_to_vector->chassis_RC->key.v & KEY_PRESSED_OFFSET_CTRL){

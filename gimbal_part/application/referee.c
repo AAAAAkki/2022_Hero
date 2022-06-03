@@ -191,11 +191,6 @@ void get_shoot_heat1_limit_and_heat0(uint16_t *heat0_limit, uint16_t *heat0)
     *heat0 = chassis_data_receive.shooter_heat0;
 }
 
-void get_shoot_heat2_limit_and_heat1(uint16_t *heat1_limit, uint16_t *heat1)
-{
-    *heat1_limit = robot_state.shooter_id2_17mm_cooling_limit;
-    *heat1 = power_heat_data_t.shooter_id2_17mm_cooling_heat;
-}
 ext_robot_hurt_t *get_hurt_point(void)
 {
     return &robot_hurt_t;

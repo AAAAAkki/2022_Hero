@@ -25,7 +25,7 @@
 #include "arm_math.h"
 #include "user_lib.h"
 #include "referee.h"
-
+#include "gimbal_task.h"
 #include "CAN_receive.h"
 #include "gimbal_behaviour.h"
 #include "detect_task.h"
@@ -78,7 +78,7 @@ void shoot_init(void)
 
     static const fp32 Trigger_speed_pid[3] = {TRIGGER_ANGLE_PID_KP, TRIGGER_ANGLE_PID_KI, TRIGGER_ANGLE_PID_KD};
     static const fp32 Fric_speed_pid0[3] = {40, 0.2, 0};
-		static const fp32 Fric_speed_pid1[3] = {40, 1, 0};
+		static const fp32 Fric_speed_pid1[3] = {20, 0.4, 0};
     shoot_control.shoot_mode = SHOOT_STOP;
     //遥控器指针
     shoot_control.shoot_rc = get_remote_control_point();
@@ -109,6 +109,7 @@ void shoot_init(void)
     shoot_control.speed_set = 0.0f;
     shoot_control.key_time = 0;
 		shoot_control.sum_ecd_set=shoot_control.sum_ecd;
+		shoot_control.trigger_high_speed = 0;
 }
 
 /**
@@ -121,12 +122,24 @@ int16_t shoot_control_loop(void)
 
     shoot_set_mode();        //设置状态机
     shoot_feedback_update(); //更新数据
-		trigger_speed = 2;
 		
+		trigger_speed = FASTER_TRIGGER_SPEED;
+		
+//		if(shoot_control.trigger_high_speed)
+//				trigger_speed = FASTER_TRIGGER_SPEED;
+//		high speed shoot mode
+		
+		//trigger set
     if (shoot_control.shoot_mode == SHOOT_STOP)
     {
         //设置拨弹轮的速度
         shoot_control.speed_set = 0.0f;
+				if(gimbal_behaviour != GIMBAL_ZERO_FORCE){
+						PID_calc(&shoot_control.trigger_motor_pid, shoot_control.speed, shoot_control.speed_set);
+						shoot_control.given_current = (int16_t)(shoot_control.trigger_motor_pid.out);
+				}
+				else
+						shoot_control.given_current = 0;
     }
 		else if (shoot_control.shoot_mode == SHOOT_READY)
     {
@@ -145,15 +158,10 @@ int16_t shoot_control_loop(void)
         shoot_control.trigger_motor_pid.max_iout = TRIGGER_BULLET_PID_MAX_IOUT;
         shoot_bullet_control();
     }
-     
+    
+		//fric set
     if (shoot_control.shoot_mode == SHOOT_STOP)
     {
-				if(gimbal_behaviour != GIMBAL_ZERO_FORCE){
-						PID_calc(&shoot_control.trigger_motor_pid, shoot_control.speed, shoot_control.speed_set);
-						shoot_control.given_current = (int16_t)(shoot_control.trigger_motor_pid.out);
-				}
-				else
-						shoot_control.given_current = 0;
 				shoot_laser_off();
         //摩擦轮需要一个个斜波开启，不能同时直接开启，否则可能电机不转
         shoot_control.fric1_ramp.out = 0;
@@ -175,9 +183,8 @@ int16_t shoot_control_loop(void)
     shoot_control.fric_can2 = (int16_t)(shoot_control.fric2_ramp.out);
     PID_calc(&shoot_control.fric_motor_pid[0], shoot_control.fric_motor_measure[0]->speed_rpm, -shoot_control.fric_can1);
     PID_calc(&shoot_control.fric_motor_pid[1], shoot_control.fric_motor_measure[1]->speed_rpm, shoot_control.fric_can1);
-		
-    CAN_CMD_FRIC((int16_t)shoot_control.fric_motor_pid[0].out, (int16_t)shoot_control.fric_motor_pid[1].out);
-		
+		CAN_CMD_FRIC((int16_t)shoot_control.fric_motor_pid[0].out, (int16_t)shoot_control.fric_motor_pid[1].out, gimbal_control.gimbal_scope_motor.current_set);
+//		CAN_CMD_FRIC(2000,2000,0);		
 		return shoot_control.given_current;
 }
 
@@ -188,10 +195,10 @@ int16_t shoot_control_loop(void)
   */
 static void shoot_set_mode(void)
 {
-    static int8_t last_s = RC_SW_UP;
+static int8_t last_s = RC_SW_UP;
     static uint8_t fric_state = 0;
     static uint16_t press_time = 0;
-    //上拨判断， 一次开启，再次关闭
+    //????, ????,????
     if ((switch_is_up(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && !switch_is_up(last_s) && shoot_control.shoot_mode == SHOOT_STOP))
     {
         shoot_control.shoot_mode = SHOOT_READY;
@@ -201,12 +208,12 @@ static void shoot_set_mode(void)
         shoot_control.shoot_mode = SHOOT_STOP;
     }
 
-    //处于中档， 可以使用键盘开启摩擦轮
+    //????, ???????????
     if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_rc->key.v & SHOOT_ON_KEYBOARD) && shoot_control.shoot_mode == SHOOT_STOP)
     {
         shoot_control.shoot_mode = SHOOT_READY;
     }
-    //处于中档， 可以使用键盘关闭摩擦轮
+    //????, ???????????
     else if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_rc->key.v & SHOOT_OFF_KEYBOARD) && shoot_control.shoot_mode != SHOOT_STOP)
     {
         shoot_control.shoot_mode = SHOOT_STOP;
@@ -217,17 +224,15 @@ static void shoot_set_mode(void)
     }
     if (shoot_control.shoot_mode == SHOOT_READY)
     {
-        if (switch_is_down(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]))
+
+        if ((switch_is_down(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && !switch_is_down(last_s)))
         {
-						static int count=0;
-						count++;
-						if(count>5000)
-						{
-							shoot_control.shoot_mode = SHOOT_BULLET;
-							count=0;
-						}
+            shoot_control.shoot_mode = SHOOT_CONTINUE_BULLET;
         }
+        
     }
+		
+		
 
     if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_mode == SHOOT_READY||shoot_control.shoot_mode == SHOOT_BULLET))
     {
@@ -242,6 +247,11 @@ static void shoot_set_mode(void)
 	         shoot_control.shoot_mode = SHOOT_CONTINUE_BULLET;
 				}
     }
+//		     if (shoot_control.shoot_mode == SHOOT_READY&&vision_control.vision_data.windwill_rx.fire_single)
+//        {
+//            shoot_control.shoot_mode = SHOOT_BULLET;
+//        }
+		
     if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && shoot_control.shoot_mode == SHOOT_CONTINUE_BULLET)
     {
         if (!shoot_control.press_l)
@@ -254,17 +264,17 @@ static void shoot_set_mode(void)
     }
 
     get_shoot_heat1_limit_and_heat0(&shoot_control.heat_limit, &shoot_control.heat);
-   /* if (!toe_is_error(REFEREE_TOE))
+    if (!toe_is_error(REFEREE_TOE))
     {
-        if ((shoot_control.heat + 10 >= shoot_control.heat_limit) && !(shoot_control.shoot_rc->key.v & KEY_PRESSED_OFFSET_C))
+        if ((shoot_control.heat + 100 >= shoot_control.heat_limit) && !(shoot_control.shoot_rc->key.v & KEY_PRESSED_OFFSET_G))
         {
 						if(shoot_control.shoot_mode==SHOOT_CONTINUE_BULLET)
 							{
 									shoot_control.shoot_mode = SHOOT_READY;
 							}
         }
-    }*/
-    //如果云台状态是 无力状态，就关闭射击
+    }
+    //??????? ????,?????
     if (gimbal_cmd_to_shoot_stop())
     {
         shoot_control.shoot_mode = SHOOT_STOP;
@@ -331,7 +341,6 @@ static void shoot_feedback_update(void)
 		{
 				shoot_control.sum_ecd_set=shoot_control.sum_ecd;
 		}
-		
 		
 		
     //射击开关下档时间计时
@@ -409,14 +418,15 @@ static void trigger_motor_turn_back(void)
 static void shoot_bullet_control(void)
 {
 
-    //每次拨动 1/4PI的角度
+    //每次拨动 2/5PI的角度
     if (shoot_control.move_flag == 0)
     {
-        shoot_control.sum_ecd_set=shoot_control.sum_ecd_set+31459;
+        shoot_control.sum_ecd_set=shoot_control.sum_ecd_set+31458;
+				//8191*3591/187/5==31458.6963
         shoot_control.move_flag = 1;
     }
     //到达角度判断
-    if (shoot_control.sum_ecd_set - shoot_control.sum_ecd > 629)
+    if (shoot_control.sum_ecd_set - shoot_control.sum_ecd > 1500)
     {
         //没到达一直设置旋转速度
         shoot_control.trigger_speed_set = trigger_speed;

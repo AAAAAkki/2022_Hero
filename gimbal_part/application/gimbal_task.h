@@ -39,16 +39,16 @@
 // #define PITCH_SPEED_PID_MAX_OUT   30000.0f
 // #define PITCH_SPEED_PID_MAX_IOUT  15000.0f
 
-#define PITCH_SPEED_PID_KP        3000.0f
+#define PITCH_SPEED_PID_KP        6000.0f
 #define PITCH_SPEED_PID_KI        45.0f
-#define PITCH_SPEED_PID_KD        40000000.0f
+#define PITCH_SPEED_PID_KD        35000000.0f
 #define PITCH_SPEED_PID_MAX_OUT   30000.0f
 #define PITCH_SPEED_PID_MAX_IOUT  15000.0f
 
 //yaw speed close-loop PID params, max out and max iout
 //yaw 速度环 PID参数以及 PID最大输出，积分输出
-#define YAW_SPEED_PID_KP        3000.0f
-#define YAW_SPEED_PID_KI        60.0f
+#define YAW_SPEED_PID_KP        8000.0f
+#define YAW_SPEED_PID_KI        100.0f
 #define YAW_SPEED_PID_KD        80000000.0f
 #define YAW_SPEED_PID_MAX_OUT   30000.0f
 #define YAW_SPEED_PID_MAX_IOUT  15000.0f
@@ -89,7 +89,7 @@
 
 
 //任务初始化 空闲一段时间
-#define GIMBAL_TASK_INIT_TIME 201
+#define GIMBAL_TASK_INIT_TIME 400
 //yaw,pitch控制通道以及状态开关通道
 #define YAW_CHANNEL   2
 #define PITCH_CHANNEL 3
@@ -113,6 +113,9 @@
 
 #define YAW_MOUSE_SEN   0.00005f
 #define PITCH_MOUSE_SEN -0.00005f
+
+#define YAW_MOUSE_SEN_SCOPE 0.00002f
+#define PITCH_MOUSE_SEN_SCOPE -0.00002f
 
 #define YAW_ENCODE_SEN    0.01f
 #define PITCH_ENCODE_SEN  0.01f
@@ -217,7 +220,7 @@ typedef struct
     fp32 raw_cmd_current;
     fp32 current_set;
     int16_t given_current;
-
+		
 } gimbal_motor_t;
 
 //scope state
@@ -232,7 +235,9 @@ typedef struct
     fp32 current_set;
     int16_t given_current;
 		pid_type_def scope_motor_pid;
+		uint8_t toggle_flag;
 		uint8_t scope_state;
+		uint16_t toggle_count;
 }scope_motor_t;
 
 typedef struct
@@ -257,6 +262,7 @@ typedef struct
     gimbal_motor_t gimbal_pitch_motor;
     gimbal_step_cali_t gimbal_cali;
     uint8_t vision_mode;
+		uint8_t shooter_cannon_mode;
     fp32 vision_angle_set[2];
 		scope_motor_t gimbal_scope_motor;
 } gimbal_control_t;
@@ -348,9 +354,7 @@ gimbal_control_t *get_gimbal_point(void);
 //additional define
 void gimbal_scope_control(gimbal_control_t *scope_toggle);
 
-void gimbal_scope_cmd(gimbal_control_t *scope_toggle, uint8_t state);
+void scope_position_limit(scope_motor_t *scope);
 
-void scope_position_limit(gimbal_control_t *scope);
-
-uint16_t scope_support(uint8_t time);
+uint16_t scope_support(uint16_t time);
 #endif
