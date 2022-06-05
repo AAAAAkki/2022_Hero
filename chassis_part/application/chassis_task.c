@@ -167,8 +167,8 @@ void chassis_task(void const *pvParameters)
 //    chassis_set_contorl(&chassis_move);
     //chassis control pid calculate0
     //底盘控制PID计算
-		chassis_move.chassis_mode=intermedia_chassis_speed[3];
-		top_down_speed_set(&chassis_move);
+//		chassis_move.chassis_mode=intermedia_chassis_speed[3];
+//		top_down_speed_set(&chassis_move);
     chassis_control_loop(&chassis_move);
 
     //make sure  one motor is online at least, so that the control CAN message can be received
@@ -225,7 +225,8 @@ static void chassis_init(chassis_move_t *chassis_move_init)
   //chassis angle PID
   //底盘角度pid值
   const static fp32 chassis_yaw_pid[3] = {CHASSIS_FOLLOW_GIMBAL_PID_KP, CHASSIS_FOLLOW_GIMBAL_PID_KI, CHASSIS_FOLLOW_GIMBAL_PID_KD};
-
+	const static fp32 chassis_buffer_pid[3] = {-0.5,0,2000};
+	const static fp32 voltage_pid[3] = {-300,0,0};
   const static fp32 chassis_x_order_filter[1] = {CHASSIS_ACCEL_X_NUM};
   const static fp32 chassis_y_order_filter[1] = {CHASSIS_ACCEL_Y_NUM};
   uint8_t i;
@@ -243,7 +244,7 @@ static void chassis_init(chassis_move_t *chassis_move_init)
   //获取云台电机数据指针
   chassis_move_init->chassis_yaw_motor = get_yaw_motor_point();
   chassis_move_init->chassis_pitch_motor = get_pitch_motor_point();
-
+	
   //get chassis motor data point,  initialize motor speed PID
   //获取底盘电机数据指针，初始化PID
   for (i = 0; i < 4; i++)
@@ -251,6 +252,7 @@ static void chassis_init(chassis_move_t *chassis_move_init)
     chassis_move_init->motor_chassis[i].chassis_motor_measure = get_chassis_motor_measure_point(i);
     PID_init(&chassis_move_init->motor_speed_pid[i], PID_POSITION, motor_speed_pid, M3505_MOTOR_SPEED_PID_MAX_OUT, M3505_MOTOR_SPEED_PID_MAX_IOUT);
   }
+	PID_init(&chassis_move_init->buffer_pid,PID_POSITION,chassis_buffer_pid,20,0);
   //initialize angle PID
   //初始化角度PID
   PID_init(&chassis_move_init->chassis_angle_pid, PID_POSITION, chassis_yaw_pid, CHASSIS_FOLLOW_GIMBAL_PID_MAX_OUT, CHASSIS_FOLLOW_GIMBAL_PID_MAX_IOUT);

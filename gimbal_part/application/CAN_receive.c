@@ -118,20 +118,19 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
       detect_hook(TRIGGER_MOTOR_TOE);
       break;
     }
-		case gimbal_scope_motor_id:
-		{
-      get_motor_measure(&motor_chassis[9], rx_data);
-      //detect_hook(CHASSIS_MOTOR1_TOE + i);
-			break;
-		}
-		case state_data_id:
-		{
-			chassis_data_receive.shooter_heat0_limit=(uint16_t)(rx_data[0]<<8|rx_data[1]);
-			break;
-		}
+		
+		//merge heat and limit data
+		//detect REFEREE_TOE
+//		case state_data_id:
+//		{
+//			chassis_data_receive.shooter_heat0_limit=(uint16_t)(rx_data[0]<<8|rx_data[1]);
+//			break;
+//		}
 		case heat_data_id:
 		{
 			chassis_data_receive.shooter_heat0=(uint16_t)(rx_data[0]<<8|rx_data[1]);
+			chassis_data_receive.shooter_heat0_limit=(uint16_t)(rx_data[2]<<8|rx_data[3]);
+			detect_hook(REFEREE_TOE);
 			break;
 		}
 		case shoot_data_id:
@@ -179,6 +178,12 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
       detect_hook(PITCH_GIMBAL_MOTOR_TOE);
       break;
     }
+		case gimbal_scope_motor_id:
+		{
+      get_motor_measure(&motor_chassis[9], rx_data);
+      //detect_hook(CHASSIS_MOTOR1_TOE + i);
+			break;
+		}
     default:
     {
       break;
@@ -232,7 +237,7 @@ void CAN_cmd_gimbal(int16_t yaw, int16_t pitch, int16_t shoot, int16_t rev)
   * @param[in]      none
   * @retval         none
   */
-void CAN_CMD_FRIC(int16_t motor1, int16_t motor2)
+void CAN_CMD_FRIC(int16_t motor1, int16_t motor2, int16_t scope)
 {
   uint32_t send_mail_box;
   fric_tx_message.StdId = 0x200;
@@ -243,6 +248,8 @@ void CAN_CMD_FRIC(int16_t motor1, int16_t motor2)
   fric_can_send_data[1] = motor1;
   fric_can_send_data[2] = (motor2 >> 8);
   fric_can_send_data[3] = motor2;
+	fric_can_send_data[4] = (scope>>8);
+	fric_can_send_data[5] = scope;
   HAL_CAN_AddTxMessage(&hcan1, &fric_tx_message, fric_can_send_data, &send_mail_box);
 }
 
@@ -406,7 +413,7 @@ const motor_measure_t *get_fric_motor_measure_point(uint8_t i)
 /*Addtional functions*/
 const motor_measure_t *get_scope_gimbal_motor_measure_point(void)
 {
-    return &motor_chassis[7];
+    return &motor_chassis[9];
 }
 
 static CAN_TxHeaderTypeDef  chassis_board_tx_message;
@@ -432,20 +439,3 @@ void CAN_chassis_transfer(int16_t vx_set, int16_t vy_set, int16_t wz_set, uint16
     HAL_CAN_AddTxMessage(&hcan2, &chassis_board_tx_message, chassis_board_can_send_data, &send_mail_box);
 }
 
-static CAN_TxHeaderTypeDef  scope_toggle_tx_message;
-static uint8_t              gimbal_scope_can_send_data[8]={0};
-
-
-void CAN_gimbal_scope_toggle(int16_t set_current)
-{
-		uint32_t send_mail_box;
-		//int16_t temp[4];
-    scope_toggle_tx_message.StdId = gimbal_scope_motor_id;
-    scope_toggle_tx_message.IDE = CAN_ID_STD;
-    scope_toggle_tx_message.RTR = CAN_RTR_DATA;
-    scope_toggle_tx_message.DLC = 0x08;
-    gimbal_scope_can_send_data[0]=set_current>>8;
-		gimbal_scope_can_send_data[1]=set_current;
-		
-    HAL_CAN_AddTxMessage(&GIMBAL_CAN, &scope_toggle_tx_message, gimbal_scope_can_send_data, &send_mail_box);
-}

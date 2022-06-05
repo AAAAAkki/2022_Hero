@@ -30,6 +30,7 @@
 extern CAN_HandleTypeDef hcan1;
 extern CAN_HandleTypeDef hcan2;
 extern fp32 intermedia_chassis_speed[4];
+extern chassis_move_t chassis_move;
 //motor data read
 #define CAN_Commucation hcan2
 
@@ -45,10 +46,10 @@ extern fp32 intermedia_chassis_speed[4];
 
 #define get_cap_measure(ptr, data)                               \
   {                                                                \
-		(ptr)->InputVot = ((int16_t) ((data)[1] << 8 | (data)[0]))/100;      \
-		(ptr)->CapVot = ((int16_t) ((data)[3] <<8 | (data) [2]))/100; \
-		(ptr) -> TestCurrent = ((int16_t) ((data)[5] <<8 | (data) [4]))/100;   \
-		(ptr) -> Target_Power = ((int16_t) ((data)[7] <<8 | (data) [6]))/100;   \
+		(ptr)->InputVot = ((fp32) ((data)[1] << 8 | (data)[0]))/100;      \
+		(ptr)->CapVot = ((fp32) ((data)[3] <<8 | (data) [2]))/100; \
+		(ptr) -> TestCurrent = ((fp32) ((data)[5] <<8 | (data) [4]))/100;   \
+		(ptr) -> Target_Power = ((fp32) ((data)[7] <<8 | (data) [6]))/100;   \
   }
 /*
 motor data,  0:chassis motor1 3508;1:chassis motor3 3508;2:chassis motor3 3508;3:chassis motor4 3508;
@@ -57,7 +58,7 @@ motor data,  0:chassis motor1 3508;1:chassis motor3 3508;2:chassis motor3 3508;3
 4:yaw云台电机 6020电机; 5:pitch云台电机 6020电机; 6:拨弹电机 2006电机 7:左摩擦轮电机 3508 8：右摩擦轮电机 3508*/
  motor_measure_t motor_chassis[9];
 fp32 chassis_speed_set[4]={0};
-static cap_measure_t cap_measure;
+cap_measure_t cap_measure;
 static CAN_TxHeaderTypeDef gimbal_tx_message;
 static uint8_t gimbal_can_send_data[8];
 static CAN_TxHeaderTypeDef chassis_tx_message;
@@ -100,6 +101,10 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 				for(int i=0;i<3;i++)
 						intermedia_chassis_speed[i]=((fp32)temp[i])/transform_key;
 				intermedia_chassis_speed[3]=temp[3];
+				chassis_move.vx_set=intermedia_chassis_speed[0];
+				chassis_move.vy_set=intermedia_chassis_speed[1];
+				chassis_move.wz_set=intermedia_chassis_speed[2];
+				chassis_move.chassis_mode=intermedia_chassis_speed[3];
 				break;
 		}
 
@@ -201,10 +206,10 @@ void CAN_CMD_FRIC(int16_t motor1, int16_t motor2)
   HAL_CAN_AddTxMessage(&hcan2, &fric_tx_message, fric_can_send_data, &send_mail_box);
 }
 
-void CAN_CMD_CAP(uint16_t power, uint16_t buffer)
+void CAN_CMD_CAP(float power, float buffer)
 {
 	uint16_t powertx;
-	powertx = power * 100;
+	powertx = power * 99;
   uint32_t send_mail_box;
   cap_tx_measure.StdId = 0x210;
   cap_tx_measure.IDE = CAN_ID_STD;
@@ -212,8 +217,9 @@ void CAN_CMD_CAP(uint16_t power, uint16_t buffer)
   cap_tx_measure.DLC = 0x08;
 	cap_can_send_data[0] = powertx>>8;
 	cap_can_send_data[1] = powertx;
-	cap_can_send_data[2] = buffer>>8;
-	cap_can_send_data[3] = buffer;
+//Mr. Wang Version
+//	cap_can_send_data[2] = buffer>>8;
+//	cap_can_send_data[3] = buffer;
   HAL_CAN_AddTxMessage(&hcan1, &cap_tx_measure, cap_can_send_data, &send_mail_box);
 }
 
@@ -381,17 +387,17 @@ const motor_measure_t *get_fric_motor_measure_point(uint8_t i)
 static CAN_TxHeaderTypeDef  gimbal_board_heat_message;
 static uint8_t              gimbal_board_heat_send_data[8]={0};
 
-void CAN_heat_data_send(uint16_t shooter_heat0){
+void CAN_heat_data_send(uint16_t shooter_heat, uint16_t shoot_heat_limit){
 		uint32_t send_mail_box;
 		
     gimbal_board_heat_message.StdId = heat_data_id;
     gimbal_board_heat_message.IDE = CAN_ID_STD;
     gimbal_board_heat_message.RTR = CAN_RTR_DATA;
     gimbal_board_heat_message.DLC = 0x08;
-    gimbal_board_heat_send_data[0]=shooter_heat0>>8;
-		gimbal_board_heat_send_data[1]=shooter_heat0;
-		//gimbal_board_heat_send_data[2]=shooter_heat1>>8;
-		//gimbal_board_heat_send_data[3]=shooter_heat1;
+    gimbal_board_heat_send_data[0]=shooter_heat>>8;
+		gimbal_board_heat_send_data[1]=shooter_heat;
+		gimbal_board_heat_send_data[2]=shoot_heat_limit>>8;
+		gimbal_board_heat_send_data[3]=shoot_heat_limit;
 		
     HAL_CAN_AddTxMessage(&CAN_Commucation, &gimbal_board_heat_message, gimbal_board_heat_send_data, &send_mail_box);
 }
@@ -414,23 +420,7 @@ void CAN_shoot_data_send(uint8_t	bullet_type, uint8_t	bullet_freq, float	bullet_
     HAL_CAN_AddTxMessage(&CAN_Commucation, &gimbal_board_shoot_message, gimbal_board_shoot_data, &send_mail_box);
 }
 
-static CAN_TxHeaderTypeDef  gimbal_board_state_message;
-static uint8_t              gimbal_board_state_data[8]={0};
 
-void CAN_state_data_send(uint16_t heat_limit){
-		uint32_t send_mail_box;
-		
-    gimbal_board_state_message.StdId = state_data_id;
-    gimbal_board_state_message.IDE = CAN_ID_STD;
-    gimbal_board_state_message.RTR = CAN_RTR_DATA;
-    gimbal_board_state_message.DLC = 0x08;
-	
-    gimbal_board_state_data[0]=heat_limit>>8;
-		gimbal_board_state_data[1]=heat_limit;
-		//48bits reserved
-    HAL_CAN_AddTxMessage(&CAN_Commucation, &gimbal_board_state_message, gimbal_board_state_data, &send_mail_box);
-	
-}
 
 const fp32 * get_vx_set_point(void){
 		return &chassis_speed_set[0];

@@ -30,7 +30,7 @@
 #include "chassis_power_control.h"
 
 #include "referee.h"
-
+#define Mini_speed 0.5f
 #define rc_deadband_limit(input, output, dealine)    \
   {                                                  \
     if ((input) > (dealine) || (input) < -(dealine)) \
@@ -118,7 +118,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop);
 #if INCLUDE_uxTaskGetStackHighWaterMark
 uint32_t chassis_high_water;
 #endif
-
+extern gimbal_control_t gimbal_control;
 //底盘运动数据
 chassis_move_t chassis_move;
 
@@ -157,13 +157,13 @@ void chassis_task(void const *pvParameters)
     chassis_mode_change_control_transit(&chassis_move);
     //chassis data update
     //底盘数据更新
-    chassis_feedback_update(&chassis_move);
+//    chassis_feedback_update(&chassis_move);
     //set chassis control set-point
     //底盘控制量设置
     chassis_set_contorl(&chassis_move);
     //chassis control pid calculate
     //底盘控制PID计算
-		
+//		CAN_chassis_transfer(0,0,0,2);
 		/*send speed from gimbal C board to chassis C board*/
 		if(toe_is_error(DBUS_TOE))
 				CAN_chassis_transfer(0,0,0,2);
@@ -409,26 +409,47 @@ void chassis_rc_to_control_vector(fp32 *vx_set, fp32 *vy_set, chassis_move_t *ch
   vx_set_channel = vx_channel * CHASSIS_VX_RC_SEN;
   vy_set_channel = vy_channel * -CHASSIS_VY_RC_SEN;
 
+	
   //keyboard set speed set-point
   //键盘控制
-  if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_FRONT_KEY)
-  {
-    vx_set_channel = chassis_move_rc_to_vector->vx_max_speed;
-  }
-  else if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_BACK_KEY)
-  {
-    vx_set_channel = chassis_move_rc_to_vector->vx_min_speed;
-  }
+	if(chassis_move_rc_to_vector->chassis_RC->key.v & KEY_PRESSED_OFFSET_CTRL){
+			if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_FRONT_KEY)
+			{
+				vx_set_channel = Mini_speed;
+			}
+			else if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_BACK_KEY)
+			{
+				vx_set_channel = -Mini_speed;
+			}
 
-  if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_LEFT_KEY)
-  {
-    vy_set_channel = chassis_move_rc_to_vector->vy_max_speed;
-  }
-  else if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_RIGHT_KEY)
-  {
-    vy_set_channel = chassis_move_rc_to_vector->vy_min_speed;
-  }
+			if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_LEFT_KEY)
+			{
+				vy_set_channel = Mini_speed;
+			}
+			else if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_RIGHT_KEY)
+			{
+				vy_set_channel = -Mini_speed;
+			}
+	}
+	else{
+			if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_FRONT_KEY)
+			{
+				vx_set_channel = chassis_move_rc_to_vector->vx_max_speed;
+			}
+			else if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_BACK_KEY)
+			{
+				vx_set_channel = chassis_move_rc_to_vector->vx_min_speed;
+			}
 
+			if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_LEFT_KEY)
+			{
+				vy_set_channel = chassis_move_rc_to_vector->vy_max_speed;
+			}
+			else if (chassis_move_rc_to_vector->chassis_RC->key.v & CHASSIS_RIGHT_KEY)
+			{
+				vy_set_channel = chassis_move_rc_to_vector->vy_min_speed;
+			}
+	}
   //first order low-pass replace ramp function, calculate chassis speed set-point to improve control performance
   //一阶低通滤波代替斜波作为底盘速度输入
   first_order_filter_cali(&chassis_move_rc_to_vector->chassis_cmd_slow_set_vx, vx_set_channel);

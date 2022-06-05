@@ -275,6 +275,7 @@ static void gimbal_motionless_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *
 
 //��̨��Ϊ״̬��
 gimbal_behaviour_e gimbal_behaviour = GIMBAL_ZERO_FORCE;
+extern gimbal_control_t gimbal_control;
 
 /**
   * @brief          the function is called by gimbal_set_mode function in gimbal_task.c
@@ -705,46 +706,19 @@ static void gimbal_absolute_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control
 
     rc_deadband_limit(gimbal_control_set->gimbal_rc_ctrl->rc.ch[YAW_CHANNEL], yaw_channel, RC_DEADBAND);
     rc_deadband_limit(gimbal_control_set->gimbal_rc_ctrl->rc.ch[PITCH_CHANNEL], pitch_channel, RC_DEADBAND);
-
-    *yaw = yaw_channel * YAW_RC_SEN - gimbal_control_set->gimbal_rc_ctrl->mouse.x * YAW_MOUSE_SEN;
-    *pitch = pitch_channel * PITCH_RC_SEN + gimbal_control_set->gimbal_rc_ctrl->mouse.y * PITCH_MOUSE_SEN;
+		if(!gimbal_control.gimbal_scope_motor.scope_state){
+				*yaw = yaw_channel * YAW_RC_SEN - gimbal_control_set->gimbal_rc_ctrl->mouse.x * YAW_MOUSE_SEN;
+				*pitch = pitch_channel * PITCH_RC_SEN + gimbal_control_set->gimbal_rc_ctrl->mouse.y * PITCH_MOUSE_SEN;
+		}
+		else{
+				*yaw = yaw_channel * YAW_RC_SEN - gimbal_control_set->gimbal_rc_ctrl->mouse.x * YAW_MOUSE_SEN_SCOPE;
+				*pitch = pitch_channel * PITCH_RC_SEN + gimbal_control_set->gimbal_rc_ctrl->mouse.y * PITCH_MOUSE_SEN_SCOPE;
+		}
+			
+    
 		//micro_control applied
 		key_micro_control(yaw, pitch, gimbal_control_set);
 
-    {
-        static uint16_t last_turn_keyboard = 0;
-        static uint8_t gimbal_turn_flag = 0;
-        static fp32 gimbal_end_angle = 0.0f;
-
-        if ((gimbal_control_set->gimbal_rc_ctrl->key.v & TURN_KEYBOARD) && !(last_turn_keyboard & TURN_KEYBOARD))
-        {
-            if (gimbal_turn_flag == 0)
-            {
-                gimbal_turn_flag = 1;
-                //�����ͷ��Ŀ��ֵ
-                gimbal_end_angle = rad_format(gimbal_control_set->gimbal_yaw_motor.absolute_angle + PI);
-            }
-        }
-        last_turn_keyboard = gimbal_control_set->gimbal_rc_ctrl->key.v;
-
-        if (gimbal_turn_flag)
-        {
-            //���Ͽ��Ƶ���ͷ��Ŀ��ֵ����ת����װ�����
-            if (rad_format(gimbal_end_angle - gimbal_control_set->gimbal_yaw_motor.absolute_angle) > 0.0f)
-            {
-                *yaw += TURN_SPEED;
-            }
-            else
-            {
-                *yaw -= TURN_SPEED;
-            }
-        }
-        //����pi ��180�㣩��ֹͣ
-        if (gimbal_turn_flag && fabs(rad_format(gimbal_end_angle - gimbal_control_set->gimbal_yaw_motor.absolute_angle)) < 0.01f)
-        {
-            gimbal_turn_flag = 0;
-        }
-    }
 }
 
 /**
@@ -837,43 +811,47 @@ static void 	gimbal_LASER_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimb
 
 void key_micro_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set)
 {
-		static uint8_t flag_r=0,flag_f=0,flag_g=0,flag_v=0;//rfgv
+		static uint8_t flag_c=0,flag_f=0,flag_b=0,flag_v=0;//rfgv
+		if(!flag_b)
+		{
+				if(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_B && !(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_CTRL))
+				{
+						flag_b=CD_microcontrol;
+						*yaw-=MC_Unit_r;
+						gimbal_control_set->shooter_cannon_mode = 1;
+				}
+		}
+		else
+				flag_b--;
+		if(!flag_c)
+		{
+				if(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_C && !(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_CTRL))
+				{
+						flag_c=CD_microcontrol;
+						*yaw+=MC_Unit_r;
+						gimbal_control_set->shooter_cannon_mode = 1;
+				}
+		}
+		else
+				flag_c--;
 		if(!flag_f)
 		{
-				if(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_F)
+				if(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_F && !(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_CTRL))
 				{
 						flag_f=CD_microcontrol;
-						*yaw+=MC_Unit_r;
+						*pitch+=MC_Unit_r;
+						gimbal_control_set->shooter_cannon_mode = 1;
 				}
 		}
 		else
 				flag_f--;
-		if(!flag_g)
-		{
-				if(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_G)
-				{
-						flag_g=CD_microcontrol;
-						*yaw-=MC_Unit_r;
-				}
-		}
-		else
-				flag_g--;
-		if(!flag_r)
-		{
-				if(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_R)
-				{
-						flag_r=CD_microcontrol;
-						*pitch+=MC_Unit_r;
-				}
-		}
-		else
-				flag_r--;
 		if(!flag_v)
 		{
-				if(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_V)
+				if(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_V && !(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_CTRL))
 				{
 						flag_v=CD_microcontrol;
-						*pitch+=MC_Unit_r;
+						*pitch-=MC_Unit_r;
+						gimbal_control_set->shooter_cannon_mode = 1;
 				}
 		}
 		else

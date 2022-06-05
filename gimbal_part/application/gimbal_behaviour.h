@@ -151,7 +151,7 @@ extern bool_t gimbal_cmd_to_chassis_stop(void);
 extern bool_t gimbal_cmd_to_shoot_stop(void);
 
 //addition
-#define CD_microcontrol 20
+#define CD_microcontrol 40
 #define MC_Unit_r 0.001
 void key_micro_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set);
 #endif

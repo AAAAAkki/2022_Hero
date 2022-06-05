@@ -51,7 +51,7 @@ typedef enum
 #define Communication_CAN hcan2
 #define chassis_motor_cmd_id 0x301
 #define chassis_motor_feedback_id 0x302
-#define gimbal_scope_motor_id 0x303
+#define gimbal_scope_motor_id 0x203
 #define heat_data_id 0x401
 #define shoot_data_id 0x402
 #define state_data_id 0x403
@@ -201,12 +201,10 @@ extern const motor_measure_t *get_fric_motor_measure_point(uint8_t i);
   * @param[in]      none
   * @retval         none
   */
-extern void CAN_CMD_FRIC(int16_t motor1, int16_t motor2);
+extern void CAN_CMD_FRIC(int16_t motor1, int16_t motor2, int16_t scope);
 void CAN_CMD_CAP(uint16_t power, uint16_t buffer);
 //additional functions
 void CAN_chassis_transfer(int16_t vx_set, int16_t vy_set, int16_t wz_set, uint16_t chassis_mode);
-
-void CAN_gimbal_scope_toggle(int16_t set_current);
 
 extern const motor_measure_t *get_scope_gimbal_motor_measure_point(void);
 
