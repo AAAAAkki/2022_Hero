@@ -9,4 +9,7 @@
 *.map
 *.htm
 *.lnp
+*.hex
+*.dep
+*.axf
 **/.vscode

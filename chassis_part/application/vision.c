@@ -310,7 +310,7 @@ void Vision_Unpack(void) {
         xSemaphoreTake(vision_rx_buf_ind_mutex, 1);
         vision_control.vision_data.rx_buf_ind ^= 1;
         xSemaphoreGive(vision_rx_buf_ind_mutex);
-        detect_hook(VISION);
+//        detect_hook(VISION);
     }
 }
 

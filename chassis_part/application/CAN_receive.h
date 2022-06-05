@@ -205,6 +205,11 @@ void CAN_shoot_data_send(uint8_t	bullet_type, uint8_t	bullet_freq, float	bullet_
 
 void CAN_state_data_send(uint16_t heat_limit);
 
+const fp32 * get_wz_set_point(void);
+
+const fp32 * get_vx_set_point(void);
+
+const fp32 * get_vy_set_point(void);
 /*Addtional Functions*/
 //void CAN_gimbal_transfer(uint8_t*data);
 #endif

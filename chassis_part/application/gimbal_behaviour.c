@@ -465,11 +465,11 @@ static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set)
     }
     //if other operate make step change to start, means enter cali mode
     //����ⲿʹ��У׼�����0 ��� start�������У׼ģʽ
-    if (gimbal_mode_set->gimbal_cali.step == GIMBAL_CALI_START_STEP && !toe_is_error(DBUS_TOE))
-    {
-        gimbal_behaviour = GIMBAL_CALI;
-        return;
-    }
+//    if (gimbal_mode_set->gimbal_cali.step == GIMBAL_CALI_START_STEP && !toe_is_error(DBUS_TOE))
+//    {
+//        gimbal_behaviour = GIMBAL_CALI;
+//        return;
+//    }
 
     //init mode, judge if gimbal is in middle place
     //��ʼ��ģʽ�ж��Ƿ񵽴���ֵλ��
@@ -498,16 +498,16 @@ static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set)
         }
 
         //������ʼ�����ʱ�䣬�����Ѿ��ȶ�����ֵһ��ʱ�䣬�˳���ʼ��״̬���ش��µ������ߵ���
-        if (init_time < GIMBAL_INIT_TIME && init_stop_time < GIMBAL_INIT_STOP_TIME &&
-            !switch_is_down(gimbal_mode_set->gimbal_rc_ctrl->rc.s[GIMBAL_MODE_CHANNEL]) && !toe_is_error(DBUS_TOE))
-        {
-            return;
-        }
-        else
-        {
-            init_stop_time = 0;
-            init_time = 0;
-        }
+//        if (init_time < GIMBAL_INIT_TIME && init_stop_time < GIMBAL_INIT_STOP_TIME &&
+//            !switch_is_down(gimbal_mode_set->gimbal_rc_ctrl->rc.s[GIMBAL_MODE_CHANNEL]) && !toe_is_error(DBUS_TOE))
+//        {
+//            return;
+//        }
+//        else
+//        {
+//            init_stop_time = 0;
+//            init_time = 0;
+//        }
     }
 
     //���ؿ��� ��̨״̬
@@ -526,10 +526,10 @@ static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set)
         gimbal_behaviour = GIMBAL_ABSOLUTE_ANGLE;
     }
 
-    if (toe_is_error(DBUS_TOE))
-    {
-        gimbal_behaviour = GIMBAL_ZERO_FORCE;
-    }
+//    if (toe_is_error(DBUS_TOE))
+//    {
+//        gimbal_behaviour = GIMBAL_ZERO_FORCE;
+//    }
 
     //enter init mode
     //�жϽ���init״̬��

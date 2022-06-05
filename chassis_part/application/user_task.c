@@ -153,105 +153,106 @@ void ui_name_refresh(void)
 void ui_char_refresh(UI_show_t *ui_char)
 {
 
-		static uint8_t time;
+//		static uint8_t time;
 
-	if (time )
-	{
-		time--;
-	}
-	if(!time)
-{
-	if (toe_is_error(FRIC_RIGHT_MOTOR_TOE) && toe_is_error(FRIC_LEFT_MOTOR_TOE))
-	{
-		Char_Draw(&CH_OFFLINE, "062", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 2, 4, 280, 860, &offline[0]);
-		Char_ReFresh(CH_OFFLINE);
-	}
-	else
-	{
-		if (ui_char->ui_shoot_control->shoot_mode == SHOOT_READY)
-		{
-			Char_Draw(&CH_ON, "062", UI_Graph_Change, 8, UI_Color_Green, 26, 2, 4, 280, 860, &on[0]);
-			Char_ReFresh(CH_ON);
-		}
-		else if (ui_char->ui_shoot_control->shoot_mode == SHOOT_STOP)
-		{
-			Char_Draw(&CH_OFF, "062", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 3, 4, 280, 860, &off[0]);
-			Char_ReFresh(CH_OFF);
-		}
-		else if (ui_char->ui_shoot_control->shoot_mode == SHOOT_CONTINUE_BULLET)
-		{
-			Char_Draw(&CH_ON, "062", UI_Graph_Change, 8, UI_Color_Green, 30, 2, 4, 280, 860, &on[0]);
-			Char_ReFresh(CH_ON);
-		}
-	}
+//	if (time )
+//	{
+//		time--;
+//	}
+//	if(!time)
+//{
+//	if (toe_is_error(FRIC_RIGHT_MOTOR_TOE) && toe_is_error(FRIC_LEFT_MOTOR_TOE))
+//	{
+//		Char_Draw(&CH_OFFLINE, "062", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 2, 4, 280, 860, &offline[0]);
+//		Char_ReFresh(CH_OFFLINE);
+//	}
+//	else
+//	{
+//		if (ui_char->ui_shoot_control->shoot_mode == SHOOT_READY)
+//		{
+//			Char_Draw(&CH_ON, "062", UI_Graph_Change, 8, UI_Color_Green, 26, 2, 4, 280, 860, &on[0]);
+//			Char_ReFresh(CH_ON);
+//		}
+//		else if (ui_char->ui_shoot_control->shoot_mode == SHOOT_STOP)
+//		{
+//			Char_Draw(&CH_OFF, "062", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 3, 4, 280, 860, &off[0]);
+//			Char_ReFresh(CH_OFF);
+//		}
+//		else if (ui_char->ui_shoot_control->shoot_mode == SHOOT_CONTINUE_BULLET)
+//		{
+//			Char_Draw(&CH_ON, "062", UI_Graph_Change, 8, UI_Color_Green, 30, 2, 4, 280, 860, &on[0]);
+//			Char_ReFresh(CH_ON);
+//		}
+//	}
 
-	if (toe_is_error(TRIGGER_MOTOR_TOE))
-	{
-		Char_Draw(&CH_OFFLINE, "060", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 3, 4, 280, 740, &offline[0]);
-		Char_ReFresh(CH_OFFLINE);
-	}
-	else
-	{
-		if (ui_char->ui_shoot_control->shoot_mode == SHOOT_READY)
-		{
-			Char_Draw(&CH_OFF, "060", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 3, 4, 280, 740, &off[0]);
-			Char_ReFresh(CH_OFF);
-		}
-		else if (ui_char->ui_shoot_control->shoot_mode == SHOOT_STOP)
-		{
-			Char_Draw(&CH_OFF, "060", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 3, 4, 280, 740, &off[0]);
-			Char_ReFresh(CH_OFF);
-		}
-		else if (ui_char->ui_shoot_control->shoot_mode == SHOOT_CONTINUE_BULLET)
-		{
-			Char_Draw(&CH_ON, "060", UI_Graph_Change, 8, UI_Color_Green, 26, 2, 4, 280, 740, &on[0]);
-			Char_ReFresh(CH_ON);
-		}
-	}
+//	if (toe_is_error(TRIGGER_MOTOR_TOE))
+//	{
+//		Char_Draw(&CH_OFFLINE, "060", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 3, 4, 280, 740, &offline[0]);
+//		Char_ReFresh(CH_OFFLINE);
+//	}
+//	else
+//	{
+//		if (ui_char->ui_shoot_control->shoot_mode == SHOOT_READY)
+//		{
+//			Char_Draw(&CH_OFF, "060", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 3, 4, 280, 740, &off[0]);
+//			Char_ReFresh(CH_OFF);
+//		}
+//		else if (ui_char->ui_shoot_control->shoot_mode == SHOOT_STOP)
+//		{
+//			Char_Draw(&CH_OFF, "060", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 3, 4, 280, 740, &off[0]);
+//			Char_ReFresh(CH_OFF);
+//		}
+//		else if (ui_char->ui_shoot_control->shoot_mode == SHOOT_CONTINUE_BULLET)
+//		{
+//			Char_Draw(&CH_ON, "060", UI_Graph_Change, 8, UI_Color_Green, 26, 2, 4, 280, 740, &on[0]);
+//			Char_ReFresh(CH_ON);
+//		}
+//	}
 
-	if (ui_char->ui_chassis_move->swing_flag == 1)
-	{
-		Char_Draw(&CH_ON, "059", UI_Graph_Change, 8, UI_Color_Green, 26, 3, 4, 280, 680, &on[0]);
-		Char_ReFresh(CH_ON);
-	}
-	else
-	{
-		Char_Draw(&CH_OFF, "059", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 3, 4, 280, 680, &off[0]);
-		Char_ReFresh(CH_OFF);
-	}
+//	if (ui_char->ui_chassis_move->swing_flag == 1)
+//	{
+//		Char_Draw(&CH_ON, "059", UI_Graph_Change, 8, UI_Color_Green, 26, 3, 4, 280, 680, &on[0]);
+//		Char_ReFresh(CH_ON);
+//	}
+//	else
+//	{
+//		Char_Draw(&CH_OFF, "059", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 3, 4, 280, 680, &off[0]);
+//		Char_ReFresh(CH_OFF);
+//	}
 
-	if (toe_is_error(VISION))
-	{
-		Char_Draw(&CH_VISION_MODE, "061", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 7, 4, 280, 800, &offline[0]);
-		Char_ReFresh(CH_VISION_MODE);
-	}
-	else if (ui_char->ui_vision->vision_mode == 0)
-	{
-		Char_Draw(&CH_VISION_MODE, "061", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 7, 4, 280, 800, &armour[0]);
-		Char_ReFresh(CH_VISION_MODE);
-	}
-	else if (ui_char->ui_vision->vision_mode == 1)
-	{
-		Char_Draw(&CH_VISION_MODE, "061", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 7, 4, 280, 800, &windmill[0]);
-		Char_ReFresh(CH_VISION_MODE);
-	}
+//	if (toe_is_error(VISION))
+//	{
+//		Char_Draw(&CH_VISION_MODE, "061", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 7, 4, 280, 800, &offline[0]);
+//		Char_ReFresh(CH_VISION_MODE);
+//	}
+//	else if (ui_char->ui_vision->vision_mode == 0)
+//	{
+//		Char_Draw(&CH_VISION_MODE, "061", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 7, 4, 280, 800, &armour[0]);
+//		Char_ReFresh(CH_VISION_MODE);
+//	}
+//	else if (ui_char->ui_vision->vision_mode == 1)
+//	{
+//		Char_Draw(&CH_VISION_MODE, "061", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 7, 4, 280, 800, &windmill[0]);
+//		Char_ReFresh(CH_VISION_MODE);
+//	}
 
-	fp32 pitch_angle = ui_char->ui_gimbal_control->gimbal_pitch_motor.absolute_angle;
-	if (!toe_is_error(PITCH_GIMBAL_MOTOR_TOE))
-	{
-		char pitch_angle_value[12];
-		sprintf(pitch_angle_value, "%f", pitch_angle);
-		Char_Draw(&CH_PITCH_DATA, "022", UI_Graph_Change, 8, UI_Color_Yellow, 26, 10, 4, 1600, 540, &pitch_angle_value[0]);
-		Char_ReFresh(CH_PITCH_DATA);
-	}
-	else
-	{
-		Char_Draw(&CH_PITCH_DATA, "022", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 11, 4, 1600, 540, &pitch_error[0]);
-		Char_ReFresh(CH_PITCH_DATA);
-	}
-		time=5;
+//	fp32 pitch_angle = ui_char->ui_gimbal_control->gimbal_pitch_motor.absolute_angle;
+//	if (!toe_is_error(PITCH_GIMBAL_MOTOR_TOE))
+//	{
+//		char pitch_angle_value[12];
+//		sprintf(pitch_angle_value, "%f", pitch_angle);
+//		Char_Draw(&CH_PITCH_DATA, "022", UI_Graph_Change, 8, UI_Color_Yellow, 26, 10, 4, 1600, 540, &pitch_angle_value[0]);
+//		Char_ReFresh(CH_PITCH_DATA);
+//	}
+//	else
+//	{
+//		Char_Draw(&CH_PITCH_DATA, "022", UI_Graph_Change, 8, UI_Color_Purplish_red, 26, 11, 4, 1600, 540, &pitch_error[0]);
+//		Char_ReFresh(CH_PITCH_DATA);
+//	}
+//		time=5;
+//}
 }
-}
+
 void armour_refresh(UI_show_t *armour)
 {
 
@@ -366,19 +367,19 @@ void robot_id_select(void)
 
 void robot_images_refresh(void)
 {
-	if(toe_is_error(VISION))
-	{
-	Circle_Draw(&vision_state,"001",UI_Graph_ADD,2,UI_Color_Orange,5,1000,680,5);
-	UI_ReFresh(1,vision_state);
-	}
-	else if(vision_control.vision_data.rx[0].target_flag&&!UI_show.ui_rc_ctrl->mouse.press_r)
-	{
-	Circle_Draw(&vision_state,"001",UI_Graph_ADD,2,UI_Color_Cyan,5,1000,680,5);
-	UI_ReFresh(1,vision_state);
-	}
-	else if(vision_control.vision_data.rx[0].target_flag&&UI_show.ui_rc_ctrl->mouse.press_r)
-	{
-	Circle_Draw(&vision_state,"001",UI_Graph_ADD,2,UI_Color_Green,5,1000,680,5);
-	UI_ReFresh(1,vision_state);
-	}
+//	if(toe_is_error(VISION))
+//	{
+//	Circle_Draw(&vision_state,"001",UI_Graph_ADD,2,UI_Color_Orange,5,1000,680,5);
+//	UI_ReFresh(1,vision_state);
+//	}
+//	else if(vision_control.vision_data.rx[0].target_flag&&!UI_show.ui_rc_ctrl->mouse.press_r)
+//	{
+//	Circle_Draw(&vision_state,"001",UI_Graph_ADD,2,UI_Color_Cyan,5,1000,680,5);
+//	UI_ReFresh(1,vision_state);
+//	}
+//	else if(vision_control.vision_data.rx[0].target_flag&&UI_show.ui_rc_ctrl->mouse.press_r)
+//	{
+//	Circle_Draw(&vision_state,"001",UI_Graph_ADD,2,UI_Color_Green,5,1000,680,5);
+//	UI_ReFresh(1,vision_state);
+//	}
 }

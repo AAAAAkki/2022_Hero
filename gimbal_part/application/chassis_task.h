@@ -215,4 +215,10 @@ extern void chassis_task(void const *pvParameters);
   */
 extern void chassis_rc_to_control_vector(fp32 *vx_set, fp32 *vy_set, chassis_move_t *chassis_move_rc_to_vector);
 chassis_move_t  *get_chassis_point(void);
+
+/*Additional functions begin*/
+
+void top_down_communication(chassis_move_t *gimbal_speed_info_transfer_to_chassis);
+
+void top_down_speed_set(chassis_move_t *chassis_speed_set);
 #endif

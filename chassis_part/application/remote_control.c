@@ -185,7 +185,7 @@ void USART3_IRQHandler(void)
             {
                 sbus_to_rc(sbus_rx_buf[0], &rc_ctrl);
                 //记录数据接收时间
-                detect_hook(DBUS_TOE);
+//                detect_hook(DBUS_TOE);
                 sbus_to_usart1(sbus_rx_buf[0]);
             }
         }
@@ -217,7 +217,7 @@ void USART3_IRQHandler(void)
                 //处理遥控器数据
                 sbus_to_rc(sbus_rx_buf[1], &rc_ctrl);
                 //记录数据接收时间
-                detect_hook(DBUS_TOE);
+//                detect_hook(DBUS_TOE);
                 sbus_to_usart1(sbus_rx_buf[1]);
             }
         }

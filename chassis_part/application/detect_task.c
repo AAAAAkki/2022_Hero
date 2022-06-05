@@ -259,22 +259,22 @@ static void detect_init(uint32_t time)
     //设置离线时间，上线稳定工作时间，优先级 offlineTime onlinetime priority
     uint16_t set_item[ERROR_LIST_LENGHT][3] =
         {
-            {30, 40, 15},   //SBUS
+            //{30, 40, 15},   //SBUS
             {10, 10, 11},   //motor1
             {10, 10, 10},   //motor2
             {10, 10, 9},    //motor3
             {10, 10, 8},    //motor4
-            {2, 3, 14},     //yaw
-            {2, 3, 13},     //pitch
-            {10, 10, 12},   //trigger
-            {2, 3, 7},      //board gyro
-            {5, 5, 7},      //board accel
-            {40, 200, 7},   //board mag
+//            {2, 3, 14},     //yaw
+//            {2, 3, 13},     //pitch
+//            {10, 10, 12},   //trigger
+//            {2, 3, 7},      //board gyro
+//            {5, 5, 7},      //board accel
+//            {40, 200, 7},   //board mag
             {100, 100, 5},  //referee
-            {10, 10, 7},    //rm imu
-						{10,10,6},
-						{10,10,6},
-						{50,50,5},
+//            {10, 10, 7},    //rm imu
+//						{10,10,6},
+//						{10,10,6},
+//						{50,50,5},
 						{100,100,6},
         };
 
@@ -297,7 +297,12 @@ static void detect_init(uint32_t time)
         error_list[i].lost_time = time;
         error_list[i].work_time = time;
     }
-
+//		for(uint8_t i = 5;i<ERROR_LIST_LENGHT;i++){
+//				error_list[i].enable = 0;
+//		}
+//		error_list[0].enable = 0;
+//		error_list[11].enable = 1;
+//		error_list[ERROR_LIST_LENGHT].enable = 1;
 
 //    error_list[DBUSTOE].dataIsErrorFun = RC_data_is_error;
 //    error_list[DBUSTOE].solveLostFun = slove_RC_lost;

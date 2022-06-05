@@ -32,6 +32,7 @@
 #include "pid.h"
 #include "referee.h"
 extern ext_game_robot_state_t robot_state;
+extern gimbal_behaviour_e gimbal_behaviour;
 #define shoot_laser_on() laser_on()   //激光开启宏定义
 #define shoot_laser_off() laser_off() //激光关闭宏定义
 //微动开关IO
@@ -160,11 +161,19 @@ int16_t shoot_control_loop(void)
      
     if (shoot_control.shoot_mode == SHOOT_STOP)
     {
-        shoot_laser_off();
-        shoot_control.given_current = 0;
-        //摩擦轮需要一个个斜波开启，不能同时直接开启，否则可能电机不转
-        shoot_control.fric1_ramp.out = 0;
-        shoot_control.fric2_ramp.out = 0;
+				if(gimbal_behaviour == GIMBAL_ZERO_FORCE){
+					
+					shoot_laser_off();
+					shoot_control.given_current = 0;
+					//摩擦轮需要一个个斜波开启，不能同时直接开启，否则可能电机不转
+					shoot_control.fric1_ramp.out = 0;
+					shoot_control.fric2_ramp.out = 0;
+				}
+				else{
+					PID_calc(&shoot_control.trigger_motor_pid, shoot_control.speed, shoot_control.speed_set);
+          shoot_control.given_current = (int16_t)(shoot_control.trigger_motor_pid.out);
+
+				}
     }
     else
     {
