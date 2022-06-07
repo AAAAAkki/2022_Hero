@@ -90,10 +90,6 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
   {
     switch (rx_header.StdId)
     {
-//    case CAN_3508_M1_ID:
-//    case CAN_3508_M2_ID:
-//    case CAN_3508_M3_ID:
-//    case CAN_3508_M4_ID:
     case CAN_YAW_MOTOR_ID:
     {
       static uint8_t i = 0;
@@ -103,12 +99,6 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
       detect_hook(YAW_GIMBAL_MOTOR_TOE);
       break;
     }
-		case CAN_CAP:
-		{
-			get_cap_measure(&cap_measure,rx_data);
-			detect_hook(CAP_TOE);
-      break;
-		}
 		case CAN_TRIGGER_MOTOR_ID:
     {
       static uint8_t i = 0;

@@ -35,5 +35,5 @@
   * @retval         none
   */
 extern void chassis_power_control(chassis_move_t *chassis_power_control);
-#define TEST 1
+#define TEST 0
 #endif

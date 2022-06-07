@@ -267,13 +267,14 @@ static void detect_init(uint32_t time)
             {2, 3, 14},     //yaw
             {2, 3, 13},     //pitch
             {10, 10, 12},   //trigger
+						{10,10,6},			//fric
+						{10,10,6},
             {2, 3, 7},      //board gyro
             {5, 5, 7},      //board accel
             {40, 200, 7},   //board mag
             {100, 100, 5},  //referee
             {10, 10, 7},    //rm imu
-						{10,10,6},
-						{10,10,6},
+						
 						{50,50,5},
 						{100,100,6},
         };
