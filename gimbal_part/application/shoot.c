@@ -77,8 +77,9 @@ void shoot_init(void)
 {
 
     static const fp32 Trigger_speed_pid[3] = {TRIGGER_ANGLE_PID_KP, TRIGGER_ANGLE_PID_KI, TRIGGER_ANGLE_PID_KD};
-    static const fp32 Fric_speed_pid0[3] = {40, 0.2, 0};
-		static const fp32 Fric_speed_pid1[3] = {20, 0.4, 0};
+		static const fp32 Trigger_ecd_reverse_pid[3] = {TRIIGER_ECD_REVERSE_PID_KP, TRIIGER_ECD_REVERSE_PID_KI, TRIIGER_ECD_REVERSE_PID_KD};
+    static const fp32 Fric_speed_pid0[3] = {35, 0.2, 0};
+		static const fp32 Fric_speed_pid1[3] = {30, 0.3, 0};
     shoot_control.shoot_mode = SHOOT_STOP;
     //遥控器指针
     shoot_control.shoot_rc = get_remote_control_point();
@@ -89,6 +90,7 @@ void shoot_init(void)
     shoot_control.fric_motor_measure[1] = get_fric_motor_measure_point(2);
     //初始化PID
     PID_init(&shoot_control.trigger_motor_pid, PID_POSITION, Trigger_speed_pid, TRIGGER_READY_PID_MAX_OUT, TRIGGER_READY_PID_MAX_IOUT);
+		PID_init(&shoot_control.trigger_motor_ecd_pid, PID_POSITION, Trigger_ecd_reverse_pid, 50, 5);
     PID_init(&shoot_control.fric_motor_pid[0], PID_POSITION, Fric_speed_pid0, FRIC_PID_MAX_OUT, FRIC_PID_MAX_IOUT);
     PID_init(&shoot_control.fric_motor_pid[1], PID_POSITION, Fric_speed_pid1, FRIC_PID_MAX_OUT, FRIC_PID_MAX_IOUT);
 	//	shoot_control.fric_motor_pid[0].proportion_output_filter_coefficient = exp(-300*1E-3);
@@ -149,7 +151,7 @@ int16_t shoot_control_loop(void)
     else if (shoot_control.shoot_mode == SHOOT_CONTINUE_BULLET)
     {
         //设置拨弹轮的拨动速度,并开启堵转反转处理
-        shoot_control.trigger_speed_set = trigger_speed;
+        shoot_control.speed_set = trigger_speed;
         trigger_motor_turn_back();
     }
     else if (shoot_control.shoot_mode == SHOOT_BULLET)
@@ -224,15 +226,18 @@ static int8_t last_s = RC_SW_UP;
     }
     if (shoot_control.shoot_mode == SHOOT_READY)
     {
-
-        if ((switch_is_down(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && !switch_is_down(last_s)))
+				if (switch_is_down(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]))
         {
-            shoot_control.shoot_mode = SHOOT_CONTINUE_BULLET;
+						static int count=0;
+						count++;
+						if(count>3000)
+						{
+							shoot_control.shoot_mode = SHOOT_BULLET;
+							count=0;
+						}
         }
-        
     }
-		
-		
+
 
     if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_mode == SHOOT_READY||shoot_control.shoot_mode == SHOOT_BULLET))
     {
@@ -241,37 +246,29 @@ static int8_t last_s = RC_SW_UP;
         {
             shoot_control.shoot_mode = SHOOT_BULLET;
         }
-    
-				if(shoot_control.press_l_time==PRESS_LONG_TIME)
-				{
-	         shoot_control.shoot_mode = SHOOT_CONTINUE_BULLET;
-				}
     }
 //		     if (shoot_control.shoot_mode == SHOOT_READY&&vision_control.vision_data.windwill_rx.fire_single)
 //        {
 //            shoot_control.shoot_mode = SHOOT_BULLET;
 //        }
 		
-    if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && shoot_control.shoot_mode == SHOOT_CONTINUE_BULLET)
-    {
-        if (!shoot_control.press_l)
-        {
-            if (shoot_control.shoot_mode != SHOOT_BULLET)
-            {
-                shoot_control.shoot_mode = SHOOT_READY;
-            }
-        }
-    }
+//    if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && shoot_control.shoot_mode == SHOOT_CONTINUE_BULLET)
+//    {
+//        if (!shoot_control.press_l)
+//        {
+//            if (shoot_control.shoot_mode != SHOOT_BULLET)
+//            {
+//                shoot_control.shoot_mode = SHOOT_READY;
+//            }
+//        }
+//    }
 
     get_shoot_heat1_limit_and_heat0(&shoot_control.heat_limit, &shoot_control.heat);
     if (!toe_is_error(REFEREE_TOE))
     {
         if ((shoot_control.heat + 100 >= shoot_control.heat_limit) && !(shoot_control.shoot_rc->key.v & KEY_PRESSED_OFFSET_G))
         {
-						if(shoot_control.shoot_mode==SHOOT_CONTINUE_BULLET)
-							{
-									shoot_control.shoot_mode = SHOOT_READY;
-							}
+							shoot_control.shoot_mode = SHOOT_READY;
         }
     }
     //??????? ????,?????
@@ -388,26 +385,57 @@ static void trigger_motor_turn_back(void)
 {
     if (shoot_control.block_time < BLOCK_TIME)
     {
-        shoot_control.speed_set = shoot_control.trigger_speed_set;
+        shoot_control.speed_set = trigger_speed;
     }
     else
     {
-        shoot_control.speed_set = -shoot_control.trigger_speed_set;
+        shoot_control.speed_set = -trigger_speed;
+				//reverse
+				shoot_control.speed_set = shoot_control.trigger_motor_ecd_pid.out;
     }
 
     if (fabs(shoot_control.speed) < BLOCK_TRIGGER_SPEED && shoot_control.block_time < BLOCK_TIME)
     {
         shoot_control.block_time++;
         shoot_control.reverse_time = 0;
+				shoot_control.sum_ecd_reverse = shoot_control.sum_ecd - REVERSE_ECD;
     }
     else if (shoot_control.block_time == BLOCK_TIME && shoot_control.reverse_time < REVERSE_TIME)
     {
         shoot_control.reverse_time++;
+				PID_calc(&shoot_control.trigger_motor_ecd_pid, shoot_control.sum_ecd, shoot_control.sum_ecd_reverse);
     }
     else
     {
         shoot_control.block_time = 0;
+				PID_clear(&shoot_control.trigger_motor_ecd_pid);//may not reach target position, 
     }
+		
+		/*
+		if (shoot_control.block_time < BLOCK_TIME)
+				shoot_control.speed_set = trigger_speed;
+    else
+				//reverse
+				shoot_control.speed_set = shoot_control.trigger_motor_ecd_pid.out;
+		
+    if(shoot_control.speed < BLOCK_TRIGGER_SPEED && shoot_control.speed > 0 && shoot_control.block_time < BLOCK_TIME)
+    {
+        shoot_control.block_time++;
+        shoot_control.reverse_time = 0;
+				shoot_control.sum_ecd_reverse = shoot_control.sum_ecd - REVERSE_ECD;
+    }
+    else if (shoot_control.block_time >= BLOCK_TIME)
+    {
+        shoot_control.reverse_time++;
+				PID_calc(&shoot_control.trigger_motor_ecd_pid, shoot_control.sum_ecd, shoot_control.sum_ecd_reverse);
+    }
+    else if(abs(shoot_control.sum_ecd-shoot_control.sum_ecd_reverse)<629)
+    {
+        shoot_control.block_time = 0;
+				PID_clear(&shoot_control.trigger_motor_ecd_pid);
+    }
+		
+		*/
 }
 
 /**
@@ -429,7 +457,7 @@ static void shoot_bullet_control(void)
     if (shoot_control.sum_ecd_set - shoot_control.sum_ecd > 1500)
     {
         //没到达一直设置旋转速度
-        shoot_control.trigger_speed_set = trigger_speed;
+        shoot_control.speed_set = trigger_speed;
         trigger_motor_turn_back();
     }
     else

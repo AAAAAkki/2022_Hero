@@ -275,7 +275,7 @@ static void detect_init(uint32_t time)
 //						{10,10,6},
 //						{10,10,6},
 //						{50,50,5},
-						{100,100,6},
+						{1000,100,6},
         };
 
     for (uint8_t i = 0; i < ERROR_LIST_LENGHT; i++)

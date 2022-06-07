@@ -115,6 +115,8 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control);
   */
 static void chassis_control_loop(chassis_move_t *chassis_move_control_loop);
 
+static void chaasis_detect_control(chassis_move_t *chaasis_detect_control);
+
 #if INCLUDE_uxTaskGetStackHighWaterMark
 uint32_t chassis_high_water;
 #endif
@@ -169,7 +171,7 @@ void chassis_task(void const *pvParameters)
     //底盘控制PID计算
 //		chassis_move.chassis_mode=intermedia_chassis_speed[3];
 //		top_down_speed_set(&chassis_move);
-    chassis_control_loop(&chassis_move);
+    
 
     //make sure  one motor is online at least, so that the control CAN message can be received
     //确保至少一个电机在线， 这样CAN控制包可以被接收到
@@ -186,11 +188,16 @@ void chassis_task(void const *pvParameters)
 //				//CAN_cmd_chassis(0, 0, 0, 0);
 //        //send control current
 //        //发送控制电流
-        CAN_cmd_chassis(chassis_move.motor_chassis[0].give_current, chassis_move.motor_chassis[1].give_current,
-                       chassis_move.motor_chassis[2].give_current, chassis_move.motor_chassis[3].give_current);
+				chassis_control_loop(&chassis_move);
+        
 //      }
     }
-    //os delay
+		else if((toe_is_error(CHASSIS_MOTOR1_TOE) + toe_is_error(CHASSIS_MOTOR2_TOE) + toe_is_error(CHASSIS_MOTOR3_TOE) + toe_is_error(CHASSIS_MOTOR4_TOE))==1)
+				chaasis_detect_control(&chassis_move);
+		
+		CAN_cmd_chassis(chassis_move.motor_chassis[0].give_current, chassis_move.motor_chassis[1].give_current,
+                       chassis_move.motor_chassis[2].give_current, chassis_move.motor_chassis[3].give_current);
+		//os delay
     //系统延时
     vTaskDelay(CHASSIS_CONTROL_TIME_MS);
 
@@ -225,8 +232,8 @@ static void chassis_init(chassis_move_t *chassis_move_init)
   //chassis angle PID
   //底盘角度pid值
   const static fp32 chassis_yaw_pid[3] = {CHASSIS_FOLLOW_GIMBAL_PID_KP, CHASSIS_FOLLOW_GIMBAL_PID_KI, CHASSIS_FOLLOW_GIMBAL_PID_KD};
-	const static fp32 chassis_buffer_pid[3] = {-0.5,0,2000};
-	const static fp32 voltage_pid[3] = {-300,0,0};
+	const static fp32 chassis_buffer_pid[3] = {0.5,0,200};
+	const static fp32 voltage_pid[3] = {2400,5,200};
   const static fp32 chassis_x_order_filter[1] = {CHASSIS_ACCEL_X_NUM};
   const static fp32 chassis_y_order_filter[1] = {CHASSIS_ACCEL_Y_NUM};
   uint8_t i;
@@ -253,7 +260,8 @@ static void chassis_init(chassis_move_t *chassis_move_init)
     PID_init(&chassis_move_init->motor_speed_pid[i], PID_POSITION, motor_speed_pid, M3505_MOTOR_SPEED_PID_MAX_OUT, M3505_MOTOR_SPEED_PID_MAX_IOUT);
   }
 	PID_init(&chassis_move_init->buffer_pid,PID_POSITION,chassis_buffer_pid,20,0);
-  //initialize angle PID
+  PID_init(&chassis_move_init->cap_voltage_pid, PID_POSITION, voltage_pid, 24000, 15000);
+	//initialize angle PID
   //初始化角度PID
   PID_init(&chassis_move_init->chassis_angle_pid, PID_POSITION, chassis_yaw_pid, CHASSIS_FOLLOW_GIMBAL_PID_MAX_OUT, CHASSIS_FOLLOW_GIMBAL_PID_MAX_IOUT);
 
@@ -693,4 +701,81 @@ void top_down_speed_set(chassis_move_t *chassis_speed_set){
 //	}
 //	CAN_motor_feedback_send(motor_rpm[0],motor_rpm[1],motor_rpm[2],motor_rpm[3]);
 //}
+
+static void chaasis_detect_control(chassis_move_t *chaasis_detect_control)
+{	
+  if(toe_is_error(CHASSIS_MOTOR1_TOE))
+		 {
+			if(chaasis_detect_control->vx_set != 0 && chaasis_detect_control->vy_set == 0 && chaasis_detect_control->wz_set == 0)
+		{
+			  chaasis_detect_control->motor_chassis[2].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[2].out);
+			  chaasis_detect_control->motor_chassis[3].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[3].out);
+		}
+		 if(chaasis_detect_control->vx_set == 0 && chaasis_detect_control->vy_set != 0 && chaasis_detect_control->wz_set == 0)
+		{
+			  chaasis_detect_control->motor_chassis[1].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[1].out);
+			  chaasis_detect_control->motor_chassis[3].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[3].out);
+		}
+		if( chaasis_detect_control->vx_set == 0 && chaasis_detect_control->vy_set == 0 && chaasis_detect_control->wz_set != 0)
+		{
+			chaasis_detect_control->motor_chassis[1].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[1].out);
+			chaasis_detect_control->motor_chassis[2].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[2].out);
+		}
+	   }
+	if(toe_is_error(CHASSIS_MOTOR2_TOE))
+		 {
+			if(chaasis_detect_control->vx_set != 0 && chaasis_detect_control->vy_set ==0 && chaasis_detect_control->wz_set == 0)
+		{
+			  chaasis_detect_control->motor_chassis[2].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[2].out);
+			  chaasis_detect_control->motor_chassis[3].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[3].out);
+		}
+		  if(chaasis_detect_control->vx_set == 0 && chaasis_detect_control->vy_set != 0 && chaasis_detect_control->wz_set == 0)
+		{
+			  chaasis_detect_control->motor_chassis[0].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[0].out);
+			  chaasis_detect_control->motor_chassis[2].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[2].out);
+		}
+		if( chaasis_detect_control->vx_set == 0 && chaasis_detect_control->vy_set == 0 && chaasis_detect_control->wz_set != 0)
+		{
+			chaasis_detect_control->motor_chassis[0].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[0].out);
+			chaasis_detect_control->motor_chassis[3].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[3].out);
+	  }
+	   }
+	if(toe_is_error(CHASSIS_MOTOR3_TOE))
+		 {
+			if(chaasis_detect_control->vx_set != 0 && chaasis_detect_control->vy_set ==0 && chaasis_detect_control->wz_set == 0)
+		{
+			  chaasis_detect_control->motor_chassis[0].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[0].out);
+			  chaasis_detect_control->motor_chassis[1].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[1].out);
+		}
+		 if(chaasis_detect_control->vx_set == 0 && chaasis_detect_control->vy_set != 0 && chaasis_detect_control->wz_set == 0)
+		{
+			  chaasis_detect_control->motor_chassis[0].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[0].out);
+			  chaasis_detect_control->motor_chassis[2].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[2].out);
+		}
+		if( chaasis_detect_control->vx_set == 0 && chaasis_detect_control->vy_set == 0 && chaasis_detect_control->wz_set != 0)
+		{
+			chaasis_detect_control->motor_chassis[0].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[0].out);
+			chaasis_detect_control->motor_chassis[3].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[3].out);
+		}
+	   }
+	if(toe_is_error(CHASSIS_MOTOR4_TOE))
+		 {
+			if(chaasis_detect_control->vx_set != 0 && chaasis_detect_control->vy_set ==0 && chaasis_detect_control->wz_set == 0)
+		{
+			  chaasis_detect_control->motor_chassis[0].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[0].out);
+			  chaasis_detect_control->motor_chassis[1].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[1].out);
+		}
+		 if(chaasis_detect_control->vx_set == 0 && chaasis_detect_control->vy_set != 0 && chaasis_detect_control->wz_set == 0)
+		{
+			  chaasis_detect_control->motor_chassis[0].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[0].out);
+			  chaasis_detect_control->motor_chassis[2].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[2].out);
+		}
+		if( chaasis_detect_control->vx_set ==  0 && chaasis_detect_control->vy_set == 0 && chaasis_detect_control->wz_set != 0)
+		{
+			chaasis_detect_control->motor_chassis[1].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[1].out);
+			chaasis_detect_control->motor_chassis[2].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[2].out);
+		}
+	   }
+}
+
 /*Additional functions end*/

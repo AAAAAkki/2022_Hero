@@ -65,9 +65,11 @@
 
 //卡单时间 以及反转时间
 #define BLOCK_TRIGGER_SPEED         1.0f
-#define BLOCK_TIME                  900
-#define REVERSE_TIME                500
+#define BLOCK_TIME                  500
+#define REVERSE_TIME                150
 #define REVERSE_SPEED_LIMIT         13.0f
+
+#define REVERSE_ECD									6554
 
 #define PI_FOUR                     0.78539816339744830961566084581988f
 #define PI_TEN                      0.314f
@@ -82,8 +84,12 @@
 #define TRIGGER_FAST_SPEED_PID_KI		0.4f
 #define TRIGGER_FAST_SPEED_PID_KD		18.0f
 
+#define TRIIGER_ECD_REVERSE_PID_KP	0.003f
+#define TRIIGER_ECD_REVERSE_PID_KI	0.001f
+#define TRIIGER_ECD_REVERSE_PID_KD	0.0f
+
 #define TRIGGER_BULLET_PID_MAX_OUT  16000.0f
-#define TRIGGER_BULLET_PID_MAX_IOUT 9000.0f
+#define TRIGGER_BULLET_PID_MAX_IOUT 4000.0f
 
 #define TRIGGER_READY_PID_MAX_OUT   16000.0f
 #define TRIGGER_READY_PID_MAX_IOUT  2500.0f
@@ -119,13 +125,15 @@ typedef struct
     ramp_function_source_t fric2_ramp;
     uint16_t fric_can2;
     pid_type_def trigger_motor_pid;
+		pid_type_def trigger_motor_ecd_pid;//for a reverse with a fixed angle 
     pid_type_def fric_motor_pid[2];
 		int16_t firc_speed[2];
-    fp32 trigger_speed_set;
+    
     fp32 speed;
     fp32 speed_set;
     int32_t sum_ecd;
 		int32_t sum_ecd_set;
+		int32_t sum_ecd_reverse;//target reverse position
 	  int32_t ecd_count;
     fp32 set_angle;
     int16_t given_current;
