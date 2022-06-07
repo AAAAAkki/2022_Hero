@@ -64,19 +64,19 @@
 #define SWITCH_TRIGGER_OFF          1
 
 //卡单时间 以及反转时间
-#define BLOCK_TRIGGER_SPEED         1.0f
+#define BLOCK_TRIGGER_SPEED         1.5f
 #define BLOCK_TIME                  500
 #define REVERSE_TIME                150
-#define REVERSE_SPEED_LIMIT         13.0f
+#define REVERSE_SPEED_LIMIT         50.0f
 
-#define REVERSE_ECD									6554
+#define REVERSE_ECD									7554
 
 #define PI_FOUR                     0.78539816339744830961566084581988f
 #define PI_TEN                      0.314f
 #define PI_EIGHT                    0.39269908169872415480783042290994f
 
 //拨弹轮电机PID
-#define TRIGGER_ANGLE_PID_KP        190.0f
+#define TRIGGER_ANGLE_PID_KP        205.0f
 #define TRIGGER_ANGLE_PID_KI        0.4f
 #define TRIGGER_ANGLE_PID_KD        18.0f
 
@@ -84,9 +84,9 @@
 #define TRIGGER_FAST_SPEED_PID_KI		0.4f
 #define TRIGGER_FAST_SPEED_PID_KD		18.0f
 
-#define TRIIGER_ECD_REVERSE_PID_KP	0.003f
-#define TRIIGER_ECD_REVERSE_PID_KI	0.001f
-#define TRIIGER_ECD_REVERSE_PID_KD	0.0f
+#define TRIIGER_ECD_REVERSE_PID_KP	0.55f
+#define TRIIGER_ECD_REVERSE_PID_KI	0.15f
+#define TRIIGER_ECD_REVERSE_PID_KD	0.05f
 
 #define TRIGGER_BULLET_PID_MAX_OUT  16000.0f
 #define TRIGGER_BULLET_PID_MAX_IOUT 4000.0f

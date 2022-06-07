@@ -232,8 +232,8 @@ static void chassis_init(chassis_move_t *chassis_move_init)
   //chassis angle PID
   //µ×ÅÌ½Ç¶ÈpidÖµ
   const static fp32 chassis_yaw_pid[3] = {CHASSIS_FOLLOW_GIMBAL_PID_KP, CHASSIS_FOLLOW_GIMBAL_PID_KI, CHASSIS_FOLLOW_GIMBAL_PID_KD};
-	const static fp32 chassis_buffer_pid[3] = {0.5,0,200};
-	const static fp32 voltage_pid[3] = {2400,5,200};
+	const static fp32 chassis_buffer_pid[3] = {0.5,0,100};
+	const static fp32 voltage_pid[3] = {2300,5,200};
   const static fp32 chassis_x_order_filter[1] = {CHASSIS_ACCEL_X_NUM};
   const static fp32 chassis_y_order_filter[1] = {CHASSIS_ACCEL_Y_NUM};
   uint8_t i;

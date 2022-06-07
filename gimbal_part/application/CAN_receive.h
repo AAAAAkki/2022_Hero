@@ -82,6 +82,7 @@ typedef struct
 		uint8_t bullet_type;
 		uint8_t bullet_freq;
 		float bullet_speed;
+		uint16_t chassis_power_limit;
 } chassis_data_t;
 
 /**

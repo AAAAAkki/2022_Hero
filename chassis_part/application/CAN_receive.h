@@ -199,7 +199,7 @@ void CAN_CMD_CAP(float power, float buffer);
 //feedback not necessary
 //void CAN_motor_feedback_send(int16_t chassis_motor1, int16_t chassis_motor2, int16_t chassis_motor3, int16_t chassis_motor4);
 
-void CAN_heat_data_send(uint16_t shooter_heat, uint16_t shoot_heat_limit);
+void CAN_heat_data_send(uint16_t shooter_heat, uint16_t shoot_heat_limit, uint16_t chassis_power_limit);
 
 void CAN_shoot_data_send(uint8_t	bullet_type, uint8_t	bullet_freq, float	bullet_speed);
 

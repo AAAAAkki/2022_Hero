@@ -387,7 +387,7 @@ const motor_measure_t *get_fric_motor_measure_point(uint8_t i)
 static CAN_TxHeaderTypeDef  gimbal_board_heat_message;
 static uint8_t              gimbal_board_heat_send_data[8]={0};
 
-void CAN_heat_data_send(uint16_t shooter_heat, uint16_t shoot_heat_limit){
+void CAN_heat_data_send(uint16_t shooter_heat, uint16_t shoot_heat_limit, uint16_t chassis_power_limit){
 		uint32_t send_mail_box;
 		
     gimbal_board_heat_message.StdId = heat_data_id;
@@ -398,6 +398,8 @@ void CAN_heat_data_send(uint16_t shooter_heat, uint16_t shoot_heat_limit){
 		gimbal_board_heat_send_data[1]=shooter_heat;
 		gimbal_board_heat_send_data[2]=shoot_heat_limit>>8;
 		gimbal_board_heat_send_data[3]=shoot_heat_limit;
+		gimbal_board_heat_send_data[4]=shoot_heat_limit>>8;
+		gimbal_board_heat_send_data[5]=shoot_heat_limit;
 		
     HAL_CAN_AddTxMessage(&CAN_Commucation, &gimbal_board_heat_message, gimbal_board_heat_send_data, &send_mail_box);
 }

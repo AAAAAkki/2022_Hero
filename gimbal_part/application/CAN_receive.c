@@ -120,6 +120,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 		{
 			chassis_data_receive.shooter_heat0=(uint16_t)(rx_data[0]<<8|rx_data[1]);
 			chassis_data_receive.shooter_heat0_limit=(uint16_t)(rx_data[2]<<8|rx_data[3]);
+			chassis_data_receive.chassis_power_limit=(uint16_t)(rx_data[4]<<8|rx_data[5]);
 			detect_hook(REFEREE_TOE);
 			break;
 		}
