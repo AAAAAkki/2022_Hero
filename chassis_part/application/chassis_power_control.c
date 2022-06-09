@@ -89,9 +89,9 @@ void chassis_power_control(chassis_move_t *chassis_power_control)
 					get_chassis_max_power(&max_power_limit);
 					if(1)
 					{
-						PID_calc(&chassis_power_control->cap_voltage_pid,cap_measure.CapVot,19);
+						PID_calc(&chassis_power_control->cap_voltage_pid,cap_measure.CapVot,18);
 					}
-					power_total_current_limit = (max_power_limit - chassis_power_control->buffer_pid.out)* 6000.00/cap_measure.CapVot;
+					power_total_current_limit = (max_power_limit - chassis_power_control->buffer_pid.out)* 6400.00/cap_measure.CapVot;
 					if(cap_measure.CapVot>13)
 					{
 						total_current_limit = power_total_current_limit-chassis_power_control->cap_voltage_pid.out;
