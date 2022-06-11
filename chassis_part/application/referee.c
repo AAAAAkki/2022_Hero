@@ -117,14 +117,14 @@ void referee_data_solve(uint8_t *frame)
         case ROBOT_STATE_CMD_ID:
         {
             memcpy(&robot_state, frame + index, sizeof(robot_state));
-						CAN_heat_data_send(power_heat_data_t.shooter_id1_42mm_cooling_heat, robot_state.shooter_id1_42mm_cooling_limit);
 				}
         break;
         case POWER_HEAT_DATA_CMD_ID:
         {
             memcpy(&power_heat_data_t, frame + index, sizeof(power_heat_data_t));
-//						CAN_heat_data_send(power_heat_data_t.shooter_id1_42mm_cooling_heat);
-						CAN_heat_data_send(power_heat_data_t.shooter_id1_42mm_cooling_heat, robot_state.shooter_id1_42mm_cooling_limit);
+
+						CAN_heat_data_send(power_heat_data_t.shooter_id1_42mm_cooling_heat, robot_state.shooter_id1_42mm_cooling_limit, 
+															robot_state.chassis_power_limit);
 				}
         break;
         case ROBOT_POS_CMD_ID:
@@ -150,7 +150,7 @@ void referee_data_solve(uint8_t *frame)
         case SHOOT_DATA_CMD_ID:
         {
             memcpy(&shoot_data_t, frame + index, sizeof(shoot_data_t));
-//						CAN_shoot_data_send(shoot_data_t.bullet_type, shoot_data_t.bullet_freq, shoot_data_t.bullet_speed);
+						CAN_shoot_data_send(shoot_data_t.bullet_type, shoot_data_t.bullet_freq, shoot_data_t.bullet_speed);
 				}
         break;
         case BULLET_REMAINING_CMD_ID:

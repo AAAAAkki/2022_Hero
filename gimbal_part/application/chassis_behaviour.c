@@ -258,12 +258,15 @@ void chassis_behaviour_mode_set(chassis_move_t *chassis_move_mode)
 
   //add your own logic to enter the new mode
   //添加自己的逻辑判断进入新模式
-	if(gimbal_control.shooter_cannon_mode)
-			chassis_behaviour_mode = CHASSIS_NO_MOVE;
-	if(gimbal_control.shooter_cannon_mode&&(chassis_move.chassis_RC->key.v & 0x000f)){
+	if(chassis_behaviour_mode != CHASSIS_SWING_GIMBAL_NO_MOVE && !chassis_move.swing_flag){
+			if(gimbal_control.shooter_cannon_mode)
+					chassis_behaviour_mode = CHASSIS_NO_MOVE;
+	}
+	if(gimbal_control.shooter_cannon_mode&&(chassis_move.chassis_RC->key.v & 0x000f)&&chassis_behaviour_mode==CHASSIS_NO_MOVE){
 			chassis_behaviour_mode = CHASSIS_INFANTRY_FOLLOW_GIMBAL_YAW;
 			gimbal_control.shooter_cannon_mode=0;
 	}
+	
 	
 	//for test
 //	if(shoot_control.shoot_mode!=SHOOT_STOP)

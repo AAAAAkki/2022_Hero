@@ -54,10 +54,10 @@
 #define MOTOR_ECD_TO_ANGLE          0.000021305288720633905968306772076277f
 #define FULL_COUNT                  10
 //拨弹速度
-#define TRIGGER_SPEED               6.0f
+#define TRIGGER_SPEED               12.0f
 #define CONTINUE_TRIGGER_SPEED      4.0f
-#define READY_TRIGGER_SPEED         5.0f
-#define FASTER_TRIGGER_SPEED				12.0f
+#define READY_TRIGGER_SPEED         2.0f
+#define FASTER_TRIGGER_SPEED				72.0f
 
 #define KEY_OFF_JUGUE_TIME          500
 #define SWITCH_TRIGGER_ON           0
@@ -65,9 +65,9 @@
 
 //卡单时间 以及反转时间
 #define BLOCK_TRIGGER_SPEED         1.0f
-#define BLOCK_TIME                  500
+#define BLOCK_TIME                  600
 #define REVERSE_TIME                150
-#define REVERSE_SPEED_LIMIT         13.0f
+#define REVERSE_SPEED_LIMIT         50.0f
 
 #define REVERSE_ECD									6554
 
@@ -76,23 +76,27 @@
 #define PI_EIGHT                    0.39269908169872415480783042290994f
 
 //拨弹轮电机PID
-#define TRIGGER_ANGLE_PID_KP        190.0f
-#define TRIGGER_ANGLE_PID_KI        0.4f
-#define TRIGGER_ANGLE_PID_KD        18.0f
+#define TRIGGER_ANGLE_PID_KP        270.0f
+#define TRIGGER_ANGLE_PID_KI        4.0f
+#define TRIGGER_ANGLE_PID_KD        25.0f
 
-#define TRIGGER_FAST_SPEED_PID_KP		187.0f
-#define TRIGGER_FAST_SPEED_PID_KI		0.4f
-#define TRIGGER_FAST_SPEED_PID_KD		18.0f
+#define TRIGGER_FAST_SPEED_PID_KP		400.0f
+#define TRIGGER_FAST_SPEED_PID_KI		7.5f
+#define TRIGGER_FAST_SPEED_PID_KD		65.0f
 
-#define TRIIGER_ECD_REVERSE_PID_KP	0.003f
-#define TRIIGER_ECD_REVERSE_PID_KI	0.001f
-#define TRIIGER_ECD_REVERSE_PID_KD	0.0f
+#define TRIGGER_SLOW_SPEED_PID_KP		1150.0f
+#define TRIGGER_SLOW_SPEED_PID_KI		0.5f
+#define TRIGGER_SLOW_SPEED_PID_KD		0.0f
+
+#define TRIIGER_ECD_REVERSE_PID_KP	0.5f
+#define TRIIGER_ECD_REVERSE_PID_KI	0.15f
+#define TRIIGER_ECD_REVERSE_PID_KD	0.05f
 
 #define TRIGGER_BULLET_PID_MAX_OUT  16000.0f
-#define TRIGGER_BULLET_PID_MAX_IOUT 4000.0f
+#define TRIGGER_BULLET_PID_MAX_IOUT 4200.0f
 
 #define TRIGGER_READY_PID_MAX_OUT   16000.0f
-#define TRIGGER_READY_PID_MAX_IOUT  2500.0f
+#define TRIGGER_READY_PID_MAX_IOUT  3000.0f
 
 //摩擦轮PID
 #define FRIC_ANGLE_PID_KP 40.0f
@@ -162,4 +166,5 @@ typedef struct
 extern void shoot_init(void);
 extern int16_t shoot_control_loop(void);
 shoot_control_t *get_shoot_point(void);
+void trigger_pid_select(void);
 #endif

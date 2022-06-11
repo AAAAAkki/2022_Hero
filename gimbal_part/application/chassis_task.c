@@ -488,7 +488,15 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
     return;
   }
 
- 
+	u16 chassis_power;
+	if(!toe_is_error(REFEREE_TOE))
+	{
+		get_chassis_max_power(&chassis_power);
+	}
+	else
+	{
+		chassis_power=45;
+	}
   //get three control set-point, 获取三个控制设置值
   chassis_behaviour_control_set(&vx_set, &vy_set, &angle_set, chassis_move_control);
 
@@ -496,11 +504,10 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
   //跟随云台模式
   if (chassis_move_control->chassis_mode == CHASSIS_VECTOR_FOLLOW_GIMBAL_YAW)
   {
+		
     if (chassis_move_control->swing_flag)
     {
       fp32 sin_yaw = 0.0f, cos_yaw = 0.0f;
-			u16 chassis_power;
-			get_chassis_max_power(&chassis_power);
       //rotate chassis direction, make sure vertial direction follow gimbal
       //旋转控制底盘速度方向，保证前进方向是云台方向，有利于运动平稳
       sin_yaw = arm_sin_f32(-chassis_move_control->chassis_yaw_motor->relative_angle);
@@ -508,7 +515,7 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
       chassis_move_control->vx_set = cos_yaw * vx_set + sin_yaw * vy_set;
       chassis_move_control->vy_set = -sin_yaw * vx_set + cos_yaw * vy_set;
       //set control relative angle  set-point
-      chassis_move_control->wz_set = chassis_power/4.5f;
+      chassis_move_control->wz_set = chassis_power/9*1.4f;
       //speed limit
       //速度限幅
       chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);
@@ -537,8 +544,6 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
   }
   else if (chassis_move_control->chassis_mode == CHASSIS_SWING)
   {
-			u16 chassis_power;
-			get_chassis_max_power(&chassis_power);
       fp32 sin_yaw = 0.0f, cos_yaw = 0.0f;
       //rotate chassis direction, make sure vertial direction follow gimbal
       //旋转控制底盘速度方向，保证前进方向是云台方向，有利于运动平稳
@@ -547,7 +552,7 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
       chassis_move_control->vx_set = cos_yaw * vx_set + sin_yaw * vy_set;
       chassis_move_control->vy_set = -sin_yaw * vx_set + cos_yaw * vy_set;
       //set control relative angle  set-point
-      chassis_move_control->wz_set = 13;
+      chassis_move_control->wz_set = chassis_power/9*1.4f;
       //speed limit
       //速度限幅
       chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);

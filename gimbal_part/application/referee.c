@@ -177,7 +177,7 @@ void get_chassis_power_and_buffer(fp32 *power, fp32 *buffer)
 
 void get_chassis_max_power(uint16_t *max_power)
 {
-    *max_power = robot_state.chassis_power_limit;
+    *max_power = chassis_data_receive.chassis_power_limit;
 }
 
 uint8_t get_robot_id(void)

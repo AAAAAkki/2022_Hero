@@ -51,12 +51,20 @@ typedef enum
 //#define gimbal_board_Id 0x210
 //#define chassis_board_Id 0x211
 #define chassis_motor_cmd_id 0x301
-#define chassis_motor_feedback_id 0x302
+#define ui_info_id 0x302
 #define heat_data_id 0x401
 #define shoot_data_id 0x402
 #define state_data_id 0x403
 
 #define transform_key 1000
+
+typedef struct
+{		
+		fp32 speed_set[3];
+		uint8_t chassis_mode;
+		uint8_t shoot_mode;
+		fp32 pitch_angel_degree;
+}gimbal_data_t;
 
 //rm motor data
 typedef struct
@@ -199,15 +207,10 @@ void CAN_CMD_CAP(float power, float buffer);
 //feedback not necessary
 //void CAN_motor_feedback_send(int16_t chassis_motor1, int16_t chassis_motor2, int16_t chassis_motor3, int16_t chassis_motor4);
 
-void CAN_heat_data_send(uint16_t shooter_heat, uint16_t shoot_heat_limit);
+void CAN_heat_data_send(uint16_t shooter_heat, uint16_t shoot_heat_limit, uint16_t chassis_power_limit);
 
 void CAN_shoot_data_send(uint8_t	bullet_type, uint8_t	bullet_freq, float	bullet_speed);
 
-const fp32 * get_wz_set_point(void);
-
-const fp32 * get_vx_set_point(void);
-
-const fp32 * get_vy_set_point(void);
 /*Addtional Functions*/
 //void CAN_gimbal_transfer(uint8_t*data);
 #endif
