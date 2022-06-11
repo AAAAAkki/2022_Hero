@@ -49,7 +49,7 @@ void test_task(void const * argument)
 
         //find error
         //·¢ÏÖ´íÎó
-        for(error_num = 0; error_num < REFEREE_TOE; error_num++)
+        for(error_num = 0; error_num < REFEREE_TOE+2; error_num++)
         {
             if(error_list_test_local[error_num].error_exist)
             {
@@ -111,7 +111,7 @@ static void buzzer_warn_error(uint8_t num)
         }
         else if(tick < 100)
         {
-            buzzer_on(1, 30000);
+            buzzer_on(1, 20000);
         }
         else
         {

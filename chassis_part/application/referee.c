@@ -150,7 +150,7 @@ void referee_data_solve(uint8_t *frame)
         case SHOOT_DATA_CMD_ID:
         {
             memcpy(&shoot_data_t, frame + index, sizeof(shoot_data_t));
-//						CAN_shoot_data_send(shoot_data_t.bullet_type, shoot_data_t.bullet_freq, shoot_data_t.bullet_speed);
+						CAN_shoot_data_send(shoot_data_t.bullet_type, shoot_data_t.bullet_freq, shoot_data_t.bullet_speed);
 				}
         break;
         case BULLET_REMAINING_CMD_ID:

@@ -50,7 +50,7 @@ typedef enum
 #define GIMBAL_CAN hcan2
 #define Communication_CAN hcan2
 #define chassis_motor_cmd_id 0x301
-#define chassis_motor_feedback_id 0x302
+#define ui_info_id 0x302
 #define gimbal_scope_motor_id 0x203
 #define heat_data_id 0x401
 #define shoot_data_id 0x402
@@ -65,6 +65,7 @@ typedef struct
     int16_t given_current;
     uint8_t temperate;
     int16_t last_ecd;
+		int32_t ecd_count;
 } motor_measure_t;
 
 typedef struct 
@@ -206,6 +207,10 @@ extern void CAN_CMD_FRIC(int16_t motor1, int16_t motor2, int16_t scope);
 void CAN_CMD_CAP(uint16_t power, uint16_t buffer);
 //additional functions
 void CAN_chassis_transfer(int16_t vx_set, int16_t vy_set, int16_t wz_set, uint16_t chassis_mode);
+
+void get_motor_measure_ecd(motor_measure_t *motor_measure, uint8_t data[8]);
+
+void send_gimbal_motor_state(uint8_t shoot_mode, fp32 pitch_angel);//fric state, trigger state, pitch angel
 
 extern const motor_measure_t *get_scope_gimbal_motor_measure_point(void);
 

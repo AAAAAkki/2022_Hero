@@ -121,7 +121,7 @@ static void chaasis_detect_control(chassis_move_t *chaasis_detect_control);
 uint32_t chassis_high_water;
 #endif
 
-fp32 intermedia_chassis_speed[4]={0,0,0,0};
+extern gimbal_data_t gimbal_trans;
 //底盘运动数据
 chassis_move_t chassis_move;
 
@@ -260,7 +260,7 @@ static void chassis_init(chassis_move_t *chassis_move_init)
     PID_init(&chassis_move_init->motor_speed_pid[i], PID_POSITION, motor_speed_pid, M3505_MOTOR_SPEED_PID_MAX_OUT, M3505_MOTOR_SPEED_PID_MAX_IOUT);
   }
 	PID_init(&chassis_move_init->buffer_pid,PID_POSITION,chassis_buffer_pid,20,0);
-  PID_init(&chassis_move_init->cap_voltage_pid, PID_POSITION, voltage_pid, 40000, 10000);
+  PID_init(&chassis_move_init->cap_voltage_pid, PID_POSITION, voltage_pid, 40000, 15000);
 	//initialize angle PID
   //初始化角度PID
   PID_init(&chassis_move_init->chassis_angle_pid, PID_POSITION, chassis_yaw_pid, CHASSIS_FOLLOW_GIMBAL_PID_MAX_OUT, CHASSIS_FOLLOW_GIMBAL_PID_MAX_IOUT);
@@ -689,18 +689,11 @@ chassis_move_t  *get_chassis_point(void)
 
 
 void top_down_speed_set(chassis_move_t *chassis_speed_set){
-	chassis_speed_set->vx_set=intermedia_chassis_speed[0];
-	chassis_speed_set->vy_set=intermedia_chassis_speed[1];
-	chassis_speed_set->wz_set=intermedia_chassis_speed[2];
+	chassis_speed_set->vx_set=gimbal_trans.speed_set[0];
+	chassis_speed_set->vy_set=gimbal_trans.speed_set[1];
+	chassis_speed_set->wz_set=gimbal_trans.speed_set[2];
 }
 
-//void motor_feedback_rpm_send(chassis_move_t *motor_feedback_rpm){
-//	int16_t motor_rpm[4];
-//	for(int i=0;i<4;i++){
-//		motor_rpm[i]=motor_feedback_rpm->motor_chassis[i].chassis_motor_measure->speed_rpm;
-//	}
-//	CAN_motor_feedback_send(motor_rpm[0],motor_rpm[1],motor_rpm[2],motor_rpm[3]);
-//}
 
 static void chaasis_detect_control(chassis_move_t *chaasis_detect_control)
 {	

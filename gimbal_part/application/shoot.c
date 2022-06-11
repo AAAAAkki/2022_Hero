@@ -69,7 +69,7 @@ static void shoot_bullet_control(void);
 shoot_control_t shoot_control; //射击数据
 fp32 trigger_speed = 0;
 uint16_t tolerant = 0;
-uint8_t fast = 0;
+uint8_t fast = 1;
 /**
   * @brief          射击初始化，初始化PID，遥控器指针，电机指针
   * @param[in]      void
@@ -80,8 +80,8 @@ void shoot_init(void)
 
     
 		static const fp32 Trigger_ecd_reverse_pid[3] = {TRIIGER_ECD_REVERSE_PID_KP, TRIIGER_ECD_REVERSE_PID_KI, TRIIGER_ECD_REVERSE_PID_KD};
-    static const fp32 Fric_speed_pid0[3] = {39.2, 0.2, 0.6};
-		static const fp32 Fric_speed_pid1[3] = {40, 0.3, 0.4};
+    static const fp32 Fric_speed_pid0[3] = {40, 0.3, 0};
+		static const fp32 Fric_speed_pid1[3] = {40, 0.3, 0};
     shoot_control.shoot_mode = SHOOT_STOP;
     //遥控器指针
     shoot_control.shoot_rc = get_remote_control_point();
@@ -153,9 +153,6 @@ int16_t shoot_control_loop(void)
     else if (shoot_control.shoot_mode == SHOOT_BULLET)
     {
         shoot_control.trigger_motor_pid.max_out = TRIGGER_BULLET_PID_MAX_OUT;
-			if(fast)
-				shoot_control.trigger_motor_pid.max_iout = TRIGGER_BULLET_PID_MAX_IOUT*FASTER_TRIGGER_SPEED/TRIGGER_SPEED;
-			else
         shoot_control.trigger_motor_pid.max_iout = TRIGGER_BULLET_PID_MAX_IOUT;
         shoot_bullet_control();
     }
@@ -186,10 +183,10 @@ int16_t shoot_control_loop(void)
 
     shoot_control.fric_can1 = (int16_t)(shoot_control.fric1_ramp.out);
     shoot_control.fric_can2 = (int16_t)(shoot_control.fric2_ramp.out);
-    PID_calc(&shoot_control.fric_motor_pid[0], shoot_control.fric_motor_measure[0]->speed_rpm, -shoot_control.fric_can1);
-    PID_calc(&shoot_control.fric_motor_pid[1], shoot_control.fric_motor_measure[1]->speed_rpm, shoot_control.fric_can1);
+    PID_calc(&shoot_control.fric_motor_pid[0], shoot_control.fric_motor_measure[0]->speed_rpm, shoot_control.fric_can1);
+    PID_calc(&shoot_control.fric_motor_pid[1], shoot_control.fric_motor_measure[1]->speed_rpm, -shoot_control.fric_can1);
 		CAN_CMD_FRIC((int16_t)shoot_control.fric_motor_pid[0].out, (int16_t)shoot_control.fric_motor_pid[1].out, gimbal_control.gimbal_scope_motor.current_set);
-//		CAN_CMD_FRIC(2000,2000,0);
+//		CAN_CMD_FRIC(0,0,gimbal_control.gimbal_scope_motor.current_set);
 		
 		return shoot_control.given_current;
 }
@@ -266,7 +263,7 @@ static int8_t last_s = RC_SW_UP;
     get_shoot_heat1_limit_and_heat0(&shoot_control.heat_limit, &shoot_control.heat);
     if (!toe_is_error(REFEREE_TOE))
     {
-        if ((shoot_control.heat + 100 > shoot_control.heat_limit) && !(shoot_control.shoot_rc->key.v & KEY_PRESSED_OFFSET_G) && shoot_control.shoot_mode==SHOOT_BULLET)
+        if ((shoot_control.heat + 100 > shoot_control.heat_limit) && !(shoot_control.shoot_rc->key.v & KEY_PRESSED_OFFSET_G) && !shoot_control.move_flag && shoot_control.shoot_mode==SHOOT_BULLET)
         {
 							shoot_control.shoot_mode = SHOOT_READY;
         }
@@ -306,15 +303,8 @@ static void shoot_feedback_update(void)
     speed_fliter_3 = shoot_control.shoot_motor_measure->speed_rpm * MOTOR_RPM_TO_SPEED;
     shoot_control.speed = speed_fliter_3;
     //电机圈数重置， 因为输出轴旋转一圈， 电机轴旋转 20圈，将电机轴数据处理成输出轴数据，用于控制输出轴角度
-    if (shoot_control.shoot_motor_measure->ecd - shoot_control.shoot_motor_measure->last_ecd > HALF_ECD_RANGE)
-    {
-        shoot_control.ecd_count--;
-    }
-    else if (shoot_control.shoot_motor_measure->ecd - shoot_control.shoot_motor_measure->last_ecd < -HALF_ECD_RANGE)
-    {
-        shoot_control.ecd_count++;
-    }
-		shoot_control.sum_ecd= shoot_control.ecd_count*8191+ shoot_control.shoot_motor_measure->ecd;
+		
+		shoot_control.sum_ecd= shoot_control.shoot_motor_measure->ecd_count*8191+ shoot_control.shoot_motor_measure->ecd;
     //鼠标按键
 		shoot_control.last_press_l = shoot_control.press_l;
 		shoot_control.press_l = shoot_control.shoot_rc->mouse.press_l;
@@ -449,15 +439,15 @@ shoot_control_t *get_shoot_point(void)
 }
 
 void trigger_pid_select(void){
-		#if fast
-				static const fp32 Trigger_speed_pid[3] = {TRIGGER_FAST_SPEED_PID_KP, TRIGGER_FAST_SPEED_PID_KI, TRIGGER_FAST_SPEED_PID_KD};
-				trigger_speed = FASTER_TRIGGER_SPEED;
-		#else
-				static const fp32 Trigger_speed_pid[3] = {TRIGGER_ANGLE_PID_KP, TRIGGER_ANGLE_PID_KI, TRIGGER_ANGLE_PID_KD};
-				trigger_speed = TRIGGER_SPEED;
+		
+		static const fp32 Trigger_speed_pid[3] = {TRIGGER_FAST_SPEED_PID_KP, TRIGGER_FAST_SPEED_PID_KI, TRIGGER_FAST_SPEED_PID_KD};
+		trigger_speed = FASTER_TRIGGER_SPEED;
+//		trigger_speed = READY_TRIGGER_SPEED;
+//		static const fp32 Trigger_speed_pid[3] = {TRIGGER_SLOW_SPEED_PID_KP, TRIGGER_SLOW_SPEED_PID_KI, TRIGGER_SLOW_SPEED_PID_KD};
+			
+//				static const fp32 Trigger_speed_pid[3] = {TRIGGER_ANGLE_PID_KP, TRIGGER_ANGLE_PID_KI, TRIGGER_ANGLE_PID_KD};
+//				trigger_speed = TRIGGER_SPEED;
 				
-		#endif
-				
-		tolerant = trigger_speed/6*1000;
+		tolerant = trigger_speed/6*100+1100;
     PID_init(&shoot_control.trigger_motor_pid, PID_POSITION, Trigger_speed_pid, TRIGGER_READY_PID_MAX_OUT, TRIGGER_READY_PID_MAX_IOUT);
 }

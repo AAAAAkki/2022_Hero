@@ -38,6 +38,21 @@ extern CAN_HandleTypeDef hcan2;
     (ptr)->given_current = (uint16_t)((data)[4] << 8 | (data)[5]); \
     (ptr)->temperate = (data)[6];                                  \
   }
+void get_motor_measure_ecd(motor_measure_t *motor_measure, uint8_t data[8]){
+		motor_measure->last_ecd = motor_measure->ecd;                          
+    motor_measure->ecd = (uint16_t)((data)[0] << 8 | (data)[1]);           
+    motor_measure->speed_rpm = (uint16_t)((data)[2] << 8 | (data)[3]);     
+    motor_measure->given_current = (uint16_t)((data)[4] << 8 | (data)[5]); 
+    motor_measure->temperate = (data)[6];
+		if (motor_measure->ecd - motor_measure->last_ecd > 8191/2)
+    {
+        motor_measure->ecd_count--;
+    }
+    else if (motor_measure->ecd - motor_measure->last_ecd < -8191/2)
+    {
+        motor_measure->ecd_count++;
+    }
+}
 
 #define get_cap_measure(ptr, data)                               \
   {                                                                \
@@ -104,18 +119,13 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
       static uint8_t i = 0;
       //get motor id
       i = 6;
-      get_motor_measure(&motor_chassis[i], rx_data);
+      get_motor_measure_ecd(&motor_chassis[i], rx_data);
       detect_hook(TRIGGER_MOTOR_TOE);
       break;
     }
 		
 		//merge heat and limit data
 		//detect REFEREE_TOE
-//		case state_data_id:
-//		{
-//			chassis_data_receive.shooter_heat0_limit=(uint16_t)(rx_data[0]<<8|rx_data[1]);
-//			break;
-//		}
 		case heat_data_id:
 		{
 			chassis_data_receive.shooter_heat0=(uint16_t)(rx_data[0]<<8|rx_data[1]);
@@ -128,7 +138,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 		{
 			chassis_data_receive.bullet_type=rx_data[0];
 			chassis_data_receive.bullet_freq=rx_data[1];
-			chassis_data_receive.bullet_speed=(float)(rx_data[2]<<8|rx_data[1])/100;
+			chassis_data_receive.bullet_speed=(float)(rx_data[2]<<8|rx_data[3])/100;
 			break;
 		}
     default:
@@ -426,7 +436,29 @@ void CAN_chassis_transfer(int16_t vx_set, int16_t vy_set, int16_t wz_set, uint16
 		chassis_board_can_send_data[5]=wz_set;
 		chassis_board_can_send_data[6]=chassis_mode>>8;
 		chassis_board_can_send_data[7]=chassis_mode;
-		//chassis_board_can_send_data[6] to chassis_board_can_send_data[7] reserved
     HAL_CAN_AddTxMessage(&hcan2, &chassis_board_tx_message, chassis_board_can_send_data, &send_mail_box);
 }
+
+
+static CAN_TxHeaderTypeDef  ui_info_tx_message;
+uint8_t              ui_info_can_send_data[8]={0};
+
+
+void send_gimbal_motor_state(uint8_t shoot_mode, fp32 pitch_angel){
+		uint32_t send_mail_box;
+		int16_t pitch = (int16_t)(pitch_angel*100);
+    chassis_board_tx_message.StdId = ui_info_id;
+    chassis_board_tx_message.IDE = CAN_ID_STD;
+    chassis_board_tx_message.RTR = CAN_RTR_DATA;
+    chassis_board_tx_message.DLC = 0x08;
+    ui_info_can_send_data[0]=shoot_mode>>8;
+		ui_info_can_send_data[1]=shoot_mode;
+		ui_info_can_send_data[2]=pitch>>8;
+		ui_info_can_send_data[3]=pitch;
+//		ui_info_can_send_data[4]=wz_set>>8;
+//		ui_info_can_send_data[5]=wz_set;
+		
+    HAL_CAN_AddTxMessage(&hcan2, &chassis_board_tx_message, ui_info_can_send_data, &send_mail_box);
+}
+
 
