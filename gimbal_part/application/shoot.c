@@ -96,8 +96,8 @@ void shoot_init(void)
 		PID_init(&shoot_control.trigger_motor_ecd_pid, PID_POSITION, Trigger_ecd_reverse_pid, 12000, 2000);
     PID_init(&shoot_control.fric_motor_pid[0], PID_POSITION, Fric_speed_pid0, FRIC_PID_MAX_OUT, FRIC_PID_MAX_IOUT);
     PID_init(&shoot_control.fric_motor_pid[1], PID_POSITION, Fric_speed_pid1, FRIC_PID_MAX_OUT, FRIC_PID_MAX_IOUT);
-	//	shoot_control.fric_motor_pid[0].proportion_output_filter_coefficient = exp(-300*1E-3);
-	//	shoot_control.fric_motor_pid[1].proportion_output_filter_coefficient = exp(-300*1E-3);
+		shoot_control.fric_motor_pid[0].proportion_output_filter_coefficient = exp(-300*1E-3);
+		shoot_control.fric_motor_pid[1].proportion_output_filter_coefficient = exp(-300*1E-3);
 //		shoot_control.trigger_motor_pid.derivative_output_filter_coefficient = exp(-0.05*1E-3);
 		shoot_control.trigger_motor_pid.proportion_output_filter_coefficient = exp(-1000*1E-3);
 		
