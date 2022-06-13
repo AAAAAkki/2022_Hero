@@ -63,7 +63,7 @@
 #define UI_Data_Del_ALL 2
 /***************************图形配置参数__图形操作********************/
 #define UI_Graph_ADD 1
-#define UI_Graph_Change 2
+#define UI_Graph_Change 2 
 #define UI_Graph_Del 3
 /***************************图形配置参数__图形类型********************/
 #define UI_Graph_Line 0         //直线

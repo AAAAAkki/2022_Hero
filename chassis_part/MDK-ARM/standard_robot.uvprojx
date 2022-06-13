@@ -923,6 +923,21 @@
               <FileType>1</FileType>
               <FilePath>..\application\RM_Cilent_UI.c</FilePath>
             </File>
+            <File>
+              <FileName>UI_car.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\application\UI_car.c</FilePath>
+            </File>
+            <File>
+              <FileName>UI_label.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\application\UI_label.c</FilePath>
+            </File>
+            <File>
+              <FileName>UI_ProgressBar.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\application\UI_ProgressBar.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
