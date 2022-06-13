@@ -30,7 +30,7 @@
 #include "chassis_power_control.h"
 
 #include "referee.h"
-#define Mini_speed 0.5f
+#define Mini_speed 0.4f
 #define rc_deadband_limit(input, output, dealine)    \
   {                                                  \
     if ((input) > (dealine) || (input) < -(dealine)) \
@@ -119,6 +119,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop);
 uint32_t chassis_high_water;
 #endif
 extern gimbal_control_t gimbal_control;
+
 //底盘运动数据
 chassis_move_t chassis_move;
 
@@ -157,7 +158,7 @@ void chassis_task(void const *pvParameters)
     chassis_mode_change_control_transit(&chassis_move);
     //chassis data update
     //底盘数据更新
-//    chassis_feedback_update(&chassis_move);
+
     //set chassis control set-point
     //底盘控制量设置
     chassis_set_contorl(&chassis_move);
@@ -694,6 +695,10 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
 chassis_move_t  *get_chassis_point(void)
 {
   return &chassis_move;
+}
+
+uint8_t get_swing_flag(void){
+		return chassis_move.swing_flag;
 }
 
 void top_down_communication(chassis_move_t *gimbal_speed_info_transfer_to_chassis){

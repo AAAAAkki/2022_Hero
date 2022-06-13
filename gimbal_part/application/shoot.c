@@ -437,7 +437,9 @@ shoot_control_t *get_shoot_point(void)
 {
     return &shoot_control;
 }
-
+uint8_t get_shoot_mode(void){
+		return shoot_control.shoot_mode;
+}
 void trigger_pid_select(void){
 		
 		static const fp32 Trigger_speed_pid[3] = {TRIGGER_FAST_SPEED_PID_KP, TRIGGER_FAST_SPEED_PID_KI, TRIGGER_FAST_SPEED_PID_KD};

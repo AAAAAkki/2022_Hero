@@ -167,4 +167,5 @@ extern void shoot_init(void);
 extern int16_t shoot_control_loop(void);
 shoot_control_t *get_shoot_point(void);
 void trigger_pid_select(void);
+uint8_t get_shoot_mode(void);
 #endif

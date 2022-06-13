@@ -26,7 +26,7 @@
   */
 
 #include "gimbal_task.h"
-
+#include "chassis_task.h"
 #include "main.h"
 
 #include "cmsis_os.h"
@@ -345,6 +345,9 @@ void gimbal_task(void const *pvParameters)
         gimbal_control_loop(&gimbal_control);                //云台控制PID计算
         gimbal_scope_control(&gimbal_control);							 //scope position set
 				shoot_can_set_current = shoot_control_loop();        //射击任务控制循环
+				send_gimbal_motor_state(get_shoot_mode(),get_swing_flag(),gimbal_control.gimbal_pitch_motor.absolute_angle_degree,
+																gimbal_control.gimbal_yaw_motor.absolute_angle_degree,gimbal_control.gimbal_yaw_motor.relative_angle/PI*180);
+																														 //data for ui on chassis
 #if YAW_TURN
         yaw_can_set_current = -gimbal_control.gimbal_yaw_motor.given_current;
 #else
