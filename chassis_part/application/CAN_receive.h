@@ -225,6 +225,8 @@ void get_yaw_absolute_angel(fp32 * yaw_absolute);
 void get_yaw_relative_angel(fp32 * yaw_relative);
 
 void get_cap_proportion(fp32 *cap_proportion);
+
+gimbal_data_t *get_gimbal_data(void);
 /*Addtional Functions*/
 
 #endif
