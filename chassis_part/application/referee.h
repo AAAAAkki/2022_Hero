@@ -181,17 +181,16 @@ typedef __packed struct
     uint8_t data[32];
 } ext_download_stream_data_t;
 
-
-
 extern void init_referee_struct_data(void);
+
 extern void referee_data_solve(uint8_t *frame);
 
 extern void get_chassis_power_and_buffer(fp32 *power, fp32 *buffer);
 
 extern uint8_t get_robot_id(void);
 
-extern void get_shoot_heat1_limit_and_heat0(uint16_t *heat0_limit, uint16_t *heat0);
-extern void get_shoot_heat2_limit_and_heat1(uint16_t *heat1_limit, uint16_t *heat1);
+void get_bullet_max_speed(uint16_t *max_bullet_speed);
+
 extern void get_chassis_max_power(uint16_t *max_power);
 ext_robot_hurt_t *get_hurt_point(void);
 ext_game_robot_state_t *get_robot_status_point(void);

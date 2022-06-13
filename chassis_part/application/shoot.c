@@ -261,7 +261,7 @@ static void shoot_set_mode(void)
         }
     }
 
-    get_shoot_heat1_limit_and_heat0(&shoot_control.heat_limit, &shoot_control.heat);
+    
    /* if (!toe_is_error(REFEREE_TOE))
     {
         if ((shoot_control.heat + 10 >= shoot_control.heat_limit) && !(shoot_control.shoot_rc->key.v & KEY_PRESSED_OFFSET_C))

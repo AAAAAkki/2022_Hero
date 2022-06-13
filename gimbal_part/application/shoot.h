@@ -80,8 +80,8 @@
 #define TRIGGER_ANGLE_PID_KI        4.0f
 #define TRIGGER_ANGLE_PID_KD        25.0f
 
-#define TRIGGER_FAST_SPEED_PID_KP		400.0f
-#define TRIGGER_FAST_SPEED_PID_KI		7.5f
+#define TRIGGER_FAST_SPEED_PID_KP		440.0f
+#define TRIGGER_FAST_SPEED_PID_KI		7.8f
 #define TRIGGER_FAST_SPEED_PID_KD		65.0f
 
 #define TRIGGER_SLOW_SPEED_PID_KP		1150.0f
@@ -104,7 +104,7 @@
 #define FRIC_ANGLE_PID_KD 0.0f
 
 #define FRIC_PID_MAX_OUT 16000.0f
-#define FRIC_PID_MAX_IOUT 10000.0f
+#define FRIC_PID_MAX_IOUT 1000.0f
 
 
 #define SHOOT_HEAT_REMAIN_VALUE     80
@@ -167,4 +167,5 @@ extern void shoot_init(void);
 extern int16_t shoot_control_loop(void);
 shoot_control_t *get_shoot_point(void);
 void trigger_pid_select(void);
+uint8_t get_shoot_mode(void);
 #endif
