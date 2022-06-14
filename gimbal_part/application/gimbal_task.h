@@ -30,6 +30,7 @@
 #include "struct_typedef.h"
 #include "CAN_receive.h"
 #include "pid.h"
+
 #include "remote_control.h"
 //pitch speed close-loop PID params, max out and max iout
 //pitch 速度环 PID参数以及 PID最大输出，积分输出
@@ -355,6 +356,8 @@ gimbal_control_t *get_gimbal_point(void);
 void gimbal_scope_control(gimbal_control_t *scope_toggle);
 
 void scope_position_limit(scope_motor_t *scope);
+
+uint8_t get_shoot_mode(void);
 
 uint16_t scope_support(uint16_t time);
 #endif

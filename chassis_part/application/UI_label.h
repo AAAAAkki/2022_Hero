@@ -21,6 +21,7 @@
 typedef struct {
     const RC_ctrl_t *ui_rc_ctrl;
     gimbal_control_t *ui_gimbal_control;
+		gimbal_data_t *ui_gimbal_data;
     chassis_move_t *ui_chassis_move;
     shoot_control_t *ui_shoot_control;
     ext_robot_hurt_t *ui_robot_hurt;

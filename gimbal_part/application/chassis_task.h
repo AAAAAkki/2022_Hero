@@ -221,4 +221,6 @@ chassis_move_t  *get_chassis_point(void);
 void top_down_communication(chassis_move_t *gimbal_speed_info_transfer_to_chassis);
 
 void top_down_speed_set(chassis_move_t *chassis_speed_set);
+
+uint8_t get_swing_flag(void);
 #endif

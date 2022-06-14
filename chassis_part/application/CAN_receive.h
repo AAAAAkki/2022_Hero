@@ -63,7 +63,10 @@ typedef struct
 		fp32 speed_set[3];
 		uint8_t chassis_mode;
 		uint8_t shoot_mode;
+		uint8_t swing_flag;
 		fp32 pitch_angel_degree;
+		fp32 yaw_absolute_angel;
+		fp32 yaw_relative_angel;
 }gimbal_data_t;
 
 //rm motor data
@@ -211,6 +214,19 @@ void CAN_heat_data_send(uint16_t shooter_heat, uint16_t shoot_heat_limit, uint16
 
 void CAN_shoot_data_send(uint8_t	bullet_type, uint8_t	bullet_freq, float	bullet_speed);
 
+void get_shoot_mode(uint8_t * shoot_mode);
+
+void get_swing_mode(uint8_t * swing_flag);
+
+void get_pitch_angel(fp32 * pitch_angel);
+
+void get_yaw_absolute_angel(fp32 * yaw_absolute);
+
+void get_yaw_relative_angel(fp32 * yaw_relative);
+
+void get_cap_proportion(fp32 *cap_proportion);
+
+gimbal_data_t *get_gimbal_data(void);
 /*Addtional Functions*/
-//void CAN_gimbal_transfer(uint8_t*data);
+
 #endif

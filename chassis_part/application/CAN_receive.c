@@ -110,12 +110,15 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 		case ui_info_id:
 		{
 				int16_t temp[4];
-				temp[0]=(int16_t)(rx_data[0]<<8|rx_data[1]);
+				
 				temp[1]=(int16_t)(rx_data[2]<<8|rx_data[3]);
 				temp[2]=(int16_t)(rx_data[4]<<8|rx_data[5]);
 				temp[3]=(int16_t)(rx_data[6]<<8|rx_data[7]);
-				gimbal_trans.shoot_mode=temp[0];
+				gimbal_trans.shoot_mode=rx_data[0];
+				gimbal_trans.swing_flag=rx_data[1];
 				gimbal_trans.pitch_angel_degree=(fp32)temp[1]/100;
+				gimbal_trans.yaw_absolute_angel=(fp32)temp[2]/100;
+				gimbal_trans.yaw_relative_angel=(fp32)temp[3]/100;
 		}
 
     default:
@@ -373,26 +376,6 @@ const motor_measure_t *get_fric_motor_measure_point(uint8_t i)
 }
 
 /*Additional Functions*/
-// static CAN_TxHeaderTypeDef gimbal_board_tx_message;
-// static uint8_t             gimbal_board_can_tx_data[8]={0};
-// void CAN_gimbal_transfer(uint8_t*data){
-//  uint32_t send_mail_box;
-//	uint8_t  temp[8];
-//  gimbal_board_tx_message.StdId = CAN_GIMBAL_ALL_ID;
-//  gimbal_board_tx_message.IDE = CAN_ID_STD;
-//  gimbal_board_tx_message.RTR = CAN_RTR_DATA;
-//  gimbal_board_tx_message.DLC = 0x08;
-
-///*shoot*/
-//	gimbal_board_can_tx_data[0] = (uint8_t)(temp[0]<<10);
-//  gimbal_board_can_tx_data[1]	= (uint8_t)(temp[1]<<22);
-//	 
-///*heat*/	 
-//  gimbal_board_can_tx_data[2] = (uint8_t)(temp[2]<<8);
-//	gimbal_board_can_tx_data[3] = (uint8_t)(temp[3]<<20); 
-//	 
-//	HAL_CAN_AddTxMessage(&CAN_Commucation, &gimbal_board_tx_message, gimbal_board_can_tx_data, &send_mail_box); 
-//}
 
 static CAN_TxHeaderTypeDef  gimbal_board_heat_message;
 static uint8_t              gimbal_board_heat_send_data[8]={0};
@@ -432,11 +415,31 @@ void CAN_shoot_data_send(uint8_t	bullet_type, uint8_t	bullet_freq, float	bullet_
     HAL_CAN_AddTxMessage(&CAN_Commucation, &gimbal_board_shoot_message, gimbal_board_shoot_data, &send_mail_box);
 }
 
-//	uint16_t yaw; 
-//	uint16_t pitch;
-//	uint16_t INS_angle;	 
-//	gimbal_board_can_tx_data[0] = (yaw >> 8);
-//  gimbal_board_can_tx_data[1] = yaw;
-//	gimbal_board_can_tx_data[2] = (pitch >> 8);
-//  gimbal_board_can_tx_data[3] = pitch;
-//	gimbal_board_can_tx_data[4] = INS_angle;
+void get_shoot_mode(uint8_t *shoot_mode){
+		*shoot_mode = gimbal_trans.shoot_mode;
+}
+
+void get_swing_mode(uint8_t * swing_flag){
+		*swing_flag = gimbal_trans.swing_flag;
+}
+
+void get_pitch_angel(fp32 * pitch_angel){
+		*pitch_angel = gimbal_trans.pitch_angel_degree;
+}
+
+void get_yaw_absolute_angel(fp32 * yaw_absolute){
+		*yaw_absolute = gimbal_trans.yaw_absolute_angel;
+}
+
+void get_yaw_relative_angel(fp32 * yaw_relative){
+		*yaw_relative = gimbal_trans.yaw_relative_angel;
+}
+
+void get_cap_proportion(fp32 *cap_proportion){
+		*cap_proportion = 0.0f;
+}
+
+gimbal_data_t *get_gimbal_data(void){
+		return &gimbal_trans;
+}
+

@@ -444,19 +444,23 @@ static CAN_TxHeaderTypeDef  ui_info_tx_message;
 uint8_t              ui_info_can_send_data[8]={0};
 
 
-void send_gimbal_motor_state(uint8_t shoot_mode, fp32 pitch_angel){
+void send_gimbal_motor_state(uint8_t shoot_mode,uint8_t swing_flag, fp32 pitch_angel, fp32 yaw_absolute, fp32 yaw_relative){
 		uint32_t send_mail_box;
 		int16_t pitch = (int16_t)(pitch_angel*100);
+		int16_t yaw_absolute_angel = (int16_t)(yaw_absolute*100);
+		int16_t yaw_relative_angel = (int16_t)(yaw_relative*100);
     chassis_board_tx_message.StdId = ui_info_id;
     chassis_board_tx_message.IDE = CAN_ID_STD;
     chassis_board_tx_message.RTR = CAN_RTR_DATA;
     chassis_board_tx_message.DLC = 0x08;
-    ui_info_can_send_data[0]=shoot_mode>>8;
-		ui_info_can_send_data[1]=shoot_mode;
+    ui_info_can_send_data[0]=shoot_mode;
+		ui_info_can_send_data[1]=swing_flag;
 		ui_info_can_send_data[2]=pitch>>8;
 		ui_info_can_send_data[3]=pitch;
-//		ui_info_can_send_data[4]=wz_set>>8;
-//		ui_info_can_send_data[5]=wz_set;
+		ui_info_can_send_data[4]=yaw_absolute_angel>>8;
+		ui_info_can_send_data[5]=yaw_absolute_angel;
+		ui_info_can_send_data[6]=yaw_relative_angel>>8;
+		ui_info_can_send_data[7]=yaw_relative_angel;
 		
     HAL_CAN_AddTxMessage(&hcan2, &chassis_board_tx_message, ui_info_can_send_data, &send_mail_box);
 }

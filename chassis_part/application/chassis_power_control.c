@@ -41,8 +41,8 @@ extern cap_measure_t cap_measure;
   * @param[in]      chassis_power_control: ????????
   * @retval         none
   */
-    uint16_t max_power_limit = 40;
-		uint8_t cap_state=1;
+uint16_t max_power_limit = 40;
+
 void chassis_power_control(chassis_move_t *chassis_power_control)
 {
     fp32 chassis_power = 0.0f;
@@ -89,14 +89,11 @@ void chassis_power_control(chassis_move_t *chassis_power_control)
 //					chassis_power_control->cap_voltage_pid.max_out = max_power_limit * 250*0.5;
 //					chassis_power_control->cap_voltage_pid.max_out = 80 * 250*0.5;
 
-					if(cap_state)
+					if(1)
 					{
 						PID_calc(&chassis_power_control->cap_voltage_pid,cap_measure.CapVot,18);
 					}
-					else
-					{
-						PID_calc(&chassis_power_control->cap_voltage_pid,cap_measure.CapVot,22);
-					}
+					
 					power_total_current_limit = (max_power_limit - chassis_power_control->buffer_pid.out)* 6000.00/cap_measure.CapVot;
 					if(cap_measure.CapVot>13)
 					{

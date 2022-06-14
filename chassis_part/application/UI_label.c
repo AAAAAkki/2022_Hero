@@ -36,7 +36,7 @@ void label_draw(uint8_t optional) {
     //更新数据
     ui.ui_vision = get_vision_data();
     ui.ui_chassis_move = get_chassis_point();
-
+		ui.ui_gimbal_data = get_gimbal_data();
     ui.ui_gimbal_control = get_gimbal_point();
     ui.ui_shoot_control = get_shoot_point();
     ui.ui_robot_hurt = get_hurt_point();
@@ -87,7 +87,7 @@ void label_draw(uint8_t optional) {
     }
 
     //  !Form: Pitch轴数据
-    fp32 pitch_angle = ui.ui_gimbal_control->gimbal_pitch_motor.absolute_angle;
+    fp32 pitch_angle = ui.ui_gimbal_data->pitch_angel_degree;
     if (!toe_is_error(PITCH_GIMBAL_MOTOR_TOE)) {
         char pitch_angle_value[12];
         String_Data CH_PITCH_DATA;
@@ -103,7 +103,7 @@ void label_draw(uint8_t optional) {
     }
 
     // !Form: 小陀螺状态
-    if (ui.ui_chassis_move->swing_flag == 1) {  // 小陀螺启动  FIXME: 只有键盘事件才会响应，待更新
+    if (ui.ui_gimbal_data->swing_flag == 1) {  // 小陀螺启动  FIXME: 只有键盘事件才会响应，待更新
         String_Data vision_2;
         memset(&vision_2, 0, sizeof(vision_2));
         Char_Draw(&vision_2, "201", optional, 1, UI_Color_Yellow, 15, 2, 4, 280, 770, "ON");
