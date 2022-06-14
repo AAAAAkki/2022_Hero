@@ -56,14 +56,12 @@ void robot_id_select(void);
 
 void ui_refresh(void);
 
-void robot_images_refresh(void);
-
 void UI_aimline();
 
 void UI_car_static(void);
 
 void UserTask(void const *pvParameters) {
-    static uint8_t time = 0;
+    static uint16_t time = 0;
     int16_t batter_percentage = 0;
 
     memset(&bar, 0, sizeof(bar));
@@ -72,7 +70,7 @@ void UserTask(void const *pvParameters) {
     UI_send_init();
     UI_label_static();
     UI_car_init();
-    UI_ProgressBar_static(&bar);
+//    UI_ProgressBar_static(&bar);
     UI_car_static();
     UI_aimline();
     while (1) {
@@ -81,23 +79,21 @@ void UserTask(void const *pvParameters) {
 
 
         // 刷新
-        time = (time + 1) % 64;
+        time = (time + 1) % 1024;  // TODO: 测试刷新速度
         if (time == 0) {
             UI_label_static();  // 重新加载数据表格
-            UI_ProgressBar_static(&bar);  // 重新加载超级电容显示
+//            UI_ProgressBar_static(&bar);  // 重新加载超级电容显示
             UI_aimline();  // 重新绘制瞄准线
             UI_car_static();
-        } else {
+        } else if (time %  64 == 0) {
             UI_label_change();
-            UI_ProgressBar_change(&bar);
+//            UI_ProgressBar_change(&bar);
             UI_car_change();
         }
 
-
-        robot_images_refresh();
         robot_id_select(); //保证热插拔，每次任务都选择一次ID
 
-        vTaskDelay(50);
+        vTaskDelay(1);
     }
 }
 
@@ -109,8 +105,8 @@ void UI_car_init() {
 /*其他*/
     cbc.full_radius = 110;
     cbc.body_half_length = 70;
-    cbc.body_half_width = 60;
-    cbc.rear_half_width = 30;
+    cbc.body_half_width = 55;
+    cbc.rear_half_width = 40;
     cbc.head_radius = 35;
 
     cbc.drawing_width = 2;
@@ -217,5 +213,3 @@ void robot_id_select(void) {
     }
 }
 
-void robot_images_refresh(void) {
-}
