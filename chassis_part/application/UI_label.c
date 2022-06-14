@@ -34,9 +34,8 @@ String_Data vision_0, vision_1, vision_4;  // 这是信息表的数据栏
 void label_draw(uint8_t optional) {
 
     //更新数据
-    ui.ui_vision = get_vision_data();
-    ui.ui_chassis_move = get_chassis_point();
-		ui.ui_gimbal_data = get_gimbal_data();
+    ui.ui_chassis_move = get_chassis_point();  // 获取底盘数据
+    ui.ui_gimbal_data = get_gimbal_data();  // 云台角度、射击模式、小陀螺模式
     ui.ui_gimbal_control = get_gimbal_point();
     ui.ui_shoot_control = get_shoot_point();
     ui.ui_robot_hurt = get_hurt_point();
@@ -123,21 +122,6 @@ void label_draw(uint8_t optional) {
     } else {  // 弹舱开
         memset(&vision_4, 0, sizeof(vision_4));
         Char_Draw(&vision_4, "202", optional, 1, UI_Color_Yellow, 15, 4, 4, 280, 740, "ON");
-        Char_ReFresh(vision_4);
-    }
-
-    //  !Form: 视觉数据判断  FIXME: 没有无识别状态
-    if (ui.ui_vision->vision_mode == 0) {  // 识别到装甲板  FIXME: 根据枚举值，0应该是风车
-        memset(&vision_0, 0, sizeof(vision_0));
-        Char_Draw(&vision_0, "200", optional, 1, UI_Color_Yellow, 15, 8, 4, 280, 710, "ARMOUR");
-        Char_ReFresh(vision_0);
-    } else if (ui.ui_vision->vision_mode == 1) {  // 识别到风车  FIXME: 根据枚举值，1应该是装甲板
-        memset(&vision_1, 0, sizeof(vision_1));
-        Char_Draw(&vision_1, "200", optional, 1, UI_Color_Yellow, 15, 8, 4, 280, 710, "WINDMILL");
-        Char_ReFresh(vision_1);
-    } else {
-        memset(&vision_4, 0, sizeof(vision_4));
-        Char_Draw(&vision_4, "200", optional, 1, UI_Color_Cyan, 15, 8, 4, 280, 710, "OFFLine");
         Char_ReFresh(vision_4);
     }
 }

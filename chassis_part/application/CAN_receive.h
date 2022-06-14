@@ -62,11 +62,11 @@ typedef struct
 {		
 		fp32 speed_set[3];
 		uint8_t chassis_mode;
-		uint8_t shoot_mode;
-		uint8_t swing_flag;
+		uint8_t shoot_mode;  // 射击模式: 0-摩擦轮、拨弹轮都不动; 1-摩擦轮动拨弹轮不动; 2-都动
+		uint8_t swing_flag;  // 1开小陀螺 0不开
 		fp32 pitch_angel_degree;
 		fp32 yaw_absolute_angel;
-		fp32 yaw_relative_angel;
+		fp32 yaw_relative_angel;  // 视为 body_angel
 }gimbal_data_t;
 
 //rm motor data

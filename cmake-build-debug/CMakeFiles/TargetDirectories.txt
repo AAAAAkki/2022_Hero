@@ -1,0 +1,3 @@
+C:/Users/Jessi/Desktop/projects/stm32/2022_Hero/cmake-build-debug/CMakeFiles/2022_Hero.dir
+C:/Users/Jessi/Desktop/projects/stm32/2022_Hero/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Jessi/Desktop/projects/stm32/2022_Hero/cmake-build-debug/CMakeFiles/rebuild_cache.dir

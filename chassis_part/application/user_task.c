@@ -8,22 +8,13 @@
   */
 
 #include "User_Task.h"
-#include "main.h"
-#include "math.h"
-#include "gimbal_task.h"
-#include "chassis_task.h"
-#include "shoot.h"
 #include "referee.h"
 #include "cmsis_os.h"
 #include "string.h"
-#include <stdio.h>
-#include "detect_task.h"
 #include "RM_Cilent_UI.h"
 #include "UI_ProgressBar.h"
 #include "UI_car.h"
 #include "UI_label.h"
-
-#include "voltage_task.h"
 
 extern vision_control_t vision_control;
 
