@@ -11,6 +11,7 @@
 #include "math.h"
 #include "string.h"
 #include "RM_Cilent_UI.h"
+#include "cmsis_os.h"
 
 #define basic_cfg self->basic_config
 #define PI 3.141592653589793
@@ -23,6 +24,38 @@ int car_init_head(car_handle *);
 int car_draw_head_line(car_handle *, uint8_t);
 
 int car_draw_body(car_handle *, uint8_t);
+
+uint8_t get_the_attacked_setting(car_handle *, uint8_t, uint8_t);
+
+uint8_t get_the_attacked_setting(car_handle *self, uint8_t original_attacked, uint8_t armor_code) {
+    /*此函数处理装甲板被击打后函数不会自动回复状态的问题
+     *
+     */
+    uint32_t tick;
+    switch (armor_code) {
+        case 1:
+            tick = self->front_armor_attacked_timer;
+            break;
+        case 2:
+            tick = self->right_armor_attacked_timer;
+            break;
+        case 3:
+            tick = self->back_armor_attacked_timer;
+            break;
+        case 4:
+            tick = self->left_armor_attacked_timer;
+            break;
+        default:
+            return original_attacked;
+    }
+    if (xTaskGetTickCount() - tick <= TIMER_MAX) {
+        return original_attacked;
+    } else {
+        return 0;
+    }
+
+}
+
 
 int car_init_by_handle(car_handle *self) {
     /* 使用传入的句柄绘制基础图像
@@ -119,6 +152,7 @@ int car_rotate_body(car_handle *self, fp32 degree) {
 }
 
 int car_left_armor_showing_attacked(car_handle *self, uint8_t attacked) {
+    attacked = get_the_attacked_setting(self, attacked, 4);
     if (self->left_armor_showing_attacked != attacked) {
         double s = sin(brad);
         double c = cos(brad);
@@ -137,6 +171,7 @@ int car_left_armor_showing_attacked(car_handle *self, uint8_t attacked) {
 }
 
 int car_right_armor_showing_attacked(car_handle *self, uint8_t attacked) {
+    attacked = get_the_attacked_setting(self, attacked, 2);
     if (self->right_armor_showing_attacked != attacked) {
         double s = sin(brad);
         double c = cos(brad);
@@ -155,6 +190,7 @@ int car_right_armor_showing_attacked(car_handle *self, uint8_t attacked) {
 }
 
 int car_front_armor_showing_attacked(car_handle *self, uint8_t attacked) {
+    attacked = get_the_attacked_setting(self, attacked, 1);
     if (self->front_armor_showing_attacked != attacked) {
         double s = sin(brad);
         double c = cos(brad);
@@ -173,6 +209,7 @@ int car_front_armor_showing_attacked(car_handle *self, uint8_t attacked) {
 }
 
 int car_back_armor_showing_attacked(car_handle *self, uint8_t attacked) {
+    attacked = get_the_attacked_setting(self, attacked, 3);
     if (self->back_armor_showing_attacked != attacked) {
         double s = sin(brad);
         double c = cos(brad);
@@ -189,4 +226,22 @@ int car_back_armor_showing_attacked(car_handle *self, uint8_t attacked) {
         UI_ReFresh(1, self->rear_back_data);
     }
     return 0;
+}
+
+
+
+void car_reset_front_armor_timer(car_handle *self) {
+    self->front_armor_attacked_timer = xTaskGetTickCount();
+}
+
+void car_reset_right_armor_timer(car_handle *self) {
+    self->right_armor_attacked_timer = xTaskGetTickCount();
+}
+
+void car_reset_back_armor_timer(car_handle *self) {
+    self->back_armor_attacked_timer = xTaskGetTickCount();
+}
+
+void car_reset_left_armor_timer(car_handle *self) {
+    self->left_armor_attacked_timer = xTaskGetTickCount();
 }

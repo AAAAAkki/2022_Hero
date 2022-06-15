@@ -12,6 +12,8 @@
 
 #define GRAPHIC_NAME_LENGTH 3
 
+#define TIMER_MAX 1000  // 被攻击后刷新计时器，该计时器时间大于TIME_MAX时，装甲板始终标记为未受击打。此数字不应超过 UINT16_MAX
+
 typedef struct {
     // 这些内容需要手动设置，除自动设置，程序不会检查数字是否合理
     uint16_t full_radius;  // 整个控件的半径，同时是云台炮管的长度
@@ -46,6 +48,10 @@ typedef struct {
     uint8_t right_armor_showing_attacked;  // 车身右侧装甲板是否显示受击打
     uint8_t front_armor_showing_attacked;  // 车身头部装甲板是否显示受击打
     uint8_t back_armor_showing_attacked;  // 车身背部装甲板是否显示受击打
+    uint32_t front_armor_attacked_timer;  // 受击倒计时，倒计时清零时所有装甲板显示为未受击打
+    uint32_t right_armor_attacked_timer;
+    uint32_t back_armor_attacked_timer;
+    uint32_t left_armor_attacked_timer;
     Graph_Data body_front_data;  // 车头线条的数据包
     Graph_Data body_left_data;  // 车体左侧线条的数据包
     Graph_Data body_right_data;  // 车体右边线条的数据包
@@ -65,3 +71,7 @@ int car_left_armor_showing_attacked(car_handle *, uint8_t);
 int car_right_armor_showing_attacked(car_handle *, uint8_t);
 int car_front_armor_showing_attacked(car_handle *, uint8_t);
 int car_back_armor_showing_attacked(car_handle *, uint8_t);
+void car_reset_front_armor_timer(car_handle *);  // 重置倒计时
+void car_reset_right_armor_timer(car_handle *);
+void car_reset_back_armor_timer(car_handle *);
+void car_reset_left_armor_timer(car_handle *);
