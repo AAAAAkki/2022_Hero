@@ -125,7 +125,7 @@ void UI_car_init() {
     set_name(cbc.rear_name_left, '3', '0', '7');
     set_name(cbc.rear_name_right, '3', '0', '8');
 
-//    car.body_degree = get_body_degree() + 180;
+    car.body_degree = ui.ui_gimbal_data->yaw_relative_angel;
     car.head_degree = 180;
     car.front_armor_showing_attacked = 0;  // 初始状态是不被击打
     car.back_armor_showing_attacked = 0;
@@ -137,13 +137,13 @@ void UI_car_static() {
     car_init_by_handle(&car);
 }
 
-//void UI_car_change() {
-//    car_rotate_body(&car, get_body_degree() + 180);
+void UI_car_change() {
+    car_rotate_body(&car, ui.ui_gimbal_data->yaw_relative_angel);
 //    car_front_armor_showing_attacked(&car, get_front_amour_attacked());
 //    car_back_armor_showing_attacked(&car, get_back_amour_attackek());
 //    car_left_armor_showing_attacked(&car, get_left_amour_attacked());
 //    car_right_armor_showing_attacked(&car, get_right_amour_attackek());
-//}
+}
 
 void UI_send_init() {
 
