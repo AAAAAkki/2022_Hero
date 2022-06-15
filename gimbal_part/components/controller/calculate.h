@@ -6,15 +6,17 @@
 /*---------------------VARIABLES---------------------*/
 
 
-const float p_0 = 1.01325f;//1标准大气压
-const float T_0 = 273.15f;
-const float C = 0.47f;//球的阻力系数
-const float MS = 0.0032f;//17mm的质量
-const float DS = 0.017f;//17mm
-const float MB_N = 0.041f;//42mm不发光
-const float DB_N = 0.042f;//42mm不发光
-const float MB_F = 0.043f;//42mm发光
-const float DB_F = 0.042f;//42mm发光
+
+
+#define p_0 1.01325f				//1标准大气压
+#define T_0 273.15f
+#define C_0 0.47f							//球的阻力系数
+#define MS 0.0032f					//17mm的质量
+#define DS 0.017f						//17mm
+#define MB_N 0.041f					//42mm不发光
+#define DB_N 0.042f					//42mm不发光
+#define MB_F 0.043f					//42mm发光
+#define DB_F 0.042f
 
 #define SERVO_ERROR 12
 
@@ -78,17 +80,7 @@ const float DB_F = 0.042f;//42mm发光
 
 
 typedef struct  
-{
- const float p_0;
- const float T_0;
- const float C;
- const float MS;
- const float DS;
- const float MB_N;
- const float DB_N;
- const float MB_F;
- const float DB_F;
-	
+{	
  float p_t;//现场气压
  float T_t;//现场温度
  float row;//空气密度
@@ -97,7 +89,7 @@ typedef struct
  float area;//面积计算
  float k;//结果
  int Choose;
-}trajecyory_constant ;
+}trajecyory_constant;
 
 typedef struct
 {
@@ -138,17 +130,16 @@ typedef struct
 
 } L1_ITERATION_T;
 
-
-
-
-
-
-
-
-extern L1_DATA_T L1_Data;
-extern L1_ITERATION_T L1_Iteration;
+typedef struct
+{		
+		trajecyory_constant constant;
+		L1_DATA_T l1_data;
+		L1_ITERATION_T l1_iteration;
+		uint8_t Pwm_L1;
+		uint8_t Pwm_GB;
+}laser_shoot_t;
 
 void Angel_approx(L1_DATA_T *L1_Data, L1_ITERATION_T *L1_Iteration,trajecyory_constant *constant);
-void init(trajecyory_constant *constant);
+void constant_init(trajecyory_constant *constant);
 float angel_change(L1_DATA_T *L1_Data);
 #endif

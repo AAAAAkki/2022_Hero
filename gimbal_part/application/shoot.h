@@ -158,8 +158,7 @@ typedef struct
     uint16_t heat_limit;
 			uint16_t heat;
     ext_game_robot_state_t *shoot_state;
-		uint8_t Pwm_L1;
-		uint8_t Pwm_GB;
+		
 } shoot_control_t;
 
 //由于射击和云台使用同一个can的id故也射击任务在云台任务中执行

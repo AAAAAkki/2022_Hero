@@ -516,7 +516,7 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
       chassis_move_control->vx_set = cos_yaw * vx_set + sin_yaw * vy_set;
       chassis_move_control->vy_set = -sin_yaw * vx_set + cos_yaw * vy_set;
       //set control relative angle  set-point
-      chassis_move_control->wz_set = chassis_power/9*1.4f;
+      chassis_move_control->wz_set = chassis_power/11*1.4f;
       //speed limit
       //速度限幅
       chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);
@@ -553,7 +553,7 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
       chassis_move_control->vx_set = cos_yaw * vx_set + sin_yaw * vy_set;
       chassis_move_control->vy_set = -sin_yaw * vx_set + cos_yaw * vy_set;
       //set control relative angle  set-point
-      chassis_move_control->wz_set = chassis_power/9*1.4f;
+      chassis_move_control->wz_set = chassis_power/11*1.4f;
       //speed limit
       //速度限幅
       chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);

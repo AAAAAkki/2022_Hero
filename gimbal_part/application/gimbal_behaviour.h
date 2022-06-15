@@ -92,6 +92,7 @@ typedef enum
   GIMBAL_RELATIVE_ANGLE, 
   GIMBAL_MOTIONLESS,   
   GIMBAL_VISION_PID,
+	GIMBAL_SHOOT_LASER,
 } gimbal_behaviour_e;
 
 /**
@@ -154,4 +155,5 @@ extern bool_t gimbal_cmd_to_shoot_stop(void);
 #define CD_microcontrol 40
 #define MC_Unit_r 0.001
 void key_micro_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set);
+void gimbal_LASER_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set);
 #endif

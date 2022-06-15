@@ -712,6 +712,7 @@ static void gimbal_init(gimbal_control_t *init)
  
 		init->vision_mode =0;
 		init->shooter_cannon_mode = 0;
+		constant_init(&init->laser_shoot_control.constant);
 }
 
 /**

@@ -31,6 +31,7 @@
 #include "detect_task.h"
 #include "pid.h"
 #include "referee.h"
+#include "calculate.h"
 extern ext_game_robot_state_t robot_state;
 extern gimbal_control_t gimbal_control;
 extern gimbal_behaviour_e gimbal_behaviour;
@@ -221,10 +222,7 @@ static int8_t last_s = RC_SW_UP;
     {
         shoot_control.shoot_mode = SHOOT_STOP;
     }
-//    if ((switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && !switch_is_mid(last_s) && shoot_control.shoot_mode == SHOOT_CONTINUE_BULLET))
-//    {
-//        shoot_control.shoot_mode = SHOOT_READY;
-//    }
+
     if (shoot_control.shoot_mode == SHOOT_READY)
     {
 				if (switch_is_down(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]))
@@ -249,16 +247,6 @@ static int8_t last_s = RC_SW_UP;
         }
     }
 		
-//    if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && shoot_control.shoot_mode == SHOOT_CONTINUE_BULLET)
-//    {
-//        if (!shoot_control.press_l)
-//        {
-//            if (shoot_control.shoot_mode != SHOOT_BULLET)
-//            {
-//                shoot_control.shoot_mode = SHOOT_READY;
-//            }
-//        }
-//    }
 
     get_shoot_heat1_limit_and_heat0(&shoot_control.heat_limit, &shoot_control.heat);
     if (!toe_is_error(REFEREE_TOE))
@@ -444,12 +432,7 @@ void trigger_pid_select(void){
 		
 		static const fp32 Trigger_speed_pid[3] = {TRIGGER_FAST_SPEED_PID_KP, TRIGGER_FAST_SPEED_PID_KI, TRIGGER_FAST_SPEED_PID_KD};
 		trigger_speed = FASTER_TRIGGER_SPEED;
-//		trigger_speed = READY_TRIGGER_SPEED;
-//		static const fp32 Trigger_speed_pid[3] = {TRIGGER_SLOW_SPEED_PID_KP, TRIGGER_SLOW_SPEED_PID_KI, TRIGGER_SLOW_SPEED_PID_KD};
 			
-//				static const fp32 Trigger_speed_pid[3] = {TRIGGER_ANGLE_PID_KP, TRIGGER_ANGLE_PID_KI, TRIGGER_ANGLE_PID_KD};
-//				trigger_speed = TRIGGER_SPEED;
-				
 		tolerant = trigger_speed/6*100+1100;
     PID_init(&shoot_control.trigger_motor_pid, PID_POSITION, Trigger_speed_pid, TRIGGER_READY_PID_MAX_OUT, TRIGGER_READY_PID_MAX_IOUT);
 }

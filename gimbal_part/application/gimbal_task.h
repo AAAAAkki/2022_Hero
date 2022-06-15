@@ -30,7 +30,7 @@
 #include "struct_typedef.h"
 #include "CAN_receive.h"
 #include "pid.h"
-
+#include "calculate.h"
 #include "remote_control.h"
 //pitch speed close-loop PID params, max out and max iout
 //pitch 速度环 PID参数以及 PID最大输出，积分输出
@@ -266,6 +266,7 @@ typedef struct
 		uint8_t shooter_cannon_mode;
     fp32 vision_angle_set[2];
 		scope_motor_t gimbal_scope_motor;
+		laser_shoot_t laser_shoot_control;
 } gimbal_control_t;
 
 /**

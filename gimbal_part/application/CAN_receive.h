@@ -82,6 +82,7 @@ typedef struct
 		uint16_t shooter_heat0;
 		uint8_t bullet_type;
 		uint8_t bullet_freq;
+		uint8_t power_flag;
 		float bullet_speed;
 		uint16_t chassis_power_limit;
 } chassis_data_t;
