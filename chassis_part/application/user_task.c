@@ -85,7 +85,7 @@ void UserTask(void const *pvParameters) {
 //            UI_ProgressBar_static(&bar);  // 重新加载超级电容显示
             UI_aimline();  // 重新绘制瞄准线
             UI_car_static();
-        } else if (time %  64 == 0) {
+        } else if (time % 64 == 0) {
             UI_label_change();
 //            UI_ProgressBar_change(&bar);
             UI_car_change();
@@ -155,7 +155,7 @@ void UI_send_init() {
 
 
 //瞄准辅助线 英雄辅助线 只有一种弹速的情况
-void UI_aimline() { 
+void UI_aimline() {
     Graph_Data line_1;
     memset(&line_1, 0, sizeof(line_1));
     Line_Draw(&line_1, "901", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 870, 583, 1050, 583);
@@ -171,10 +171,9 @@ void UI_aimline() {
     Graph_Data line_4;
     memset(&line_4, 0, sizeof(line_4));
     Line_Draw(&line_4, "904", UI_Graph_ADD, 1, UI_Color_Green, 2, 930, 613, 990, 613);
-	  UI_ReFresh(2, line_1, line_2);
-	  UI_ReFresh(2, line_3, line_4);
+    UI_ReFresh(2, line_1, line_2);
+    UI_ReFresh(2, line_3, line_4);
 }
-
 
 
 void robot_id_data_init(void) {
