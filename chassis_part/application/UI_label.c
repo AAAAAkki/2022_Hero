@@ -21,14 +21,11 @@
 #include "detect_task.h"
 #include "RM_Cilent_UI.h"
 
-#include "gimbal_task.h"
-#include "vision.h"
-#include "servo_task.h"
 
 UI_show_t ui;
 
-String_Data image_1, image_2, image_3, image_4, image_5, image_6; // 这是信息表的提示栏
-String_Data vision_0, vision_1, vision_4;  // 这是信息表的数据栏
+String_Data image_0, image_1, image_2, image_3; // 这是信息表的提示栏
+String_Data vision_0, vision_1;  // 这是信息表的数据栏
 
 uint8_t ui_cache_trigger_state = UINT8_MAX;
 uint8_t ui_cache_fric_state = UINT8_MAX;
@@ -127,17 +124,17 @@ void UI_label_static() {
     Char_Draw(&image_3, "103", UI_Graph_ADD, 1, UI_Color_Cyan, 15, 8, 4, 60, 860, "TRIGGER");  // 拨弹轮
     Char_ReFresh(image_3);
 
-    memset(&image_4, 0, sizeof(image_4));
-    Char_Draw(&image_4, "104", UI_Graph_ADD, 1, UI_Color_Cyan, 15, 8, 4, 60, 830, "FIRC");  // 摩擦轮
-    Char_ReFresh(image_4);
+    memset(&image_0, 0, sizeof(image_0));
+    Char_Draw(&image_0, "104", UI_Graph_ADD, 1, UI_Color_Cyan, 15, 8, 4, 60, 830, "FIRC");  // 摩擦轮
+    Char_ReFresh(image_0);
 
-    memset(&image_5, 0, sizeof(image_5));
-    Char_Draw(&image_5, "105", UI_Graph_ADD, 1, UI_Color_Cyan, 15, 8, 4, 60, 800, "PITCH");
-    Char_ReFresh(image_5);
+    memset(&image_1, 0, sizeof(image_1));
+    Char_Draw(&image_1, "105", UI_Graph_ADD, 1, UI_Color_Cyan, 15, 8, 4, 60, 800, "PITCH");
+    Char_ReFresh(image_1);
 
-    memset(&image_6, 0, sizeof(image_6));
-    Char_Draw(&image_6, "106", UI_Graph_ADD, 1, UI_Color_Cyan, 15, 4, 4, 60, 770, "SPIN");  // 小陀螺
-    Char_ReFresh(image_6);
+    memset(&image_2, 0, sizeof(image_2));
+    Char_Draw(&image_2, "106", UI_Graph_ADD, 1, UI_Color_Cyan, 15, 4, 4, 60, 770, "SPIN");  // 小陀螺
+    Char_ReFresh(image_2);
 
     //更新数据
     ui.ui_chassis_move = get_chassis_point();  // 获取底盘数据
