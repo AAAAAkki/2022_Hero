@@ -4,6 +4,9 @@
 #include "CRC8_CRC16.h"
 #include "protocol.h"
 #include "CAN_receive.h"
+#include "UI_car.h"
+
+extern car_handle car;
 
 
 frame_header_struct_t referee_receive_header;
@@ -144,6 +147,27 @@ void referee_data_solve(uint8_t *frame)
         case ROBOT_HURT_CMD_ID:
         {
             memcpy(&robot_hurt_t, frame + index, sizeof(robot_hurt_t));
+						//
+						if(robot_hurt_t.hurt_type == 0){
+								uint8_t armor_id = robot_hurt_t.armor_type;
+								switch(armor_id){
+										case 0:
+												car_reset_front_armor_timer(&car);
+												break;
+										case 1:
+												car_reset_left_armor_timer(&car);
+												break;
+										case 2:
+												car_reset_right_armor_timer(&car);
+												break;
+										case 3:
+												car_reset_back_armor_timer(&car);
+												break;
+										default:
+												break;
+								}
+						}
+						
         }
         break;
         case SHOOT_DATA_CMD_ID:

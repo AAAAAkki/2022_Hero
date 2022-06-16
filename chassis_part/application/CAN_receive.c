@@ -436,7 +436,7 @@ void get_yaw_relative_angel(fp32 * yaw_relative){
 }
 
 void get_cap_proportion(fp32 *cap_proportion){
-		*cap_proportion = 0.0f;
+		*cap_proportion = (cap_measure.CapVot-16)/(24.0f-18.0f);
 }
 
 gimbal_data_t *get_gimbal_data(void){
