@@ -79,17 +79,15 @@ void UserTask(void const *pvParameters) {
 
 
         // 刷新
-        time = (time + 1) % 10000;
+        time = (time + 1) % 1000;
         if (time == 0) {
             UI_label_static();  // 重新加载数据表格
-//            UI_ProgressBar_static(&bar);  // 重新加载超级电容显示
-            UI_aimline();  // 重新绘制瞄准线
             UI_car_static();
-        } else if (time % 64 == 0) {
+        } else if (time % 50 == 0) {
+            UI_aimline();  // 重新绘制瞄准线
             UI_label_change();
-//            UI_ProgressBar_change(&bar);
-            UI_car_change();
         }
+        UI_car_change();
 
         robot_id_select(); //保证热插拔，每次任务都选择一次ID
 
