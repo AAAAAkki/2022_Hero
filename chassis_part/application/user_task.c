@@ -47,6 +47,11 @@ car_handle car;
 progress_bar_data bar;
 
 id_data_t id_data;
+																
+		Graph_Data line_1;							
+    Graph_Data line_2;
+		Graph_Data line_3;
+		Graph_Data line_4;
 
 void ui_char_refresh(void);
 
@@ -70,7 +75,7 @@ void UserTask(void const *pvParameters) {
     UI_send_init();
     UI_label_static();
     UI_car_init();
-//    UI_ProgressBar_static(&bar);
+    UI_ProgressBar_static(&bar);
     UI_car_static();
     UI_aimline();
     while (1) {
@@ -79,17 +84,18 @@ void UserTask(void const *pvParameters) {
 
 
         // 刷新
-        time = (time + 1) % 10000;
+        time = (time + 1) % 1000;
         if (time == 0) {
             UI_label_static();  // 重新加载数据表格
-//            UI_ProgressBar_static(&bar);  // 重新加载超级电容显示
-            UI_aimline();  // 重新绘制瞄准线
+            UI_ProgressBar_static(&bar);  // 重新加载超级电容显示
             UI_car_static();
-        } else if (time % 64 == 0) {
+        } else if (time % 50 == 0) {
+            UI_aimline();  // 重新绘制瞄准线
             UI_label_change();
-//            UI_ProgressBar_change(&bar);
-            UI_car_change();
+					  UI_car_change();
+            UI_car_static();
         }
+        UI_car_change();
 
         robot_id_select(); //保证热插拔，每次任务都选择一次ID
 
@@ -154,25 +160,46 @@ void UI_send_init() {
 }
 
 
+
 //瞄准辅助线 英雄辅助线 只有一种弹速的情况
-void UI_aimline() {
-    Graph_Data line_1;
-    memset(&line_1, 0, sizeof(line_1));
-    Line_Draw(&line_1, "901", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 870, 583, 1050, 583);
+void UI_aimline() { 
+	  uint8_t ui_scope_state = ui.ui_gimbal_data->scope_state;
+	
+	switch (ui_scope_state)	{		
+		case 0: //关镜状态
+				memset(&line_1, 0, sizeof(line_1));
+				Line_Draw(&line_1, "901", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 930, 583, 990, 583);
 
-    Graph_Data line_2;
-    memset(&line_2, 0, sizeof(line_2));
-    Line_Draw(&line_2, "902", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 870, 636, 1050, 636);
+				memset(&line_2, 0, sizeof(line_2));
+				Line_Draw(&line_2, "902", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 900, 636, 1020, 636);
+				
+				memset(&line_3, 0, sizeof(line_3));
+				Line_Draw(&line_3, "903", UI_Graph_ADD, 1, UI_Color_Pink, 2, 870, 621, 1050, 621);
+				
+				memset(&line_4, 0, sizeof(line_4));
+				Line_Draw(&line_4, "904", UI_Graph_ADD, 1, UI_Color_Green, 2, 840, 613, 1080, 613);
+				UI_ReFresh(2, line_1, line_2);
+				UI_ReFresh(2, line_3, line_4);
+				break;
+		
+		case 1: //开镜状态
+				memset(&line_1, 0, sizeof(line_1));
+				Line_Draw(&line_1, "901", UI_Graph_Del, 1, UI_Color_Yellow, 2, 930, 583, 990, 583);
 
-    Graph_Data line_3;
-    memset(&line_3, 0, sizeof(line_3));
-    Line_Draw(&line_3, "903", UI_Graph_ADD, 1, UI_Color_Pink, 2, 900, 621, 1020, 621);
-
-    Graph_Data line_4;
-    memset(&line_4, 0, sizeof(line_4));
-    Line_Draw(&line_4, "904", UI_Graph_ADD, 1, UI_Color_Green, 2, 930, 613, 990, 613);
-    UI_ReFresh(2, line_1, line_2);
-    UI_ReFresh(2, line_3, line_4);
+				memset(&line_2, 0, sizeof(line_2));
+				Line_Draw(&line_2, "902", UI_Graph_Del, 1, UI_Color_Yellow, 2, 900, 636, 1020, 636);
+				
+				memset(&line_3, 0, sizeof(line_3));
+				Line_Draw(&line_3, "903", UI_Graph_Del, 1, UI_Color_Pink, 2, 870, 621, 1050, 621);
+				
+				memset(&line_4, 0, sizeof(line_4));
+				Line_Draw(&line_4, "904", UI_Graph_Del, 1, UI_Color_Green, 2, 840, 613, 1080, 613);
+				UI_ReFresh(2, line_1, line_2);
+				UI_ReFresh(2, line_3, line_4);
+				break;
+		 default:  // 理论上不会遇到
+				break;
+	}
 }
 
 
