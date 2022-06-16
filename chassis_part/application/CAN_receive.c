@@ -439,3 +439,7 @@ void get_cap_proportion(fp32 *cap_proportion){
 		*cap_proportion = 0.0f;
 }
 
+gimbal_data_t *get_gimbal_data(void){
+		return &gimbal_trans;
+}
+

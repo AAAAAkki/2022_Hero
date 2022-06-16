@@ -195,7 +195,7 @@ ext_game_robot_state_t *get_robot_status_point(void)
     return &robot_state;
 }
 
-void get_bullet_max_speed(uint16_t *max_bullet_speed)
+void get_bullet_max_speed(uint16_t *max_bullet_speed)  // 弹速上限(用于瞄准线)
 {
     *max_bullet_speed = robot_state.shooter_id1_42mm_speed_limit;
 }

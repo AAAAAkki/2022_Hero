@@ -2,6 +2,7 @@
 **/MDK-ARM/RTE
 **/MDK-ARM/standard_robot.uvguix.*
 **/MDK-ARM/standard_robot.uvoptx
+cmake-build-debug/
 *.o
 *.d
 *.crf
