@@ -117,6 +117,9 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop);
 
 static void chaasis_detect_control(chassis_move_t *chaasis_detect_control);
 
+void lost_wheel_control(chassis_move_t *lost_wheel_control);
+void lost_wheel_current_allocate(chassis_move_t * current_allocate);
+
 #if INCLUDE_uxTaskGetStackHighWaterMark
 uint32_t chassis_high_water;
 #endif
@@ -174,8 +177,7 @@ void chassis_task(void const *pvParameters)
 
     //make sure  one motor is online at least, so that the control CAN message can be received
     //确保至少一个电机在线， 这样CAN控制包可以被接收到
-    if (!(toe_is_error(CHASSIS_MOTOR1_TOE) && toe_is_error(CHASSIS_MOTOR2_TOE) && toe_is_error(CHASSIS_MOTOR3_TOE) && toe_is_error(CHASSIS_MOTOR4_TOE)))
-    {
+    
       //when remote control is offline, chassis motor should receive zero current.
       //当遥控器掉线的时候，发送给底盘电机零电流.
 //      if (toe_is_error(DBUS_TOE))
@@ -190,9 +192,6 @@ void chassis_task(void const *pvParameters)
 				chassis_control_loop(&chassis_move);
         
 //      }
-    }
-		else if((toe_is_error(CHASSIS_MOTOR1_TOE) + toe_is_error(CHASSIS_MOTOR2_TOE) + toe_is_error(CHASSIS_MOTOR3_TOE) + toe_is_error(CHASSIS_MOTOR4_TOE))==1)
-				chaasis_detect_control(&chassis_move);
 		
 				CAN_cmd_chassis(chassis_move.motor_chassis[0].give_current, chassis_move.motor_chassis[1].give_current,
                        chassis_move.motor_chassis[2].give_current, chassis_move.motor_chassis[3].give_current);
@@ -624,7 +623,8 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
   fp32 temp = 0.0f;
   fp32 wheel_speed[4] = {0.0f, 0.0f, 0.0f, 0.0f};
   uint8_t i = 0;
-
+	
+	lost_wheel_control(chassis_move_control_loop);
   //mecanum wheel speed calculation
   //麦轮运动分解
   chassis_vector_to_mecanum_wheel_speed(chassis_move_control_loop->vx_set,
@@ -670,7 +670,8 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
   {
     PID_calc(&chassis_move_control_loop->motor_speed_pid[i], chassis_move_control_loop->motor_chassis[i].speed, chassis_move_control_loop->motor_chassis[i].speed_set);
   }
-
+	
+	lost_wheel_current_allocate(chassis_move_control_loop);	
   //功率控制
   chassis_power_control(chassis_move_control_loop);
 
@@ -695,80 +696,123 @@ void top_down_speed_set(chassis_move_t *chassis_speed_set){
 }
 
 
-static void chaasis_detect_control(chassis_move_t *chaasis_detect_control)
-{	
-  if(toe_is_error(CHASSIS_MOTOR1_TOE))
-		 {
-			if(chaasis_detect_control->vx_set != 0 && chaasis_detect_control->vy_set == 0 && chaasis_detect_control->wz_set == 0)
+void lost_wheel_control(chassis_move_t *lost_wheel_control)
+{
+	if(toe_is_error(CHASSIS_MOTOR1_TOE)||toe_is_error(CHASSIS_MOTOR2_TOE)||toe_is_error(CHASSIS_MOTOR3_TOE)||toe_is_error(CHASSIS_MOTOR4_TOE))
+	{
+/*		if(lost_wheel_control->lost_wheel_flag==0)
 		{
-			  chaasis_detect_control->motor_chassis[2].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[2].out);
-			  chaasis_detect_control->motor_chassis[3].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[3].out);
+			lost_wheel_control->vy_set=0;
+			lost_wheel_control->wz_set=0;
 		}
-		 if(chaasis_detect_control->vx_set == 0 && chaasis_detect_control->vy_set != 0 && chaasis_detect_control->wz_set == 0)
+		if(lost_wheel_control->lost_wheel_flag==1)
 		{
-			  chaasis_detect_control->motor_chassis[1].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[1].out);
-			  chaasis_detect_control->motor_chassis[3].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[3].out);
+			lost_wheel_control->vx_set=0;
+			lost_wheel_control->wz_set=0;
 		}
-		if( chaasis_detect_control->vx_set == 0 && chaasis_detect_control->vy_set == 0 && chaasis_detect_control->wz_set != 0)
+		if(lost_wheel_control->lost_wheel_flag==2)
 		{
-			chaasis_detect_control->motor_chassis[1].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[1].out);
-			chaasis_detect_control->motor_chassis[2].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[2].out);
+			lost_wheel_control->vy_set=0;
+			lost_wheel_control->vx_set=0;
+		}*/
+		if(!(lost_wheel_control->wz_set>-2&&lost_wheel_control->wz_set<2))
+		{
+			lost_wheel_control->vy_set=0;
+			lost_wheel_control->vx_set=0;
+			lost_wheel_control->lost_wheel_flag=2;
 		}
-	   }
-	if(toe_is_error(CHASSIS_MOTOR2_TOE))
-		 {
-			if(chaasis_detect_control->vx_set != 0 && chaasis_detect_control->vy_set ==0 && chaasis_detect_control->wz_set == 0)
+		else
 		{
-			  chaasis_detect_control->motor_chassis[2].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[2].out);
-			  chaasis_detect_control->motor_chassis[3].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[3].out);
+			lost_wheel_control->vy_set=0;
+			lost_wheel_control->wz_set=0;
+			lost_wheel_control->lost_wheel_flag=0;
 		}
-		  if(chaasis_detect_control->vx_set == 0 && chaasis_detect_control->vy_set != 0 && chaasis_detect_control->wz_set == 0)
-		{
-			  chaasis_detect_control->motor_chassis[0].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[0].out);
-			  chaasis_detect_control->motor_chassis[2].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[2].out);
-		}
-		if( chaasis_detect_control->vx_set == 0 && chaasis_detect_control->vy_set == 0 && chaasis_detect_control->wz_set != 0)
-		{
-			chaasis_detect_control->motor_chassis[0].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[0].out);
-			chaasis_detect_control->motor_chassis[3].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[3].out);
-	  }
-	   }
-	if(toe_is_error(CHASSIS_MOTOR3_TOE))
-		 {
-			if(chaasis_detect_control->vx_set != 0 && chaasis_detect_control->vy_set ==0 && chaasis_detect_control->wz_set == 0)
-		{
-			  chaasis_detect_control->motor_chassis[0].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[0].out);
-			  chaasis_detect_control->motor_chassis[1].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[1].out);
-		}
-		 if(chaasis_detect_control->vx_set == 0 && chaasis_detect_control->vy_set != 0 && chaasis_detect_control->wz_set == 0)
-		{
-			  chaasis_detect_control->motor_chassis[0].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[0].out);
-			  chaasis_detect_control->motor_chassis[2].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[2].out);
-		}
-		if( chaasis_detect_control->vx_set == 0 && chaasis_detect_control->vy_set == 0 && chaasis_detect_control->wz_set != 0)
-		{
-			chaasis_detect_control->motor_chassis[0].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[0].out);
-			chaasis_detect_control->motor_chassis[3].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[3].out);
-		}
-	   }
-	if(toe_is_error(CHASSIS_MOTOR4_TOE))
-		 {
-			if(chaasis_detect_control->vx_set != 0 && chaasis_detect_control->vy_set ==0 && chaasis_detect_control->wz_set == 0)
-		{
-			  chaasis_detect_control->motor_chassis[0].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[0].out);
-			  chaasis_detect_control->motor_chassis[1].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[1].out);
-		}
-		 if(chaasis_detect_control->vx_set == 0 && chaasis_detect_control->vy_set != 0 && chaasis_detect_control->wz_set == 0)
-		{
-			  chaasis_detect_control->motor_chassis[0].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[0].out);
-			  chaasis_detect_control->motor_chassis[2].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[2].out);
-		}
-		if( chaasis_detect_control->vx_set ==  0 && chaasis_detect_control->vy_set == 0 && chaasis_detect_control->wz_set != 0)
-		{
-			chaasis_detect_control->motor_chassis[1].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[1].out);
-			chaasis_detect_control->motor_chassis[2].give_current = (int16_t)(chaasis_detect_control->motor_speed_pid[2].out);
-		}
-	   }
+	}
 }
+void lost_wheel_current_allocate(chassis_move_t * current_allocate)
+{
+	if(toe_is_error(CHASSIS_MOTOR1_TOE))
+	{
+		if(current_allocate->lost_wheel_flag==0)
+		{	
+			current_allocate->motor_speed_pid[0].out =0;
+			current_allocate->motor_speed_pid[1].out =0;
+		}
+		else if(current_allocate->lost_wheel_flag==1)
+		{
+			current_allocate->motor_speed_pid[0].out =0;
+			current_allocate->motor_speed_pid[1].out =0;
+		}
+		else if(current_allocate->lost_wheel_flag==2)
+		{
+			current_allocate->motor_speed_pid[2].out =0;
+			current_allocate->motor_speed_pid[0].out =0;		
+		}
+	}
+	else if(toe_is_error(CHASSIS_MOTOR2_TOE))
+	{
+		if(current_allocate->lost_wheel_flag==0)
+		{	
+			current_allocate->motor_speed_pid[0].out =0;
+			current_allocate->motor_speed_pid[1].out =0;
+		//	current_allocate->lost_wheel_flag=(current_allocate->lost_wheel_flag+1)%3;
+		}
+		else if(current_allocate->lost_wheel_flag==1)
+		{
+			current_allocate->motor_speed_pid[0].out =0;
+			current_allocate->motor_speed_pid[3].out =0;
+		//	current_allocate->lost_wheel_flag=(current_allocate->lost_wheel_flag+1)%3;
+		}
+		else if(current_allocate->lost_wheel_flag==2)
+		{
+			current_allocate->motor_speed_pid[1].out =0;
+			current_allocate->motor_speed_pid[3].out =0;		
+			//current_allocate->lost_wheel_flag=(current_allocate->lost_wheel_flag+1)%3;
+		}
+	}
+	else if(toe_is_error(CHASSIS_MOTOR3_TOE))
+	{
+		if(current_allocate->lost_wheel_flag==0)
+		{	
+			current_allocate->motor_speed_pid[3].out =0;
+			current_allocate->motor_speed_pid[2].out =0;
+			//current_allocate->lost_wheel_flag=(current_allocate->lost_wheel_flag+1)%3;
+		}
+		else if(current_allocate->lost_wheel_flag==1)
+		{
+			current_allocate->motor_speed_pid[2].out =0;
+			current_allocate->motor_speed_pid[1].out =0;
+		//	current_allocate->lost_wheel_flag=(current_allocate->lost_wheel_flag+1)%3;
+		}
+		else if(current_allocate->lost_wheel_flag==2)
+		{
+			current_allocate->motor_speed_pid[0].out =0;
+			current_allocate->motor_speed_pid[2].out =0;		
+		//	current_allocate->lost_wheel_flag=(current_allocate->lost_wheel_flag+1)%3;
+		}
+	}
 
+	else if(toe_is_error(CHASSIS_MOTOR4_TOE))
+	{
+		if(current_allocate->lost_wheel_flag==0)
+		{	
+			current_allocate->motor_speed_pid[2].out =0;
+			current_allocate->motor_speed_pid[3].out =0;
+		//	current_allocate->lost_wheel_flag=(current_allocate->lost_wheel_flag+1)%3;
+		}
+		else if(current_allocate->lost_wheel_flag==1)
+		{
+			current_allocate->motor_speed_pid[0].out =0;
+			current_allocate->motor_speed_pid[3].out =0;
+		//	current_allocate->lost_wheel_flag=(current_allocate->lost_wheel_flag+1)%3;
+		}
+		else if(current_allocate->lost_wheel_flag==2)
+		{
+			current_allocate->motor_speed_pid[0].out =0;
+			current_allocate->motor_speed_pid[3].out =0;		
+		//	current_allocate->lost_wheel_flag=(current_allocate->lost_wheel_flag+1)%3;
+		}
+	}
+
+}
 /*Additional functions end*/
