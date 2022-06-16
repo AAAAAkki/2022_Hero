@@ -67,6 +67,7 @@ typedef struct
 		fp32 pitch_angel_degree;
 		fp32 yaw_absolute_angel;
 		fp32 yaw_relative_angel;  // สำฮช body_angel
+		uint8_t scope_state;		//1-scope_on 0-scope_off
 }gimbal_data_t;
 
 //rm motor data
