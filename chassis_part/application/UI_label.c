@@ -55,7 +55,7 @@ void label_draw(uint8_t optional) {
     }
 
     // !Form: 摩擦轮
-    u8_temp = ui.ui_gimbal_data->shoot_mode != 0;
+    u8_temp = (ui.ui_gimbal_data->shoot_mode != 0 && ui.ui_gimbal_data->shoot_mode !=3);
     if (u8_temp != ui_cache_fric_state) {
         ui_cache_fric_state = u8_temp;
         memset(&vision_1, 0, sizeof(vision_1));
