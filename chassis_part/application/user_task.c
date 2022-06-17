@@ -96,7 +96,12 @@ void UserTask(void const *pvParameters) {
             UI_car_static();
         }
         UI_car_change();
-
+			
+        memset(&line_1, 0, sizeof(line_1));
+				Line_Draw(&line_1, "901", UI_Graph_Del, 1, UI_Color_Yellow, 2, 930, 583, 990, 583);
+		   	UI_ReFresh(1, line_1);
+			
+				UI_aimline();
         robot_id_select(); //保证热插拔，每次任务都选择一次ID
 
         vTaskDelay(1);
@@ -161,28 +166,12 @@ void UI_send_init() {
 
 
 
-//瞄准辅助线 英雄辅助线 只有一种弹速的情况
+//瞄准辅助线 英雄辅助线 只有一种弹速的情况 分开镜和关镜状态
 void UI_aimline() { 
 	  uint8_t ui_scope_state = ui.ui_gimbal_data->scope_state;
 	
-	switch (ui_scope_state)	{		
-		case 0: //关镜状态
-				memset(&line_1, 0, sizeof(line_1));
-				Line_Draw(&line_1, "901", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 930, 583, 990, 583);
-
-				memset(&line_2, 0, sizeof(line_2));
-				Line_Draw(&line_2, "902", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 900, 636, 1020, 636);
-				
-				memset(&line_3, 0, sizeof(line_3));
-				Line_Draw(&line_3, "903", UI_Graph_ADD, 1, UI_Color_Pink, 2, 870, 621, 1050, 621);
-				
-				memset(&line_4, 0, sizeof(line_4));
-				Line_Draw(&line_4, "904", UI_Graph_ADD, 1, UI_Color_Green, 2, 840, 613, 1080, 613);
-				UI_ReFresh(2, line_1, line_2);
-				UI_ReFresh(2, line_3, line_4);
-				break;
-		
-		case 1: //开镜状态
+	if (ui_scope_state == 2)	{		//开镜
+	
 				memset(&line_1, 0, sizeof(line_1));
 				Line_Draw(&line_1, "901", UI_Graph_Del, 1, UI_Color_Yellow, 2, 930, 583, 990, 583);
 
@@ -196,43 +185,69 @@ void UI_aimline() {
 				Line_Draw(&line_4, "904", UI_Graph_Del, 1, UI_Color_Green, 2, 840, 613, 1080, 613);
 				UI_ReFresh(2, line_1, line_2);
 				UI_ReFresh(2, line_3, line_4);
-				break;
-		 default:  // 理论上不会遇到
-				break;
+	} else {  //开镜之外的情况
+		    memset(&line_1, 0, sizeof(line_1));
+				Line_Draw(&line_1, "901", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 930, 583, 990, 583);
+
+				memset(&line_2, 0, sizeof(line_2));
+				Line_Draw(&line_2, "902", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 900, 636, 1020, 636);
+				
+				memset(&line_3, 0, sizeof(line_3));
+				Line_Draw(&line_3, "903", UI_Graph_ADD, 1, UI_Color_Pink, 2, 870, 621, 1050, 621);
+				
+				memset(&line_4, 0, sizeof(line_4));
+				Line_Draw(&line_4, "904", UI_Graph_ADD, 1, UI_Color_Green, 2, 840, 613, 1080, 613);
+				UI_ReFresh(2, line_1, line_2);
+				UI_ReFresh(2, line_3, line_4);		
 	}
 }
 
 
-void robot_id_data_init(void) {
-    id_data.ID[0] = 3;
-    id_data.ID[1] = 4;
-    id_data.ID[2] = 5;
+void robot_id_data_init(void) {  //无空中、哨兵、雷达站的id
+    id_data.ID[0] = 1;
+    id_data.ID[1] = 2;
+    id_data.ID[2] = 3;
+	  id_data.ID[3] = 4;
+    id_data.ID[4] = 5;
 
-    id_data.ID[3] = 103;
-    id_data.ID[4] = 104;
-    id_data.ID[5] = 105;
+	  
+    id_data.ID[5] = 101;
+    id_data.ID[6] = 102;
+    id_data.ID[7] = 103;
+	  id_data.ID[8] = 104;
+    id_data.ID[9] = 105;
 
-    id_data.sender_ID[0] = 3;
-    id_data.sender_ID[1] = 4;
-    id_data.sender_ID[2] = 5;
 
-    id_data.sender_ID[3] = 103;
-    id_data.sender_ID[4] = 104;
-    id_data.sender_ID[5] = 105;
+    id_data.sender_ID[0] = 1;
+    id_data.sender_ID[1] = 2;
+    id_data.sender_ID[2] = 3;
+	  id_data.sender_ID[3] = 4;
+    id_data.sender_ID[4] = 5;
 
-    id_data.receiver_ID[0] = 0x103;
-    id_data.receiver_ID[1] = 0x104;
-    id_data.receiver_ID[2] = 0x105;
+    id_data.sender_ID[5] = 101;
+    id_data.sender_ID[6] = 102;
+    id_data.sender_ID[7] = 103;
+		id_data.sender_ID[8] = 104;
+    id_data.sender_ID[9] = 105;
 
-    id_data.receiver_ID[3] = 0x167;
-    id_data.receiver_ID[4] = 0x168;
-    id_data.receiver_ID[5] = 0x169;
+    id_data.receiver_ID[0] = 0x101;
+    id_data.receiver_ID[1] = 0x102;
+    id_data.receiver_ID[2] = 0x103;
+		id_data.receiver_ID[3] = 0x104;
+    id_data.receiver_ID[4] = 0x105;
+
+    id_data.receiver_ID[5] = 0x165;
+    id_data.receiver_ID[6] = 0x166;
+    id_data.receiver_ID[7] = 0x167;
+		id_data.receiver_ID[8] = 0x168;
+    id_data.receiver_ID[9] = 0x169;
 }
+
 
 void robot_id_select(void) {
     Uint8_t i = 0;
     Robot_number = get_robot_id();
-    for (i = 0; i <= 5; i++) {
+    for (i = 0; i <= 9; i++) {
         if (Robot_number == id_data.ID[i]) {
             Robot_cline_number = id_data.receiver_ID[i];
         }
