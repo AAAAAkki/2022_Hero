@@ -42,7 +42,7 @@ typedef struct {
 
 typedef struct {
     car_basic_config basic_config;  // 需要手动填写
-    fp32 body_degree;  // 车身旋转度数，范围[0, 359]，顺时针为正方向
+    uint16_t body_degree;  // 车身旋转度数，范围[0, 359]，顺时针为正方向
     uint16_t head_degree;  // 云台旋转度数，范围[0, 359]，顺时针为正方向
     uint8_t left_armor_showing_attacked;  // 车身左侧装甲板是否显示受击打
     uint8_t right_armor_showing_attacked;  // 车身右侧装甲板是否显示受击打
@@ -64,9 +64,13 @@ typedef struct {
 } car_handle;
 
 
+uint8_t ui_armors_state[4] = {0, 0, 0, 0};   // 顺序是前、右、后、左
+
+
+
 int car_init_by_handle(car_handle *);
 int car_rotate_head(car_handle *, uint16_t);
-int car_rotate_body(car_handle *, fp32);
+int car_rotate_body(car_handle *, uint16_t);
 int car_left_armor_showing_attacked(car_handle *, uint8_t);
 int car_right_armor_showing_attacked(car_handle *, uint8_t);
 int car_front_armor_showing_attacked(car_handle *, uint8_t);

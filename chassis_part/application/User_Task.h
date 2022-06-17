@@ -13,9 +13,9 @@
 
 typedef struct
 {
-	uint8_t ID[6];
-	uint16_t sender_ID[6];
-	uint16_t receiver_ID[6];
+	uint8_t ID[10];
+	uint16_t sender_ID[10];
+	uint16_t receiver_ID[10];
 } id_data_t;
 void UserTask(void const *pvParameters);
 

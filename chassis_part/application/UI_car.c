@@ -90,8 +90,8 @@ int car_draw_head_line(car_handle *self, uint8_t operate) {
 
 int car_draw_body(car_handle *self, uint8_t operate) {
 
-    double s = sin(self->body_degree);
-    double c = cos(self->body_degree);
+    double s = sin(brad);
+    double c = cos(brad);
 
     int Ax = (int) (s * basic_cfg.body_half_length - c * basic_cfg.body_half_width);
     int Ay = (int) (c * basic_cfg.body_half_length + s * basic_cfg.body_half_width);
@@ -111,11 +111,11 @@ int car_draw_body(car_handle *self, uint8_t operate) {
               basic_cfg.central_y + By, basic_cfg.central_x + Ax, basic_cfg.central_y - Ay);
     // CD; D(-Bx, -By)
     Line_Draw(&self->body_back_data, basic_cfg.body_name_back, operate, basic_cfg.body_layer,
-              basic_cfg.normal_colour_code, basic_cfg.drawing_width, basic_cfg.central_x - Ax, basic_cfg.central_y + Ay,
+              get_colour(back_armor_showing_attacked), basic_cfg.drawing_width, basic_cfg.central_x - Ax, basic_cfg.central_y + Ay,
               basic_cfg.central_x - Bx, basic_cfg.central_y + By);
     // DA
     Line_Draw(&self->body_right_data, basic_cfg.body_name_right, operate, basic_cfg.body_layer,
-              basic_cfg.normal_colour_code, basic_cfg.drawing_width, basic_cfg.central_x + Bx, basic_cfg.central_y - By,
+              get_colour(left_armor_showing_attacked), basic_cfg.drawing_width, basic_cfg.central_x + Bx, basic_cfg.central_y - By,
               basic_cfg.central_x - Ax, basic_cfg.central_y + Ay);
     // CE; E(Gx + R * sin, Gy - R * cos)
     Line_Draw(&self->rear_left_data, basic_cfg.rear_name_left, operate, basic_cfg.body_layer,
@@ -143,7 +143,7 @@ int car_rotate_head(car_handle *self, uint16_t degree) {
     return 0;
 }
 
-int car_rotate_body(car_handle *self, fp32 degree) {
+int car_rotate_body(car_handle *self, uint16_t degree) {
     if (self->body_degree != degree) {
         self->body_degree = degree;
         car_draw_body(self, UI_Graph_Change);
@@ -202,7 +202,7 @@ int car_front_armor_showing_attacked(car_handle *self, uint8_t attacked) {
         self->front_armor_showing_attacked = attacked;
         Line_Draw(&self->body_front_data, basic_cfg.body_name_front, UI_Graph_Change, basic_cfg.body_layer,
                   get_colour(front_armor_showing_attacked), basic_cfg.drawing_width, basic_cfg.central_x + Ax,
-                  basic_cfg.central_y - Ay, basic_cfg.central_x - Bx, basic_cfg.central_y + By);
+                  basic_cfg.central_y - Ay, basic_cfg.central_x + Bx, basic_cfg.central_y - By);
         UI_ReFresh(1, self->body_front_data);
     }
     return 0;
