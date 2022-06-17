@@ -27,4 +27,6 @@ void UI_label_static();
 
 void UI_label_change();
 
+void UI_label_cache_reset();
+
 #endif

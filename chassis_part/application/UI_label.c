@@ -45,50 +45,26 @@ void label_draw(uint8_t optional) {
     u8_temp = ui.ui_gimbal_data->shoot_mode == 2;
     if (u8_temp != ui_cache_trigger_state) {
         ui_cache_trigger_state = u8_temp;
-        switch (ui_cache_trigger_state) {
-            case 0:  // OFF
-                memset(&vision_0, 0, sizeof(vision_0));
-                Char_Draw(&vision_0, "203", optional, 1, UI_Color_Yellow, 15, 3, 4, 280, 860, "OFF");
-                Char_ReFresh(vision_0);
-                break;
-            case 1:  // ON
-                memset(&vision_0, 0, sizeof(vision_0));
-                Char_Draw(&vision_0, "203", optional, 1, UI_Color_Yellow, 15, 2, 4, 280, 860, "ON");
-                Char_ReFresh(vision_0);
-                break;
-            case 3:  // 离线
-                memset(&vision_0, 0, sizeof(vision_0));
-                Char_Draw(&vision_0, "203", optional, 1, UI_Color_Yellow, 15, 8, 4, 280, 860, "off-line");
-                Char_ReFresh(vision_0);
-                break;
-            default:  // 理论上不会遇到
-                break;
+        memset(&vision_0, 0, sizeof(vision_0));
+        if (ui_cache_trigger_state) {  // ON
+            Char_Draw(&vision_0, "203", optional, 1, UI_Color_Yellow, 15, 2, 4, 280, 860, "ON");
+        } else {  // OFF
+            Char_Draw(&vision_0, "203", optional, 1, UI_Color_Yellow, 15, 3, 4, 280, 860, "OFF");
         }
+        Char_ReFresh(vision_0);
     }
 
     // !Form: 摩擦轮
     u8_temp = ui.ui_gimbal_data->shoot_mode != 0;
     if (u8_temp != ui_cache_fric_state) {
-        ui_cache_trigger_state = u8_temp;
-        switch (ui_cache_fric_state) {
-            case 0:  // OFF
-                memset(&vision_1, 0, sizeof(vision_1));
-                Char_Draw(&vision_1, "204", optional, 1, UI_Color_Yellow, 15, 3, 4, 280, 830, "OFF");
-                Char_ReFresh(vision_1);
-                break;
-            case 1:  // ON
-                memset(&vision_1, 0, sizeof(vision_1));
-                Char_Draw(&vision_1, "204", optional, 1, UI_Color_Yellow, 15, 2, 4, 280, 830, "ON");
-                Char_ReFresh(vision_1);
-                break;
-            case 3:  // 离线
-                memset(&vision_1, 0, sizeof(vision_1));
-                Char_Draw(&vision_1, "204", optional, 1, UI_Color_Yellow, 15, 8, 4, 280, 830, "off-line");
-                Char_ReFresh(vision_1);
-                break;
-            default:  // 理论上不会遇到
-                break;
+        ui_cache_fric_state = u8_temp;
+        memset(&vision_1, 0, sizeof(vision_1));
+        if (ui_cache_fric_state) {
+            Char_Draw(&vision_1, "204", optional, 1, UI_Color_Yellow, 15, 2, 4, 280, 830, "ON");
+        } else {  // OFF
+            Char_Draw(&vision_1, "204", optional, 1, UI_Color_Yellow, 15, 3, 4, 280, 830, "OFF");
         }
+        Char_ReFresh(vision_1);
     }
 
     //  !Form: Pitch轴数据
@@ -98,7 +74,7 @@ void label_draw(uint8_t optional) {
         char pitch_angle_value[12];
         String_Data CH_PITCH_DATA;
         memset(&CH_PITCH_DATA, 0, sizeof(CH_PITCH_DATA));
-        sprintf(pitch_angle_value, "%.3f", fp32_temp);
+        sprintf(pitch_angle_value, "%.1f", fp32_temp);
         Char_Draw(&CH_PITCH_DATA, "022", optional, 8, UI_Color_Yellow, 15, 6, 4, 280, 800, &pitch_angle_value[0]);
         Char_ReFresh(CH_PITCH_DATA);
     }
@@ -107,15 +83,13 @@ void label_draw(uint8_t optional) {
     u8_temp = ui.ui_gimbal_data->swing_flag;
     if (u8_temp != ui_cache_spin_state) {
         ui_cache_spin_state = u8_temp;
+        memset(&vision_3, 0, sizeof(vision_3));
         if (ui_cache_spin_state == 1) {  // 小陀螺启动
-            memset(&vision_3, 0, sizeof(vision_3));
             Char_Draw(&vision_3, "201", optional, 1, UI_Color_Yellow, 15, 2, 4, 280, 770, "ON");
-            Char_ReFresh(vision_3);
         } else {
-            memset(&vision_3, 0, sizeof(vision_3));
             Char_Draw(&vision_3, "201", optional, 1, UI_Color_Yellow, 15, 3, 4, 280, 770, "OFF");
-            Char_ReFresh(vision_3);
         }
+        Char_ReFresh(vision_3);
     }
 
     // !Form: 电容显示
@@ -125,10 +99,10 @@ void label_draw(uint8_t optional) {
         ui_cache_cap_state = fp32_temp;
         memset(&vision_3, 0, sizeof(vision_3));
         memset(string, 0, sizeof(char) * 8);
-        sprintf(string, "%.3f%%", fabsf(ui_cache_cap_state * 100));
+        sprintf(string, "%d", abs((int) (ui_cache_cap_state * 100)));
         Char_Draw(&vision_3, "205", optional, 1,
                   ui_cache_cap_state > 0 ? UI_Color_Cyan : UI_Color_Purplish_red,
-                  28, 8, 4, 910, 200, string);
+                  28, 3, 4, 910, 200, string);
         Char_ReFresh(vision_3);
     }
 }
@@ -160,6 +134,8 @@ void UI_label_static() {
     ui.ui_robot_hurt = get_hurt_point();
     ui.ui_robot_status = get_robot_status_point();
 
+    UI_label_cache_reset();
+
     label_draw(UI_Graph_ADD);
 }
 
@@ -167,4 +143,13 @@ void UI_label_static() {
 //状态更新
 void UI_label_change() {
     label_draw(UI_Graph_Change);
+}
+
+
+void UI_label_cache_reset() {
+    ui_cache_cap_state = UINT8_MAX;
+    ui_cache_trigger_state = UINT8_MAX;
+    ui_cache_pitch_angle = UINT8_MAX;
+    ui_cache_fric_state = UINT8_MAX;
+    ui_cache_spin_state = UINT8_MAX;
 }
