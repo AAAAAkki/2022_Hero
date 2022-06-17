@@ -114,6 +114,7 @@ typedef enum
     SHOOT_STOP = 0,
     SHOOT_READY,
 		SHOOT_BULLET,
+		SHOOT_ZERO_FORCE,
 		SHOOT_CONTINUE_BULLET,
 } shoot_mode_e;
 

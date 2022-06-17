@@ -83,7 +83,7 @@ void shoot_init(void)
 		static const fp32 Trigger_ecd_reverse_pid[3] = {TRIIGER_ECD_REVERSE_PID_KP, TRIIGER_ECD_REVERSE_PID_KI, TRIIGER_ECD_REVERSE_PID_KD};
     static const fp32 Fric_speed_pid0[3] = {40, 0.3, 0};
 		static const fp32 Fric_speed_pid1[3] = {40, 0.3, 0};
-    shoot_control.shoot_mode = SHOOT_STOP;
+    shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
     //遥控器指针
     shoot_control.shoot_rc = get_remote_control_point();
     shoot_control.shoot_state = get_robot_status_point();
@@ -128,10 +128,6 @@ int16_t shoot_control_loop(void)
 
     shoot_set_mode();        //设置状态机
     shoot_feedback_update(); //更新数据
-//		trigger_pid_select();
-//		if(shoot_control.trigger_high_speed)
-//				trigger_speed = FASTER_TRIGGER_SPEED;
-//		high speed shoot mode
 		
 		//trigger set
     if (shoot_control.shoot_mode == SHOOT_STOP)
@@ -145,6 +141,8 @@ int16_t shoot_control_loop(void)
 				else
 						shoot_control.given_current = 0;
     }
+		else if(shoot_control.shoot_mode == SHOOT_ZERO_FORCE)
+					shoot_control.given_current = 0;
 		else if (shoot_control.shoot_mode == SHOOT_READY)
     {
         //设置拨弹轮的速度
@@ -159,7 +157,7 @@ int16_t shoot_control_loop(void)
     }
     
 		//fric set
-    if (shoot_control.shoot_mode == SHOOT_STOP)
+    if (shoot_control.shoot_mode == SHOOT_STOP||shoot_control.shoot_mode == SHOOT_ZERO_FORCE)
     {
 				shoot_laser_off();
         //摩擦轮需要一个个斜波开启，不能同时直接开启，否则可能电机不转
@@ -203,22 +201,22 @@ static int8_t last_s = RC_SW_UP;
     static uint8_t fric_state = 0;
     static uint16_t press_time = 0;
     //????, ????,????
-    if ((switch_is_up(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && !switch_is_up(last_s) && shoot_control.shoot_mode == SHOOT_STOP))
+    if ((switch_is_up(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && !switch_is_up(last_s) && (shoot_control.shoot_mode == SHOOT_STOP || shoot_control.shoot_mode == SHOOT_ZERO_FORCE)))
     {
         shoot_control.shoot_mode = SHOOT_READY;
     }
-    else if ((switch_is_up(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && !switch_is_up(last_s) && shoot_control.shoot_mode != SHOOT_STOP))
+    else if ((switch_is_up(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && !switch_is_up(last_s) && shoot_control.shoot_mode != SHOOT_STOP && shoot_control.shoot_mode != SHOOT_ZERO_FORCE))
     {
         shoot_control.shoot_mode = SHOOT_STOP;
     }
 
     //????, ???????????
-    if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_rc->key.v & SHOOT_ON_KEYBOARD) && shoot_control.shoot_mode == SHOOT_STOP)
+    if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_rc->key.v & SHOOT_ON_KEYBOARD) && (shoot_control.shoot_mode == SHOOT_STOP || shoot_control.shoot_mode == SHOOT_ZERO_FORCE))
     {
         shoot_control.shoot_mode = SHOOT_READY;
     }
     //????, ???????????
-    else if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_rc->key.v & SHOOT_OFF_KEYBOARD) && shoot_control.shoot_mode != SHOOT_STOP)
+    else if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_rc->key.v & SHOOT_OFF_KEYBOARD) && shoot_control.shoot_mode != SHOOT_STOP && shoot_control.shoot_mode != SHOOT_ZERO_FORCE)
     {
         shoot_control.shoot_mode = SHOOT_STOP;
     }
@@ -259,7 +257,7 @@ static int8_t last_s = RC_SW_UP;
     //??????? ????,?????
     if (gimbal_cmd_to_shoot_stop())
     {
-        shoot_control.shoot_mode = SHOOT_STOP;
+        shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
     }
 
     last_s = shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL];
@@ -309,7 +307,7 @@ static void shoot_feedback_update(void)
     }
 		
 		
-		if(shoot_control.shoot_mode==SHOOT_STOP)
+		if(shoot_control.shoot_mode==SHOOT_ZERO_FORCE)
 		{
 				shoot_control.sum_ecd_set=shoot_control.sum_ecd;
 		}
