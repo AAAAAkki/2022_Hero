@@ -33,23 +33,13 @@
 #define LASER_FIFO_BUF_NUM 32
 #define LASER_FIFO_BUF_LEN 32
 
-
+#define AMMOG 9.7803f //重力加速度
 #define AMMO1ONE 1.0f  //1
 #define AMMOHUNDRED 100.0f  //100
 #define AMMOTHOUSAND 1000.0f //1000
-#define AMMO180 180.0f //180
 #define AMMOLEVEL 30.0f //水平
 #define AMMOPI 3.14159265358979f //Π
-#define AMMOgo 9.80665f //标准重力加速度
-#define AMMOR 6371.393f //地球半径
-
-
-#define AMMOh 39.0f  //现场海拔
-#define AMMFY1 31.0f //现场纬度（角度值，单位为度）
-#define AMMFY2 40.0f //现场纬度（角度值，单位为分）
-#define AMMFY3 57.0f //现场纬度（角度值，单位为秒）
-#define p_t    1.0015f//现场气压（*10^5帕）
-#define T_t    25.0f  //现场温度（摄氏度）
+#define AMMO180 180.0f //180
 
 
 //180
@@ -91,14 +81,18 @@
 
 typedef struct  
 {	
+ float p_t;//现场气压
+ float T_t;//现场温度
  float row;//空气密度
  float m;//子弹质量
  float D;//子弹直径
  float area;//面积计算
  float k;//结果
  int Choose;
- float g;//重力加速度
-	
+ uint8_t rxbuff[9];
+ uint16_t dist;
+ uint16_t strength;
+ uint16_t temp;
 }trajecyory_constant;
 
 typedef struct
