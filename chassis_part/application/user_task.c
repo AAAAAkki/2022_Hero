@@ -144,7 +144,7 @@ void UI_car_static() {
 }
 
 void UI_car_change() {
-    car_rotate_body(&car, ui.ui_gimbal_data->yaw_relative_angel);
+    car_rotate_body(&car, (uint16_t) (ui.ui_gimbal_data->yaw_relative_angel + 180));
 //    car_front_armor_showing_attacked(&car, get_front_amour_attacked());
 //    car_back_armor_showing_attacked(&car, get_back_amour_attackek());
 //    car_left_armor_showing_attacked(&car, get_left_amour_attacked());

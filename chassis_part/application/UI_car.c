@@ -90,8 +90,8 @@ int car_draw_head_line(car_handle *self, uint8_t operate) {
 
 int car_draw_body(car_handle *self, uint8_t operate) {
 
-    double s = sin(self->body_degree);
-    double c = cos(self->body_degree);
+    double s = sin(brad);
+    double c = cos(brad);
 
     int Ax = (int) (s * basic_cfg.body_half_length - c * basic_cfg.body_half_width);
     int Ay = (int) (c * basic_cfg.body_half_length + s * basic_cfg.body_half_width);
@@ -143,7 +143,7 @@ int car_rotate_head(car_handle *self, uint16_t degree) {
     return 0;
 }
 
-int car_rotate_body(car_handle *self, fp32 degree) {
+int car_rotate_body(car_handle *self, uint16_t degree) {
     if (self->body_degree != degree) {
         self->body_degree = degree;
         car_draw_body(self, UI_Graph_Change);
