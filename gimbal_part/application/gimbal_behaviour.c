@@ -817,7 +817,14 @@ static void 	gimbal_LASER_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimb
 		pitch_laser = pitch_laser>2000? 2000:pitch_laser;
 		pitch_laser = pitch_laser<1000? 1000:pitch_laser;
 		gimbal_control_set->laser_shoot_control.Pwm_L1 = pitch_laser;
-    Angel_approx(&gimbal_control_set->laser_shoot_control.l1_data,&gimbal_control_set->laser_shoot_control.l1_iteration,&gimbal_control_set->laser_shoot_control.constant);
+		if(pitch_laser>1500){
+				gimbal_control_set->laser_shoot_control.Pwm_L1 = pitch_laser;
+				Angel_approx(&gimbal_control_set->laser_shoot_control.l1_data,&gimbal_control_set->laser_shoot_control.l1_iteration,&gimbal_control_set->laser_shoot_control.constant);
+		}
+		else if(pitch_laser<1500){
+				*pitch = pitch_channel * PITCH_RC_SEN + gimbal_control_set->gimbal_rc_ctrl->mouse.y * PITCH_MOUSE_SEN;
+		}
+		
 //		pitch_mid = pitch_channel * PITCH_RC_SEN + gimbal_control_set->gimbal_rc_ctrl->mouse.y * PITCH_MOUSE_SEN;
 //		pitch control steering motor
 		
