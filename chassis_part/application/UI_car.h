@@ -64,6 +64,10 @@ typedef struct {
 } car_handle;
 
 
+uint8_t ui_armors_state[4] = {0, 0, 0, 0};   // 顺序是前、右、后、左
+
+
+
 int car_init_by_handle(car_handle *);
 int car_rotate_head(car_handle *, uint16_t);
 int car_rotate_body(car_handle *, uint16_t);

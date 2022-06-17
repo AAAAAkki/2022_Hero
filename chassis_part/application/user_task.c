@@ -151,10 +151,15 @@ void UI_car_static() {
 
 void UI_car_change() {
     car_rotate_body(&car, (uint16_t) (ui.ui_gimbal_data->yaw_relative_angel + 180));
-//    car_front_armor_showing_attacked(&car, get_front_amour_attacked());
-//    car_back_armor_showing_attacked(&car, get_back_amour_attackek());
-//    car_left_armor_showing_attacked(&car, get_left_amour_attacked());
-//    car_right_armor_showing_attacked(&car, get_right_amour_attackek());
+    // 来自步兵代码:
+    //     前装甲板显示正常
+    //     后装甲板显示正常
+    //     左装甲板是右装甲板
+    //     右装甲板是左装甲板
+    car_front_armor_showing_attacked(&car, ui_armors_state[0]);
+    car_back_armor_showing_attacked(&car, ui_armors_state[2]);
+    car_left_armor_showing_attacked(&car, ui_armors_state[3]);
+    car_right_armor_showing_attacked(&car, ui_armors_state[1]);
 }
 
 void UI_send_init() {
