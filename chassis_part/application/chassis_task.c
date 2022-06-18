@@ -258,7 +258,7 @@ static void chassis_init(chassis_move_t *chassis_move_init)
     PID_init(&chassis_move_init->motor_speed_pid[i], PID_POSITION, motor_speed_pid, M3505_MOTOR_SPEED_PID_MAX_OUT, M3505_MOTOR_SPEED_PID_MAX_IOUT);
   }
 	PID_init(&chassis_move_init->buffer_pid,PID_POSITION,chassis_buffer_pid,20,0);
-  PID_init(&chassis_move_init->cap_voltage_pid, PID_POSITION, voltage_pid, 30000, 12000);
+  PID_init(&chassis_move_init->cap_voltage_pid, PID_POSITION, voltage_pid, 20000, 8000);
 	//initialize angle PID
   //³õÊ¼»¯½Ç¶ÈPID
   PID_init(&chassis_move_init->chassis_angle_pid, PID_POSITION, chassis_yaw_pid, CHASSIS_FOLLOW_GIMBAL_PID_MAX_OUT, CHASSIS_FOLLOW_GIMBAL_PID_MAX_IOUT);

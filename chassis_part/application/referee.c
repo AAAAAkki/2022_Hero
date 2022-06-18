@@ -7,6 +7,7 @@
 #include "UI_car.h"
 
 extern car_handle car;
+extern uint8_t ui_armors_state[4];
 
 
 frame_header_struct_t referee_receive_header;
