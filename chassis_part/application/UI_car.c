@@ -19,6 +19,8 @@
 #define brad PI * self->body_degree / 180.0
 #define get_colour(attr) self->attr ? basic_cfg.attacked_colour_code : basic_cfg.normal_colour_code
 
+uint8_t ui_armors_state[4] = {0, 0, 0, 0};   // 顺序是前、右、后、左
+
 int car_init_head(car_handle *);
 
 int car_draw_head_line(car_handle *, uint8_t);

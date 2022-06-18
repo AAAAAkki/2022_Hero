@@ -41,6 +41,7 @@ void UI_car_change();
 extern uint16_t Robot_number;
 extern uint16_t Robot_cline_number;
 extern UI_show_t ui;
+extern uint8_t ui_armors_state[];
 
 
 car_handle car;
