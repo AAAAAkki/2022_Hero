@@ -46,8 +46,6 @@ extern uint8_t ui_armors_state[];
 
 car_handle car;
 
-progress_bar_data bar;
-
 id_data_t id_data;
 
 Graph_Data line_1;
@@ -69,27 +67,19 @@ void UI_car_static(void);
 
 void UserTask(void const *pvParameters) {
     static uint16_t time = 0;
-    int16_t batter_percentage = 0;
 
-    memset(&bar, 0, sizeof(bar));
     memset(&car, 0, sizeof(car));
 
     UI_send_init();
     UI_label_static();
     UI_car_init();
-    UI_ProgressBar_static(&bar);
     UI_car_static();
     UI_aimline();
     while (1) {
-//        batter_percentage = get_cap_percent();
-//        bar.progress_bar_data_change = (batter_percentage > 0) ? batter_percentage : 0;
-
-
         // 刷新
         time = (time + 1) % 1000;
         if (time == 0) {
             UI_label_static();  // 重新加载数据表格
-            UI_ProgressBar_static(&bar);  // 重新加载超级电容显示
             UI_car_static();
         } else if (time % 50 == 0) {
             UI_label_cache_reset();
