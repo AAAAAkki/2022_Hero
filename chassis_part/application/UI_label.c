@@ -24,6 +24,13 @@
 #include "CAN_receive.h"
 
 
+uint8_t get_colour() {
+    static uint8_t colour = 0;
+    colour = (colour + 1) % 9;
+    return colour;
+}
+
+
 UI_show_t ui;
 
 String_Data image_0, image_1, image_2, image_3; // 这是信息表的提示栏
@@ -80,7 +87,7 @@ void label_draw(uint8_t optional) {
     }
 
     // !Form: 小陀螺状态
-    u8_temp = ui.ui_gimbal_data->swing_flag;
+    u8_temp = ui.ui_gimbal_data->swing_flag;  // FIXME: 有时候刷新错误
     if (u8_temp != ui_cache_spin_state) {
         ui_cache_spin_state = u8_temp;
         memset(&vision_3, 0, sizeof(vision_3));

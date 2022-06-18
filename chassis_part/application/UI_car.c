@@ -113,7 +113,7 @@ int car_draw_body(car_handle *self, uint8_t operate) {
               basic_cfg.central_y + By, basic_cfg.central_x + Ax, basic_cfg.central_y - Ay);
     // CD; D(-Bx, -By)
     Line_Draw(&self->body_back_data, basic_cfg.body_name_back, operate, basic_cfg.body_layer,
-              get_colour(back_armor_showing_attacked), basic_cfg.drawing_width, basic_cfg.central_x - Ax, basic_cfg.central_y + Ay,
+              basic_cfg.normal_colour_code, basic_cfg.drawing_width, basic_cfg.central_x - Ax, basic_cfg.central_y + Ay,
               basic_cfg.central_x - Bx, basic_cfg.central_y + By);
     // DA
     Line_Draw(&self->body_right_data, basic_cfg.body_name_right, operate, basic_cfg.body_layer,
@@ -155,7 +155,7 @@ int car_rotate_body(car_handle *self, uint16_t degree) {
 
 int car_left_armor_showing_attacked(car_handle *self, uint8_t attacked) {
     attacked = get_the_attacked_setting(self, attacked, 4);
-    if (self->left_armor_showing_attacked != attacked) {
+    if (self->left_armor_showing_attacked != attacked || 1) {
         double s = sin(brad);
         double c = cos(brad);
 
@@ -174,7 +174,7 @@ int car_left_armor_showing_attacked(car_handle *self, uint8_t attacked) {
 
 int car_right_armor_showing_attacked(car_handle *self, uint8_t attacked) {
     attacked = get_the_attacked_setting(self, attacked, 2);
-    if (self->right_armor_showing_attacked != attacked) {
+    if (self->right_armor_showing_attacked != attacked || 1) {
         double s = sin(brad);
         double c = cos(brad);
 
@@ -193,7 +193,7 @@ int car_right_armor_showing_attacked(car_handle *self, uint8_t attacked) {
 
 int car_front_armor_showing_attacked(car_handle *self, uint8_t attacked) {
     attacked = get_the_attacked_setting(self, attacked, 1);
-    if (self->front_armor_showing_attacked != attacked) {
+    if (self->front_armor_showing_attacked != attacked || 1) {
         double s = sin(brad);
         double c = cos(brad);
 
@@ -212,7 +212,7 @@ int car_front_armor_showing_attacked(car_handle *self, uint8_t attacked) {
 
 int car_back_armor_showing_attacked(car_handle *self, uint8_t attacked) {
     attacked = get_the_attacked_setting(self, attacked, 3);
-    if (self->back_armor_showing_attacked != attacked) {
+    if (self->back_armor_showing_attacked != attacked || 1) {
         double s = sin(brad);
         double c = cos(brad);
 

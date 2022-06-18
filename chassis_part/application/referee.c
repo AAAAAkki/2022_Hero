@@ -135,21 +135,25 @@ void referee_data_solve(uint8_t *frame) {
                 uint8_t armor_id = robot_hurt_t.armor_type;
                 switch (armor_id) {
                     case 0:
+                        // ÓÒ×°¼×°å
+                        car_reset_left_armor_timer(&car);
+                        memset(ui_armors_state, 0, 4);
+                        ui_armors_state[1] = 1;
+                        break;
+                    case 1:
+                        // Ç°×°¼×°å
                         car_reset_front_armor_timer(&car);
                         memset(ui_armors_state, 0, 4);
                         ui_armors_state[0] = 1;
                         break;
-                    case 1:
-                        car_reset_left_armor_timer(&car);
+                    case 2:
+                        // ×ó×°¼×°å
+                        car_reset_right_armor_timer(&car);
                         memset(ui_armors_state, 0, 4);
                         ui_armors_state[3] = 1;
                         break;
-                    case 2:
-                        car_reset_right_armor_timer(&car);
-                        memset(ui_armors_state, 0, 4);
-                        ui_armors_state[1] = 1;
-                        break;
                     case 3:
+                        // ºó×°¼×°å
                         car_reset_back_armor_timer(&car);
                         memset(ui_armors_state, 0, 4);
                         ui_armors_state[2] = 1;

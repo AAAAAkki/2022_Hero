@@ -144,8 +144,8 @@ void UI_car_change() {
     //     ÓÒ×°¼×°åÊÇ×ó×°¼×°å
     car_front_armor_showing_attacked(&car, ui_armors_state[0]);
     car_back_armor_showing_attacked(&car, ui_armors_state[2]);
-    car_left_armor_showing_attacked(&car, ui_armors_state[3]);
-    car_right_armor_showing_attacked(&car, ui_armors_state[1]);
+    car_left_armor_showing_attacked(&car, ui_armors_state[1]);
+    car_right_armor_showing_attacked(&car, ui_armors_state[3]);
 }
 
 void UI_send_init() {
