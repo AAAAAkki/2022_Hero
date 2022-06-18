@@ -134,12 +134,10 @@ int16_t shoot_control_loop(void)
     {
         //设置拨弹轮的速度
         shoot_control.speed_set = 0.0f;
-				if(gimbal_behaviour != GIMBAL_ZERO_FORCE){
+				
 						PID_calc(&shoot_control.trigger_motor_pid, shoot_control.speed, shoot_control.speed_set);
 						shoot_control.given_current = (int16_t)(shoot_control.trigger_motor_pid.out);
-				}
-				else
-						shoot_control.given_current = 0;
+				
     }
 		else if(shoot_control.shoot_mode == SHOOT_ZERO_FORCE)
 					shoot_control.given_current = 0;
@@ -201,7 +199,11 @@ static int8_t last_s = RC_SW_UP;
     static uint8_t fric_state = 0;
     static uint16_t press_time = 0;
     //????, ????,????
-    if ((switch_is_up(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && !switch_is_up(last_s) && (shoot_control.shoot_mode == SHOOT_STOP || shoot_control.shoot_mode == SHOOT_ZERO_FORCE)))
+		if(gimbal_behaviour == GIMBAL_ZERO_FORCE)	
+				shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
+		else if(shoot_control.shoot_mode == SHOOT_ZERO_FORCE)
+				shoot_control.shoot_mode = SHOOT_STOP;
+    if ((switch_is_up(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && !switch_is_up(last_s) && shoot_control.shoot_mode == SHOOT_STOP))
     {
         shoot_control.shoot_mode = SHOOT_READY;
     }

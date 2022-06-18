@@ -23,6 +23,7 @@
 #include "gimbal_task.h"
 
 #define SERVO_MIN_PWM 1000
+#define SERVO_MID_PWM 1500
 #define SERVO_MAX_PWM 2000
 
 #define SERVO_INFAN3_OPEN 2150
@@ -61,8 +62,8 @@ void servo_task(void const *argument)
 {
     servo_rc = get_remote_control_point();
 
-    uint16_t time = 0;
-    pwm_set = SERVO_MIN_PWM;
+    pwm_set = SERVO_MID_PWM;
+		servo_pwm_set(pwm_set);
     while (1)
     {
       
