@@ -99,11 +99,6 @@ void UserTask(void const *pvParameters) {
         }
         UI_car_change();
 
-        memset(&line_1, 0, sizeof(line_1));
-        Line_Draw(&line_1, "901", UI_Graph_Del, 1, UI_Color_Yellow, 2, 930, 583, 990, 583);
-        UI_ReFresh(1, line_1);
-
-        UI_aimline();
         robot_id_select(); //保证热插拔，每次任务都选择一次ID
 
         vTaskDelay(1);
