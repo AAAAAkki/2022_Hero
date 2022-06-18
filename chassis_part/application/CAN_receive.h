@@ -67,6 +67,7 @@ typedef struct
 		fp32 pitch_angel_degree;
 		fp32 yaw_absolute_angel;
 		fp32 yaw_relative_angel;  // สำฮช body_angel
+		uint8_t scope_state;		//1-scope_on 0-scope_off
 }gimbal_data_t;
 
 //rm motor data
@@ -207,8 +208,6 @@ extern const motor_measure_t *get_fric_motor_measure_point(uint8_t i);
  extern void CAN_CMD_FRIC(int16_t motor1, int16_t motor2);
 void CAN_CMD_CAP(float power, float buffer);
 
-//feedback not necessary
-//void CAN_motor_feedback_send(int16_t chassis_motor1, int16_t chassis_motor2, int16_t chassis_motor3, int16_t chassis_motor4);
 
 void CAN_heat_data_send(uint16_t shooter_heat, uint16_t shoot_heat_limit, uint8_t power_state);
 

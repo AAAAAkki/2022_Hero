@@ -58,7 +58,7 @@ motor data,  0:chassis motor1 3508;1:chassis motor3 3508;2:chassis motor3 3508;3
 4:yaw云台电机 6020电机; 5:pitch云台电机 6020电机; 6:拨弹电机 2006电机 7:左摩擦轮电机 3508 8：右摩擦轮电机 3508*/
 motor_measure_t motor_chassis[9];
 cap_measure_t cap_measure;
-gimbal_data_t gimbal_trans={{0,0,0},0,0};
+gimbal_data_t gimbal_trans={{0,0,0},0,0,0};
 static CAN_TxHeaderTypeDef gimbal_tx_message;
 static uint8_t gimbal_can_send_data[8];
 static CAN_TxHeaderTypeDef chassis_tx_message;
@@ -115,7 +115,8 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 				temp[2]=(int16_t)(rx_data[4]<<8|rx_data[5]);
 				temp[3]=(int16_t)(rx_data[6]<<8|rx_data[7]);
 				gimbal_trans.shoot_mode=rx_data[0];
-				gimbal_trans.swing_flag=rx_data[1];
+				gimbal_trans.swing_flag=rx_data[1]&0x01;
+				gimbal_trans.scope_state=rx_data[1]&0x02;
 				gimbal_trans.pitch_angel_degree=(fp32)temp[1]/100;
 				gimbal_trans.yaw_absolute_angel=(fp32)temp[2]/100;
 				gimbal_trans.yaw_relative_angel=(fp32)temp[3]/100;
@@ -436,7 +437,7 @@ void get_yaw_relative_angel(fp32 * yaw_relative){
 }
 
 void get_cap_proportion(fp32 *cap_proportion){
-		*cap_proportion = 0.0f;
+		*cap_proportion = (cap_measure.CapVot-16)/(24.0f-18.0f);
 }
 
 gimbal_data_t *get_gimbal_data(void){
