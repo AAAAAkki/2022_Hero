@@ -1,17 +1,16 @@
 
 #include "arm_math.h"
 #include "calculate.h"
-#include "shoot.h"
+#include "gimbal_task.h"
 //#include "remote_control.h"
 
 //extern RC_ctrl_t rc_ctrl;                 //声明遥控器储存结构体
-shoot_control_t shoot_pwm;
+extern gimbal_control_t gimbal_control;
 
 
-
-void init(trajecyory_constant *constant)
+void constant_init(trajecyory_constant *constant)
 {
-//	constant->Choose = rc_ctrl.rc.s[0];
+	constant->Choose = 2;
 	switch (constant->Choose)
 	{
 		case 1://小
@@ -36,11 +35,10 @@ void init(trajecyory_constant *constant)
 			break;
 	}
 
-  constant->row = 1.293f * (constant->p_t / constant->p_0) * (constant->T_0 / (constant->T_0 + constant->T_t));//空气密度计算
+  constant->row = 1.293f * (constant->p_t / p_0) * (T_0 / (T_0 + constant->T_t));		//空气密度计算
  	constant->area = PI * 0.25f * constant->D * constant->D;//受风面积
-	constant->k = 0.5f * constant->C * constant->area * constant->row/constant->m;//计算常数k
+	constant->k = 0.5f * C_0 * constant->area * constant->row/constant->m;//计算常数k
 }
-
 
 
 void Angel_approx(L1_DATA_T *L1_Data, L1_ITERATION_T *L1_Iteration,trajecyory_constant *constant)
@@ -58,7 +56,8 @@ void Angel_approx(L1_DATA_T *L1_Data, L1_ITERATION_T *L1_Iteration,trajecyory_co
   float AmmoMpK_negative = -AmmoM / AmmoK;                     //-m/k
   float Ammo1One = 1.0f;
   float OneRad = ONERAD;
-	L1_Data->L1_Angel=(((shoot_pwm.Pwm_L1-5.0f*AMMOHUNDRED)/(2.0f*AMMOTHOUSAND))*AMMO180)-AMMOLEVEL;
+	L1_Data->L1_Angel=(((gimbal_control.laser_shoot_control.Pwm_L1-AMMOTHOUSAND)/(2.0f*AMMOTHOUSAND))*AMMO180)-AMMOLEVEL;//gimbal_relative_angel missing?
+	
 //  float OneRad_e = 0.0174532f;
   float precision = 0.01f;
 	
@@ -96,7 +95,7 @@ void Angel_approx(L1_DATA_T *L1_Data, L1_ITERATION_T *L1_Iteration,trajecyory_co
   arm_mult_f32(&L1_Data->L1_Distance, &Cos_alpha, &Dx, 1);
   arm_mult_f32(&L1_Data->L1_Distance, &Sin_alpha, &Dy, 1);
 //  arm_add_f32(&Dy, &PIT_CORRECT, &Dy, 1); //修正距离
-//  L1_Data->L1_AmmoSpeed = robot_referee_status.shoot_data.bullet_speed_last;
+//  L1_Data->L1_AmmoSpeed = robot_referee_status.shoot_data.bullet_speed_last; set to 15.0?
   if (L1_Data->L1_AmmoSpeed <= 1)
   {
     L1_Data->L1_AmmoSpeed = 14.2f;
@@ -114,7 +113,7 @@ void Angel_approx(L1_DATA_T *L1_Data, L1_ITERATION_T *L1_Iteration,trajecyory_co
     theta[1] = PIp6;
   } //-15度时，定义域为-30 到 30度
 
-  do
+  while (L1_Iteration->TotalCalcu_Numbers < 15)
   {
     arm_mean_f32(theta, 2, &theta_mid); //确定新的运算核心
 
@@ -140,7 +139,7 @@ void Angel_approx(L1_DATA_T *L1_Data, L1_ITERATION_T *L1_Iteration,trajecyory_co
         arm_mult_f32(&theta_mid, &OneRad, &L1_Data->Caluculat_angel, 1); //角度用°表示
         arm_mult_f32(&AmmoMpK_negative, &exp6, &L1_Data->TOA, 1);        //弹道飞行时间计算
         L1_Iteration->Pfps++;
-			  shoot_pwm.Pwm_GB=(((L1_Data->Caluculat_angel+AMMOLEVEL)/AMMO180)*(2.0f*AMMOTHOUSAND))+5.0f*AMMOHUNDRED;	
+			  gimbal_control.laser_shoot_control.Pwm_GB=(L1_Data->Caluculat_angel+AMMOLEVEL);	//result. transform not need?
 
       L1_Iteration->TotalCalcu_last_numbers = L1_Iteration->TotalCalcu_Numbers;
       L1_Iteration->TotalCalcu_Numbers = 0;
@@ -156,7 +155,7 @@ void Angel_approx(L1_DATA_T *L1_Data, L1_ITERATION_T *L1_Iteration,trajecyory_co
     }
 
     L1_Iteration->TotalCalcu_Numbers++;
-  } while (L1_Iteration->TotalCalcu_Numbers < 15);
+  }
 
   L1_Iteration->TotalCalcu_last_numbers = L1_Iteration->TotalCalcu_Numbers;
   L1_Iteration->TotalCalcu_Numbers = 0;

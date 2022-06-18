@@ -9,16 +9,7 @@
 #include "shoot.h"
 #include "referee.h"
 #include "vision.h"
-typedef struct{
-	const RC_ctrl_t *ui_rc_ctrl;
-    gimbal_control_t *ui_gimbal_control;
-    chassis_move_t *ui_chassis_move;
-    shoot_control_t *ui_shoot_control;
-    ext_robot_hurt_t *ui_robot_hurt;
-    ext_game_robot_state_t *ui_robot_status;
-    vision_control_t *ui_vision;
 
-} UI_show_t;
 
 typedef struct
 {
@@ -27,7 +18,6 @@ typedef struct
 	uint16_t receiver_ID[6];
 } id_data_t;
 void UserTask(void const *pvParameters);
-
 
 
 #endif

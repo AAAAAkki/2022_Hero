@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/chassis_part/application/CAN_receive.c" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/chassis_part/application/CAN_receive.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/chassis_part/application/shoot.c" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/chassis_part/application/shoot.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/chassis_part/application/user_task.c" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/gimbal_part/application/shoot.c" charset="GBK" />
+    <file url="PROJECT" charset="GBK" />
+  </component>
+</project>

@@ -80,8 +80,8 @@
 #define TRIGGER_ANGLE_PID_KI        4.0f
 #define TRIGGER_ANGLE_PID_KD        25.0f
 
-#define TRIGGER_FAST_SPEED_PID_KP		400.0f
-#define TRIGGER_FAST_SPEED_PID_KI		7.5f
+#define TRIGGER_FAST_SPEED_PID_KP		440.0f
+#define TRIGGER_FAST_SPEED_PID_KI		7.8f
 #define TRIGGER_FAST_SPEED_PID_KD		65.0f
 
 #define TRIGGER_SLOW_SPEED_PID_KP		1150.0f
@@ -104,7 +104,7 @@
 #define FRIC_ANGLE_PID_KD 0.0f
 
 #define FRIC_PID_MAX_OUT 16000.0f
-#define FRIC_PID_MAX_IOUT 10000.0f
+#define FRIC_PID_MAX_IOUT 1000.0f
 
 
 #define SHOOT_HEAT_REMAIN_VALUE     80
@@ -158,8 +158,7 @@ typedef struct
     uint16_t heat_limit;
 			uint16_t heat;
     ext_game_robot_state_t *shoot_state;
-		uint8_t Pwm_L1;
-		uint8_t Pwm_GB;
+		
 } shoot_control_t;
 
 //由于射击和云台使用同一个can的id故也射击任务在云台任务中执行
@@ -167,4 +166,5 @@ extern void shoot_init(void);
 extern int16_t shoot_control_loop(void);
 shoot_control_t *get_shoot_point(void);
 void trigger_pid_select(void);
+uint8_t get_shoot_mode(void);
 #endif

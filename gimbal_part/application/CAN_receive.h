@@ -82,6 +82,7 @@ typedef struct
 		uint16_t shooter_heat0;
 		uint8_t bullet_type;
 		uint8_t bullet_freq;
+		uint8_t power_flag;
 		float bullet_speed;
 		uint16_t chassis_power_limit;
 } chassis_data_t;
@@ -210,7 +211,7 @@ void CAN_chassis_transfer(int16_t vx_set, int16_t vy_set, int16_t wz_set, uint16
 
 void get_motor_measure_ecd(motor_measure_t *motor_measure, uint8_t data[8]);
 
-void send_gimbal_motor_state(uint8_t shoot_mode, fp32 pitch_angel);//fric state, trigger state, pitch angel
+void send_gimbal_motor_state(uint8_t shoot_mode, uint8_t swing_flag, fp32 pitch_angel, fp32 yaw_absolute, fp32 yaw_relative);
 
 extern const motor_measure_t *get_scope_gimbal_motor_measure_point(void);
 

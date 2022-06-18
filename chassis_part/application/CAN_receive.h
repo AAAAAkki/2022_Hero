@@ -62,8 +62,11 @@ typedef struct
 {		
 		fp32 speed_set[3];
 		uint8_t chassis_mode;
-		uint8_t shoot_mode;
+		uint8_t shoot_mode;  // 射击模式: 0-摩擦轮、拨弹轮都不动; 1-摩擦轮动拨弹轮不动; 2-都动
+		uint8_t swing_flag;  // 1开小陀螺 0不开
 		fp32 pitch_angel_degree;
+		fp32 yaw_absolute_angel;
+		fp32 yaw_relative_angel;  // 视为 body_angel
 }gimbal_data_t;
 
 //rm motor data
@@ -207,10 +210,23 @@ void CAN_CMD_CAP(float power, float buffer);
 //feedback not necessary
 //void CAN_motor_feedback_send(int16_t chassis_motor1, int16_t chassis_motor2, int16_t chassis_motor3, int16_t chassis_motor4);
 
-void CAN_heat_data_send(uint16_t shooter_heat, uint16_t shoot_heat_limit, uint16_t chassis_power_limit);
+void CAN_heat_data_send(uint16_t shooter_heat, uint16_t shoot_heat_limit, uint8_t power_state);
 
 void CAN_shoot_data_send(uint8_t	bullet_type, uint8_t	bullet_freq, float	bullet_speed);
 
+void get_shoot_mode(uint8_t * shoot_mode);
+
+void get_swing_mode(uint8_t * swing_flag);
+
+void get_pitch_angel(fp32 * pitch_angel);
+
+void get_yaw_absolute_angel(fp32 * yaw_absolute);
+
+void get_yaw_relative_angel(fp32 * yaw_relative);
+
+void get_cap_proportion(fp32 *cap_proportion);
+
+gimbal_data_t *get_gimbal_data(void);
 /*Addtional Functions*/
-//void CAN_gimbal_transfer(uint8_t*data);
+
 #endif

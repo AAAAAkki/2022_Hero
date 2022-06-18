@@ -122,7 +122,6 @@ void referee_data_solve(uint8_t *frame)
         case POWER_HEAT_DATA_CMD_ID:
         {
             memcpy(&power_heat_data_t, frame + index, sizeof(power_heat_data_t));
-
 						CAN_heat_data_send(power_heat_data_t.shooter_id1_42mm_cooling_heat, robot_state.shooter_id1_42mm_cooling_limit, 
 															robot_state.chassis_power_limit);
 				}
@@ -187,17 +186,6 @@ uint8_t get_robot_id(void)
     return robot_state.robot_id;
 }
 
-void get_shoot_heat1_limit_and_heat0(uint16_t *heat0_limit, uint16_t *heat0)
-{
-    *heat0_limit = robot_state.shooter_id1_17mm_cooling_limit;
-    *heat0 = power_heat_data_t.shooter_id1_17mm_cooling_heat;
-}
-
-void get_shoot_heat2_limit_and_heat1(uint16_t *heat1_limit, uint16_t *heat1)
-{
-    *heat1_limit = robot_state.shooter_id2_17mm_cooling_limit;
-    *heat1 = power_heat_data_t.shooter_id2_17mm_cooling_heat;
-}
 ext_robot_hurt_t *get_hurt_point(void)
 {
     return &robot_hurt_t;
@@ -207,35 +195,13 @@ ext_game_robot_state_t *get_robot_status_point(void)
     return &robot_state;
 }
 
+void get_bullet_max_speed(uint16_t *max_bullet_speed)  // 弹速上限(用于瞄准线)
+{
+    *max_bullet_speed = robot_state.shooter_id1_42mm_speed_limit;
+}
+
 fp32 get_bullet_speed(void)
 {
-	if(robot_state.shooter_id1_17mm_speed_limit ==15)
-{
-return 13.8f;
-}
-if(robot_state.shooter_id1_17mm_speed_limit == 18)
-{
-return 16.0f;
-}
-if(robot_state.shooter_id1_17mm_speed_limit == 30)
-{
-return 26.0f;
-}else return 13.8;
 }
 
 /*Additional Function*/
-//void down_to_up_communication(ext_game_robot_state_t *bullet)
-//{
-//		uint8_t temp[2];
-//		temp[0]= bullet->shooter_id1_17mm_speed_limit;
-//		temp[1]= bullet->shooter_id1_42mm_speed_limit;
-//		CAN_gimbal_transfer(temp);
-//}
-
-//void down_to_top_communication(ext_game_robot_state_t*heat)
-//{
-//		uint8_t temp[4];
-//		temp[2]=heat->shooter_id1_17mm_cooling_limit;
-//		temp[3]=heat->shooter_id1_42mm_cooling_limit;
-//		CAN_gimbal_transfer(temp);		
-//}

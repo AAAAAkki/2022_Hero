@@ -81,7 +81,7 @@
 
 #include "gimbal_behaviour.h"
 #include "arm_math.h"
-//#include "calculate.h"
+#include "calculate.h"
 #include "bsp_buzzer.h"
 #include "detect_task.h"
 
@@ -93,6 +93,7 @@
 #define gimbal_warn_buzzer_off() buzzer_off()
 
 #define int_abs(x) ((x) > 0   (x) : (-x))
+
 /**
   * @brief          remote control dealline solve,because the value of rocker is not zero in middle place,
   * @param          input:the raw channel value 
@@ -276,6 +277,7 @@ static void gimbal_motionless_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *
 //��̨��Ϊ״̬��
 gimbal_behaviour_e gimbal_behaviour = GIMBAL_ZERO_FORCE;
 extern gimbal_control_t gimbal_control;
+extern chassis_data_t chassis_data_receive;
 
 /**
   * @brief          the function is called by gimbal_set_mode function in gimbal_task.c
@@ -316,7 +318,7 @@ void gimbal_behaviour_mode_set(gimbal_control_t *gimbal_mode_set)
         gimbal_mode_set->gimbal_yaw_motor.gimbal_motor_mode = GIMBAL_MOTOR_RAW;
         gimbal_mode_set->gimbal_pitch_motor.gimbal_motor_mode = GIMBAL_MOTOR_RAW;
     }
-    else if (gimbal_behaviour == GIMBAL_ABSOLUTE_ANGLE)
+    else if (gimbal_behaviour == GIMBAL_ABSOLUTE_ANGLE || gimbal_behaviour == GIMBAL_SHOOT_LASER)
     {
         gimbal_mode_set->gimbal_yaw_motor.gimbal_motor_mode = GIMBAL_MOTOR_GYRO;
         gimbal_mode_set->gimbal_pitch_motor.gimbal_motor_mode = GIMBAL_MOTOR_GYRO;
@@ -341,6 +343,7 @@ void gimbal_behaviour_mode_set(gimbal_control_t *gimbal_mode_set)
 //    }else{
 //        gimbal_mode_set->vision_mode = 0;
 //    }
+		
 }
 
 /**
@@ -395,6 +398,9 @@ void gimbal_behaviour_control_set(fp32 *add_yaw, fp32 *add_pitch, gimbal_control
         *add_yaw = 0;
         *add_pitch = 0;
     }
+		else if(gimbal_behaviour == GIMBAL_SHOOT_LASER){
+				gimbal_LASER_control(add_yaw, add_pitch, gimbal_control_set);
+		}
 }
 
 /**
@@ -532,6 +538,10 @@ static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set)
     {
         gimbal_behaviour = GIMBAL_ZERO_FORCE;
     }
+		
+		if(gimbal_mode_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_R){
+				gimbal_behaviour = GIMBAL_SHOOT_LASER;
+		}
 
     //enter init mode
     //�жϽ���init״̬��
@@ -543,6 +553,7 @@ static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set)
         }
         last_gimbal_behaviour = gimbal_behaviour;
     }
+
 }
 
 /**
@@ -718,7 +729,12 @@ static void gimbal_absolute_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control
     
 		//micro_control applied
 		key_micro_control(yaw, pitch, gimbal_control_set);
-
+		//set value with result of iteration
+		if(gimbal_control_set->laser_shoot_control.Pwm_GB<10){
+				*yaw = gimbal_control_set->laser_shoot_control.Pwm_GB;
+				gimbal_control_set->laser_shoot_control.Pwm_GB=10;//set to an impossible value
+		}
+				
 }
 
 /**
@@ -749,6 +765,7 @@ static void gimbal_relative_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control
 
     *yaw = yaw_channel * YAW_RC_SEN - gimbal_control_set->gimbal_rc_ctrl->mouse.x * YAW_MOUSE_SEN;
     *pitch = pitch_channel * PITCH_RC_SEN + gimbal_control_set->gimbal_rc_ctrl->mouse.y * PITCH_MOUSE_SEN;
+		
 }
 
 /**
@@ -790,21 +807,19 @@ static void 	gimbal_LASER_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimb
     }
 		
 		static int16_t yaw_channel = 0, pitch_channel = 0;
-		int16_t pitch_mid=0;
-		int16_t pitch_finish=0;
-		int16_t inish=0;
+		int16_t pitch_laser=0;
 
     rc_deadband_limit(gimbal_control_set->gimbal_rc_ctrl->rc.ch[YAW_CHANNEL], yaw_channel, RC_DEADBAND);
     rc_deadband_limit(gimbal_control_set->gimbal_rc_ctrl->rc.ch[PITCH_CHANNEL], pitch_channel, RC_DEADBAND);
 		
-		
-
     *yaw = yaw_channel * YAW_RC_SEN - gimbal_control_set->gimbal_rc_ctrl->mouse.x * YAW_MOUSE_SEN;
-    pitch_mid = pitch_channel * PITCH_RC_SEN + gimbal_control_set->gimbal_rc_ctrl->mouse.y * PITCH_MOUSE_SEN;
-		//Angel_approx(pitch_mid,pitch_finish);
-    *pitch=pitch_finish;
-		
-		key_micro_control(yaw, pitch, gimbal_control_set);
+		pitch_laser += (pitch_channel * PITCH_RC_SEN + gimbal_control_set->gimbal_rc_ctrl->mouse.y * PITCH_MOUSE_SEN);
+		pitch_laser = pitch_laser>2000? 2000:pitch_laser;
+		pitch_laser = pitch_laser<1000? 1000:pitch_laser;
+		gimbal_control_set->laser_shoot_control.Pwm_L1 = pitch_laser;
+    Angel_approx(&gimbal_control_set->laser_shoot_control.l1_data,&gimbal_control_set->laser_shoot_control.l1_iteration,&gimbal_control_set->laser_shoot_control.constant);
+//		pitch_mid = pitch_channel * PITCH_RC_SEN + gimbal_control_set->gimbal_rc_ctrl->mouse.y * PITCH_MOUSE_SEN;
+//		pitch control steering motor
 		
 }
 

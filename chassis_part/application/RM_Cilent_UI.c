@@ -98,7 +98,7 @@ void UI_Delete(u8 Del_Operate,u8 Del_Layer)
         End_x、End_y   结束坐标
 **********************************************************************************************************/
         
-void Line_Draw(Graph_Data *image,char imagename[3],u32 Graph_Operate,u32 Graph_Layer,u32 Graph_Color,u32 Graph_Width,u32 Start_x,u32 Start_y,u32 End_x,u32 End_y)
+void Line_Draw(Graph_Data *image,char *imagename,u32 Graph_Operate,u32 Graph_Layer,u32 Graph_Color,u32 Graph_Width,u32 Start_x,u32 Start_y,u32 End_x,u32 End_y)
 {
    int i;
    for(i=0;i<3&&imagename[i]!='\0';i++)
@@ -238,7 +238,7 @@ void Float_Draw(String_Data *image,char imagename[3],u32 Graph_Operate,u32 Graph
         Graph_Width    图形线宽
         Graph_Size     字号
         Graph_Digit    字符个数
-        Start_x、Start_x    开始坐标
+        Start_x、Start_x    开始坐标p
         *Char_Data          待发送字符串开始地址
 **********************************************************************************************************/
         
@@ -247,7 +247,7 @@ void Char_Draw(String_Data *image,char imagename[3],u32 Graph_Operate,u32 Graph_
    int i;
    
    for(i=0;i<3&&imagename[i]!='\0';i++)
-      image->Graph_Control.graphic_name[2-i]=imagename[i];
+   image->Graph_Control.graphic_name[2-i]=(uint8_t)imagename[i];
    image->Graph_Control.graphic_tpye = UI_Graph_Char;
    image->Graph_Control.operate_tpye = Graph_Operate;
    image->Graph_Control.layer = Graph_Layer;
@@ -260,7 +260,7 @@ void Char_Draw(String_Data *image,char imagename[3],u32 Graph_Operate,u32 Graph_
    
    for(i=0;i<Graph_Digit;i++)
    {
-      image->show_Data[i]=*Char_Data;
+      image->show_Data[i]=(uint8_t)*Char_Data;
       Char_Data++;
    }
 }
