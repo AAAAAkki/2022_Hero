@@ -57,6 +57,7 @@ void Angel_approx(L1_DATA_T *L1_Data, L1_ITERATION_T *L1_Iteration,trajecyory_co
   constant->temp = (constant->rxbuff[4] | (constant->rxbuff[5] << 8))/8-256;
 	HAL_UART_Receive_IT(&huart1,constant->rxbuff ,9);
 	L1_Data->L1_Distance = constant->dist;
+	L1_Data->L1_Distance = 4;
  	//常数变量化，以便arm_math库调用
 	
   float AmmoK = constant->k;          //1/2CρS
@@ -69,7 +70,7 @@ void Angel_approx(L1_DATA_T *L1_Data, L1_ITERATION_T *L1_Iteration,trajecyory_co
   float AmmoMpK_negative = -AmmoM / AmmoK;                     //-m/k
   float Ammo1One = 1.0f;
   float OneRad = ONERAD;
-	L1_Data->L1_Angel=-(((gimbal_control.laser_shoot_control.Pwm_L1-1500)/AMMOTHOUSAND)*AMMO180)+gimbal_control.gimbal_pitch_motor.absolute_angle_degree;//gimbal_relative_angel missing?
+	L1_Data->L1_Angel=(((gimbal_control.laser_shoot_control.Pwm_L1-1500)/AMMOTHOUSAND)*AMMO180)+gimbal_control.gimbal_pitch_motor.absolute_angle_degree;
 	
 //  float OneRad_e = 0.0174532f;
   float precision = 0.01f;

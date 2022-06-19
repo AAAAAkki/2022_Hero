@@ -62,13 +62,14 @@ void servo_task(void const *argument)
 {
     servo_rc = get_remote_control_point();
 
-    pwm_set = SERVO_MID_PWM;
-		servo_pwm_set(pwm_set);
+    
+		gimbal_control.laser_shoot_control.Pwm_L1 = SERVO_MID_PWM;
+		servo_pwm_set(gimbal_control.laser_shoot_control.Pwm_L1);
     while (1)
     {
       
-			pwm_set = gimbal_control.laser_shoot_control.Pwm_L1;	
-			servo_pwm_set(pwm_set);
+//			pwm_set = gimbal_control.laser_shoot_control.Pwm_L1;	
+			servo_pwm_set(gimbal_control.laser_shoot_control.Pwm_L1);
 			osDelay(1);
 	}
 }

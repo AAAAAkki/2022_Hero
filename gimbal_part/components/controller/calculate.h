@@ -145,8 +145,8 @@ typedef struct
 		trajecyory_constant constant;
 		L1_DATA_T l1_data;
 		L1_ITERATION_T l1_iteration;
-		uint8_t Pwm_L1;
-		uint8_t Pwm_GB;
+		int16_t Pwm_L1;
+		float Pwm_GB;
 }laser_shoot_t;
 
 void Angel_approx(L1_DATA_T *L1_Data, L1_ITERATION_T *L1_Iteration,trajecyory_constant *constant);
