@@ -7,6 +7,7 @@
 #include "UI_car.h"
 
 extern car_handle car;
+extern uint8_t ui_armors_state[4];
 
 
 frame_header_struct_t referee_receive_header;
@@ -33,10 +34,7 @@ ext_bullet_remaining_t bullet_remaining_t;
 ext_student_interactive_data_t student_interactive_data_t;
 
 
-
-
-void init_referee_struct_data(void)
-{
+void init_referee_struct_data(void) {
     memset(&referee_receive_header, 0, sizeof(frame_header_struct_t));
     memset(&referee_send_header, 0, sizeof(frame_header_struct_t));
 
@@ -65,9 +63,7 @@ void init_referee_struct_data(void)
 }
 
 
-
-void referee_data_solve(uint8_t *frame)
-{
+void referee_data_solve(uint8_t *frame) {
     uint16_t cmd_id = 0;
 
     uint8_t index = 0;
@@ -79,143 +75,134 @@ void referee_data_solve(uint8_t *frame)
     memcpy(&cmd_id, frame + index, sizeof(uint16_t));
     index += sizeof(uint16_t);
 
-    switch (cmd_id)
-    {
-        case GAME_STATE_CMD_ID:
-        {
+    switch (cmd_id) {
+        case GAME_STATE_CMD_ID: {
             memcpy(&game_state, frame + index, sizeof(ext_game_state_t));
         }
-        break;
-        case GAME_RESULT_CMD_ID:
-        {
+            break;
+        case GAME_RESULT_CMD_ID: {
             memcpy(&game_result, frame + index, sizeof(game_result));
         }
-        break;
-        case GAME_ROBOT_HP_CMD_ID:
-        {
+            break;
+        case GAME_ROBOT_HP_CMD_ID: {
             memcpy(&game_robot_HP_t, frame + index, sizeof(ext_game_robot_HP_t));
         }
-        break;
-        case FIELD_EVENTS_CMD_ID:
-        {
+            break;
+        case FIELD_EVENTS_CMD_ID: {
             memcpy(&field_event, frame + index, sizeof(field_event));
         }
-        break;
-        case SUPPLY_PROJECTILE_ACTION_CMD_ID:
-        {
+            break;
+        case SUPPLY_PROJECTILE_ACTION_CMD_ID: {
             memcpy(&supply_projectile_action_t, frame + index, sizeof(supply_projectile_action_t));
         }
-        break;
-        case SUPPLY_PROJECTILE_BOOKING_CMD_ID:
-        {
+            break;
+        case SUPPLY_PROJECTILE_BOOKING_CMD_ID: {
             memcpy(&supply_projectile_booking_t, frame + index, sizeof(supply_projectile_booking_t));
         }
-        break;
-        case REFEREE_WARNING_CMD_ID:
-        {
+            break;
+        case REFEREE_WARNING_CMD_ID: {
             memcpy(&referee_warning_t, frame + index, sizeof(ext_referee_warning_t));
         }
-        break;
+            break;
 
-        case ROBOT_STATE_CMD_ID:
-        {
+        case ROBOT_STATE_CMD_ID: {
             memcpy(&robot_state, frame + index, sizeof(robot_state));
-				}
-        break;
-        case POWER_HEAT_DATA_CMD_ID:
-        {
+        }
+            break;
+        case POWER_HEAT_DATA_CMD_ID: {
             memcpy(&power_heat_data_t, frame + index, sizeof(power_heat_data_t));
-						CAN_heat_data_send(power_heat_data_t.shooter_id1_42mm_cooling_heat, robot_state.shooter_id1_42mm_cooling_limit, 
-															robot_state.chassis_power_limit);
-				}
-        break;
-        case ROBOT_POS_CMD_ID:
-        {
+            CAN_heat_data_send(power_heat_data_t.shooter_id1_42mm_cooling_heat,
+                               robot_state.shooter_id1_42mm_cooling_limit,
+                               robot_state.chassis_power_limit);
+        }
+            break;
+        case ROBOT_POS_CMD_ID: {
             memcpy(&game_robot_pos_t, frame + index, sizeof(game_robot_pos_t));
         }
-        break;
-        case BUFF_MUSK_CMD_ID:
-        {
+            break;
+        case BUFF_MUSK_CMD_ID: {
             memcpy(&buff_musk_t, frame + index, sizeof(buff_musk_t));
         }
-        break;
-        case AERIAL_ROBOT_ENERGY_CMD_ID:
-        {
+            break;
+        case AERIAL_ROBOT_ENERGY_CMD_ID: {
             memcpy(&robot_energy_t, frame + index, sizeof(robot_energy_t));
         }
-        break;
-        case ROBOT_HURT_CMD_ID:
-        {
+            break;
+        case ROBOT_HURT_CMD_ID: {
             memcpy(&robot_hurt_t, frame + index, sizeof(robot_hurt_t));
-						//
-						if(robot_hurt_t.hurt_type == 0){
-								uint8_t armor_id = robot_hurt_t.armor_type;
-								switch(armor_id){
-										case 0:
-												car_reset_front_armor_timer(&car);
-												break;
-										case 1:
-												car_reset_left_armor_timer(&car);
-												break;
-										case 2:
-												car_reset_right_armor_timer(&car);
-												break;
-										case 3:
-												car_reset_back_armor_timer(&car);
-												break;
-										default:
-												break;
-								}
-						}
-						
+            //
+            if (robot_hurt_t.hurt_type == 0) {
+                uint8_t armor_id = robot_hurt_t.armor_type;
+                switch (armor_id) {
+                    case 0:
+                        // 右装甲板
+                        car_reset_left_armor_timer(&car);
+                        memset(ui_armors_state, 0, 4);
+                        ui_armors_state[1] = 1;
+                        break;
+                    case 1:
+                        // 前装甲板
+                        car_reset_front_armor_timer(&car);
+                        memset(ui_armors_state, 0, 4);
+                        ui_armors_state[0] = 1;
+                        break;
+                    case 2:
+                        // 左装甲板
+                        car_reset_right_armor_timer(&car);
+                        memset(ui_armors_state, 0, 4);
+                        ui_armors_state[3] = 1;
+                        break;
+                    case 3:
+                        // 后装甲板
+                        car_reset_back_armor_timer(&car);
+                        memset(ui_armors_state, 0, 4);
+                        ui_armors_state[2] = 1;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
         }
-        break;
-        case SHOOT_DATA_CMD_ID:
-        {
+            break;
+        case SHOOT_DATA_CMD_ID: {
             memcpy(&shoot_data_t, frame + index, sizeof(shoot_data_t));
-						CAN_shoot_data_send(shoot_data_t.bullet_type, shoot_data_t.bullet_freq, shoot_data_t.bullet_speed);
-				}
-        break;
-        case BULLET_REMAINING_CMD_ID:
-        {
+            CAN_shoot_data_send(shoot_data_t.bullet_type, shoot_data_t.bullet_freq, shoot_data_t.bullet_speed);
+        }
+            break;
+        case BULLET_REMAINING_CMD_ID: {
             memcpy(&bullet_remaining_t, frame + index, sizeof(ext_bullet_remaining_t));
         }
-        break;
-        case STUDENT_INTERACTIVE_DATA_CMD_ID:
-        {
+            break;
+        case STUDENT_INTERACTIVE_DATA_CMD_ID: {
             memcpy(&student_interactive_data_t, frame + index, sizeof(student_interactive_data_t));
         }
-        break;
-        default:
-        {
+            break;
+        default: {
             break;
         }
     }
 }
 
-void get_chassis_power_and_buffer(fp32 *power, fp32 *buffer)
-{
+void get_chassis_power_and_buffer(fp32 *power, fp32 *buffer) {
     *power = power_heat_data_t.chassis_power;
     *buffer = power_heat_data_t.chassis_power_buffer;
 
 }
 
-void get_chassis_max_power(uint16_t *max_power)
-{
+void get_chassis_max_power(uint16_t *max_power) {
     *max_power = robot_state.chassis_power_limit;
 }
 
-uint8_t get_robot_id(void)
-{
+uint8_t get_robot_id(void) {
     return robot_state.robot_id;
 }
 
-ext_robot_hurt_t *get_hurt_point(void)
-{
+ext_robot_hurt_t *get_hurt_point(void) {
     return &robot_hurt_t;
 }
-ext_game_robot_state_t *get_robot_status_point(void)
-{
+
+ext_game_robot_state_t *get_robot_status_point(void) {
     return &robot_state;
 }
 
@@ -224,8 +211,7 @@ void get_bullet_max_speed(uint16_t *max_bullet_speed)  // 弹速上限(用于瞄准线)
     *max_bullet_speed = robot_state.shooter_id1_42mm_speed_limit;
 }
 
-fp32 get_bullet_speed(void)
-{
+fp32 get_bullet_speed(void) {
 }
 
 /*Additional Function*/

@@ -11,6 +11,7 @@
 #include "referee.h"
 #include "cmsis_os.h"
 #include "string.h"
+#include "stdint.h"
 #include "RM_Cilent_UI.h"
 #include "UI_ProgressBar.h"
 #include "UI_car.h"
@@ -40,13 +41,17 @@ void UI_car_change();
 extern uint16_t Robot_number;
 extern uint16_t Robot_cline_number;
 extern UI_show_t ui;
+extern uint8_t ui_armors_state[];
 
 
 car_handle car;
 
-progress_bar_data bar;
-
 id_data_t id_data;
+
+Graph_Data line_1;
+Graph_Data line_2;
+Graph_Data line_3;
+Graph_Data line_4;
 
 void ui_char_refresh(void);
 
@@ -62,34 +67,27 @@ void UI_car_static(void);
 
 void UserTask(void const *pvParameters) {
     static uint16_t time = 0;
-    int16_t batter_percentage = 0;
 
-    memset(&bar, 0, sizeof(bar));
     memset(&car, 0, sizeof(car));
 
     UI_send_init();
     UI_label_static();
     UI_car_init();
-//    UI_ProgressBar_static(&bar);
     UI_car_static();
     UI_aimline();
     while (1) {
-//        batter_percentage = get_cap_percent();
-//        bar.progress_bar_data_change = (batter_percentage > 0) ? batter_percentage : 0;
-
-
         // 刷新
-        time = (time + 1) % 10000;
+        time = (time + 1) % 1000;
         if (time == 0) {
             UI_label_static();  // 重新加载数据表格
-//            UI_ProgressBar_static(&bar);  // 重新加载超级电容显示
-            UI_aimline();  // 重新绘制瞄准线
             UI_car_static();
-        } else if (time % 64 == 0) {
+        } else if (time % 50 == 0) {
+            UI_label_cache_reset();
+            UI_aimline();  // 重新绘制瞄准线
             UI_label_change();
-//            UI_ProgressBar_change(&bar);
             UI_car_change();
         }
+        UI_car_change();
 
         robot_id_select(); //保证热插拔，每次任务都选择一次ID
 
@@ -125,7 +123,7 @@ void UI_car_init() {
     set_name(cbc.rear_name_left, '3', '0', '7');
     set_name(cbc.rear_name_right, '3', '0', '8');
 
-    car.body_degree = ui.ui_gimbal_data->yaw_relative_angel;
+    car.body_degree = (uint16_t) (ui.ui_gimbal_data->yaw_relative_angel + 180);
     car.head_degree = 180;
     car.front_armor_showing_attacked = 0;  // 初始状态是不被击打
     car.back_armor_showing_attacked = 0;
@@ -138,11 +136,16 @@ void UI_car_static() {
 }
 
 void UI_car_change() {
-    car_rotate_body(&car, ui.ui_gimbal_data->yaw_relative_angel);
-//    car_front_armor_showing_attacked(&car, get_front_amour_attacked());
-//    car_back_armor_showing_attacked(&car, get_back_amour_attackek());
-//    car_left_armor_showing_attacked(&car, get_left_amour_attacked());
-//    car_right_armor_showing_attacked(&car, get_right_amour_attackek());
+    car_rotate_body(&car, (uint16_t) (ui.ui_gimbal_data->yaw_relative_angel + 180));
+    // 来自步兵代码:
+    //     前装甲板显示正常
+    //     后装甲板显示正常
+    //     左装甲板是右装甲板
+    //     右装甲板是左装甲板
+    car_front_armor_showing_attacked(&car, ui_armors_state[0]);
+    car_back_armor_showing_attacked(&car, ui_armors_state[2]);
+    car_left_armor_showing_attacked(&car, ui_armors_state[1]);
+    car_right_armor_showing_attacked(&car, ui_armors_state[3]);
 }
 
 void UI_send_init() {
@@ -154,58 +157,88 @@ void UI_send_init() {
 }
 
 
-//瞄准辅助线 英雄辅助线 只有一种弹速的情况
+//瞄准辅助线 英雄辅助线 只有一种弹速的情况 分开镜和关镜状态
 void UI_aimline() {
-    Graph_Data line_1;
-    memset(&line_1, 0, sizeof(line_1));
-    Line_Draw(&line_1, "901", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 870, 583, 1050, 583);
+    uint8_t ui_scope_state = ui.ui_gimbal_data->scope_state;
 
-    Graph_Data line_2;
-    memset(&line_2, 0, sizeof(line_2));
-    Line_Draw(&line_2, "902", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 870, 636, 1050, 636);
+    if (ui_scope_state == 2) {        //开镜
 
-    Graph_Data line_3;
-    memset(&line_3, 0, sizeof(line_3));
-    Line_Draw(&line_3, "903", UI_Graph_ADD, 1, UI_Color_Pink, 2, 900, 621, 1020, 621);
+        memset(&line_1, 0, sizeof(line_1));
+        Line_Draw(&line_1, "901", UI_Graph_Del, 1, UI_Color_Yellow, 2, 930, 670, 990, 670);
 
-    Graph_Data line_4;
-    memset(&line_4, 0, sizeof(line_4));
-    Line_Draw(&line_4, "904", UI_Graph_ADD, 1, UI_Color_Green, 2, 930, 613, 990, 613);
-    UI_ReFresh(2, line_1, line_2);
-    UI_ReFresh(2, line_3, line_4);
+        memset(&line_2, 0, sizeof(line_2));
+        Line_Draw(&line_2, "902", UI_Graph_Del, 1, UI_Color_Yellow, 2, 900, 702, 1020, 702);
+
+        memset(&line_3, 0, sizeof(line_3));
+        Line_Draw(&line_3, "903", UI_Graph_Del, 1, UI_Color_Pink, 2, 870, 655, 1050, 655);
+
+//        memset(&line_4, 0, sizeof(line_4));
+//        Line_Draw(&line_4, "904", UI_Graph_Del, 1, UI_Color_Green, 2, 840, 613, 1080, 613);
+        UI_ReFresh(2, line_1, line_2);
+        UI_ReFresh(1, line_3);
+    } else {  //开镜之外的情况
+        memset(&line_1, 0, sizeof(line_1));
+        Line_Draw(&line_1, "901", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 930, 670, 990, 670);
+
+        memset(&line_2, 0, sizeof(line_2));
+        Line_Draw(&line_2, "902", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 900, 702, 1020, 702);
+
+        memset(&line_3, 0, sizeof(line_3));
+        Line_Draw(&line_3, "903", UI_Graph_ADD, 1, UI_Color_Pink, 2, 870, 655, 1050, 655);
+
+//        memset(&line_4, 0, sizeof(line_4));
+//        Line_Draw(&line_4, "904", UI_Graph_ADD, 1, UI_Color_Green, 2, 840, 613, 1080, 613);
+        UI_ReFresh(2, line_1, line_2);
+        UI_ReFresh(1, line_3);
+    }
 }
 
 
-void robot_id_data_init(void) {
-    id_data.ID[0] = 3;
-    id_data.ID[1] = 4;
-    id_data.ID[2] = 5;
+void robot_id_data_init(void) {  //无空中、哨兵、雷达站的id
+    id_data.ID[0] = 1;
+    id_data.ID[1] = 2;
+    id_data.ID[2] = 3;
+    id_data.ID[3] = 4;
+    id_data.ID[4] = 5;
 
-    id_data.ID[3] = 103;
-    id_data.ID[4] = 104;
-    id_data.ID[5] = 105;
 
-    id_data.sender_ID[0] = 3;
-    id_data.sender_ID[1] = 4;
-    id_data.sender_ID[2] = 5;
+    id_data.ID[5] = 101;
+    id_data.ID[6] = 102;
+    id_data.ID[7] = 103;
+    id_data.ID[8] = 104;
+    id_data.ID[9] = 105;
 
-    id_data.sender_ID[3] = 103;
-    id_data.sender_ID[4] = 104;
-    id_data.sender_ID[5] = 105;
 
-    id_data.receiver_ID[0] = 0x103;
-    id_data.receiver_ID[1] = 0x104;
-    id_data.receiver_ID[2] = 0x105;
+    id_data.sender_ID[0] = 1;
+    id_data.sender_ID[1] = 2;
+    id_data.sender_ID[2] = 3;
+    id_data.sender_ID[3] = 4;
+    id_data.sender_ID[4] = 5;
 
-    id_data.receiver_ID[3] = 0x167;
-    id_data.receiver_ID[4] = 0x168;
-    id_data.receiver_ID[5] = 0x169;
+    id_data.sender_ID[5] = 101;
+    id_data.sender_ID[6] = 102;
+    id_data.sender_ID[7] = 103;
+    id_data.sender_ID[8] = 104;
+    id_data.sender_ID[9] = 105;
+
+    id_data.receiver_ID[0] = 0x101;
+    id_data.receiver_ID[1] = 0x102;
+    id_data.receiver_ID[2] = 0x103;
+    id_data.receiver_ID[3] = 0x104;
+    id_data.receiver_ID[4] = 0x105;
+
+    id_data.receiver_ID[5] = 0x165;
+    id_data.receiver_ID[6] = 0x166;
+    id_data.receiver_ID[7] = 0x167;
+    id_data.receiver_ID[8] = 0x168;
+    id_data.receiver_ID[9] = 0x169;
 }
+
 
 void robot_id_select(void) {
     Uint8_t i = 0;
     Robot_number = get_robot_id();
-    for (i = 0; i <= 5; i++) {
+    for (i = 0; i <= 9; i++) {
         if (Robot_number == id_data.ID[i]) {
             Robot_cline_number = id_data.receiver_ID[i];
         }
