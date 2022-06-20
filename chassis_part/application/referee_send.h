@@ -135,15 +135,9 @@ typedef __packed struct //0x0301
 	
 	uint16_t crc16;
 } graphic_add_t;
+
 typedef struct
 {
-	uint8_t ID[6];
-	uint16_t sender_ID[6];
-	uint16_t receiver_ID[6];
-} id_data_t;
-typedef struct
-{
-id_data_t id_data;
 uint8_t robot_id;
 int16_t robot_sender_ID;
 int16_t robot_receiver_ID;
