@@ -81,7 +81,9 @@ void shoot_init(void)
 
     
 		static const fp32 Trigger_ecd_reverse_pid[3] = {TRIIGER_ECD_REVERSE_PID_KP, TRIIGER_ECD_REVERSE_PID_KI, TRIIGER_ECD_REVERSE_PID_KD};
-    static const fp32 Fric_speed_pid0[3] = {40, 0.3, 0};
+//    static const fp32 Fric_speed_pid0[3] = {100, 0.01, 200};
+//		static const fp32 Fric_speed_pid1[3] = {100, 0.01, 200};
+		static const fp32 Fric_speed_pid0[3] = {40, 0.3, 0};
 		static const fp32 Fric_speed_pid1[3] = {40, 0.3, 0};
     shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
     //Ò£¿ØÆ÷Ö¸Õë
@@ -115,7 +117,7 @@ void shoot_init(void)
     shoot_control.speed_set = 0.0f;
     shoot_control.key_time = 0;
 		shoot_control.sum_ecd_set=shoot_control.sum_ecd;
-		shoot_control.trigger_high_speed = 0;
+		shoot_control.fric_offline_state = 0;
 }
 
 /**
@@ -185,7 +187,8 @@ int16_t shoot_control_loop(void)
 		CAN_CMD_FRIC((int16_t)shoot_control.fric_motor_pid[0].out, (int16_t)shoot_control.fric_motor_pid[1].out, gimbal_control.gimbal_scope_motor.current_set);
 //		CAN_CMD_FRIC(0,0,gimbal_control.gimbal_scope_motor.current_set);
 		
-		return shoot_control.given_current;
+		
+			return shoot_control.given_current;
 }
 
 /**
@@ -201,32 +204,33 @@ static int8_t last_s = RC_SW_UP;
     //????, ????,????
 		if(gimbal_behaviour == GIMBAL_ZERO_FORCE)	
 				shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
-		else if(shoot_control.shoot_mode == SHOOT_ZERO_FORCE)
+		else if(shoot_control.shoot_mode == SHOOT_ZERO_FORCE && !shoot_control.fric_offline_state)
 				shoot_control.shoot_mode = SHOOT_STOP;
-    if ((switch_is_up(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && !switch_is_up(last_s) && shoot_control.shoot_mode == SHOOT_STOP))
-    {
-        shoot_control.shoot_mode = SHOOT_READY;
-    }
-    else if ((switch_is_up(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && !switch_is_up(last_s) && shoot_control.shoot_mode != SHOOT_STOP && shoot_control.shoot_mode != SHOOT_ZERO_FORCE))
-    {
-        shoot_control.shoot_mode = SHOOT_STOP;
-    }
+		
+		if ((switch_is_up(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && !switch_is_up(last_s) && shoot_control.shoot_mode == SHOOT_STOP))
+		{
+				shoot_control.shoot_mode = SHOOT_READY;
+		}
+		else if ((switch_is_up(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && !switch_is_up(last_s) && shoot_control.shoot_mode != SHOOT_STOP && shoot_control.shoot_mode != SHOOT_ZERO_FORCE))
+		{
+				shoot_control.shoot_mode = SHOOT_STOP;
+		}
 
-    //????, ???????????
-    if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_rc->key.v & SHOOT_ON_KEYBOARD) && (shoot_control.shoot_mode == SHOOT_STOP || shoot_control.shoot_mode == SHOOT_ZERO_FORCE))
-    {
-        shoot_control.shoot_mode = SHOOT_READY;
-    }
-    //????, ???????????
-    else if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_rc->key.v & SHOOT_OFF_KEYBOARD) && shoot_control.shoot_mode != SHOOT_STOP && shoot_control.shoot_mode != SHOOT_ZERO_FORCE)
-    {
-        shoot_control.shoot_mode = SHOOT_STOP;
-    }
+		//????, ???????????
+		if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_rc->key.v & SHOOT_ON_KEYBOARD) && (shoot_control.shoot_mode == SHOOT_STOP || shoot_control.shoot_mode == SHOOT_ZERO_FORCE))
+		{
+				shoot_control.shoot_mode = SHOOT_READY;
+		}
+		//????, ???????????
+		else if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_rc->key.v & SHOOT_OFF_KEYBOARD) && shoot_control.shoot_mode != SHOOT_STOP && shoot_control.shoot_mode != SHOOT_ZERO_FORCE)
+		{
+				shoot_control.shoot_mode = SHOOT_STOP;
+		}
 
-    if (shoot_control.shoot_mode == SHOOT_READY)
-    {
+		if (shoot_control.shoot_mode == SHOOT_READY)
+		{
 				if (switch_is_down(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]))
-        {
+				{
 						static int count=0;
 						count++;
 						if(count>3000)
@@ -234,28 +238,32 @@ static int8_t last_s = RC_SW_UP;
 							shoot_control.shoot_mode = SHOOT_BULLET;
 							count=0;
 						}
-        }
-    }
+				}
+		}
 
 
-    if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_mode == SHOOT_READY||shoot_control.shoot_mode == SHOOT_BULLET))
-    {
+		if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_mode == SHOOT_READY||shoot_control.shoot_mode == SHOOT_BULLET))
+		{
 
-        if ((shoot_control.press_l && shoot_control.last_press_l == 0) )
-        {
-            shoot_control.shoot_mode = SHOOT_BULLET;
-        }
-    }
+				if ((shoot_control.press_l && shoot_control.last_press_l == 0) )
+				{
+						shoot_control.shoot_mode = SHOOT_BULLET;
+				}
+		}
 		
 
-    get_shoot_heat1_limit_and_heat0(&shoot_control.heat_limit, &shoot_control.heat);
-    if (!toe_is_error(REFEREE_TOE))
-    {
-        if ((shoot_control.heat + 100 > shoot_control.heat_limit) && !(shoot_control.shoot_rc->key.v & KEY_PRESSED_OFFSET_G) && !shoot_control.move_flag && shoot_control.shoot_mode==SHOOT_BULLET)
-        {
+		get_shoot_heat1_limit_and_heat0(&shoot_control.heat_limit, &shoot_control.heat);
+		if (!toe_is_error(REFEREE_TOE))
+		{
+				if ((shoot_control.heat + 100 > shoot_control.heat_limit) && !(shoot_control.shoot_rc->key.v & KEY_PRESSED_OFFSET_G) && !shoot_control.move_flag && shoot_control.shoot_mode==SHOOT_BULLET)
+				{
 							shoot_control.shoot_mode = SHOOT_READY;
-        }
-    }
+				}
+		}
+		
+		if(shoot_control.fric_error_count == 100)
+				shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
+		
     //??????? ????,?????
     if (gimbal_cmd_to_shoot_stop())
     {
@@ -352,7 +360,12 @@ static void shoot_feedback_update(void)
         shoot_control.fric1_ramp.max_value = FRIC_15;
         shoot_control.fric2_ramp.max_value = FRIC_15;
     }
-		
+		shoot_control.last_offline_state = shoot_control.fric_offline_state;
+		shoot_control.fric_offline_state = toe_is_error(FRIC_LEFT_MOTOR_TOE)||toe_is_error(FRIC_RIGHT_MOTOR_TOE);
+		if(toe_is_error(FRIC_LEFT_MOTOR_TOE)||toe_is_error(FRIC_RIGHT_MOTOR_TOE))
+				shoot_control.fric_error_count++;
+		else
+				shoot_control.fric_error_count=0;
 		
 }
 

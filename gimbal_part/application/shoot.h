@@ -159,6 +159,9 @@ typedef struct
     uint16_t heat_limit;
 			uint16_t heat;
     ext_game_robot_state_t *shoot_state;
+		uint8_t fric_offline_state;
+		uint8_t fric_error_count;
+		uint8_t last_offline_state;
 		
 } shoot_control_t;
 
