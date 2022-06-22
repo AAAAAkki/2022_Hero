@@ -542,7 +542,8 @@ static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set)
 		if(gimbal_mode_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_R){
 				gimbal_behaviour = GIMBAL_SHOOT_LASER;
 		}
-
+//		if(switch_is_down(gimbal_mode_set->gimbal_rc_ctrl->rc.s[1])&&switch_is_mid(gimbal_mode_set->gimbal_rc_ctrl->rc.s[GIMBAL_MODE_CHANNEL]))
+//				gimbal_behaviour = GIMBAL_SHOOT_LASER;
     //enter init mode
     //�жϽ���init״̬��
     {
@@ -731,7 +732,7 @@ static void gimbal_absolute_angle_control(fp32 *yaw, fp32 *pitch, gimbal_control
 		key_micro_control(yaw, pitch, gimbal_control_set);
 		//set value with result of iteration
 		if(gimbal_control_set->laser_shoot_control.Pwm_GB<10){
-				*yaw = gimbal_control_set->laser_shoot_control.Pwm_GB;
+				*pitch = gimbal_control_set->laser_shoot_control.Pwm_GB;
 				gimbal_control_set->laser_shoot_control.Pwm_GB=10;//set to an impossible value
 		}
 				
@@ -807,19 +808,26 @@ static void 	gimbal_LASER_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimb
     }
 		
 		static int16_t yaw_channel = 0, pitch_channel = 0;
-		int16_t pitch_laser=0;
+		fp32 temp_pitch = 0;
+//		int16_t pitch_laser=0;
 
     rc_deadband_limit(gimbal_control_set->gimbal_rc_ctrl->rc.ch[YAW_CHANNEL], yaw_channel, RC_DEADBAND);
     rc_deadband_limit(gimbal_control_set->gimbal_rc_ctrl->rc.ch[PITCH_CHANNEL], pitch_channel, RC_DEADBAND);
 		
     *yaw = yaw_channel * YAW_RC_SEN - gimbal_control_set->gimbal_rc_ctrl->mouse.x * YAW_MOUSE_SEN;
-		pitch_laser += (pitch_channel * PITCH_RC_SEN + gimbal_control_set->gimbal_rc_ctrl->mouse.y * PITCH_MOUSE_SEN);
-		pitch_laser = pitch_laser>2000? 2000:pitch_laser;
-		pitch_laser = pitch_laser<1000? 1000:pitch_laser;
-		gimbal_control_set->laser_shoot_control.Pwm_L1 = pitch_laser;
-    Angel_approx(&gimbal_control_set->laser_shoot_control.l1_data,&gimbal_control_set->laser_shoot_control.l1_iteration,&gimbal_control_set->laser_shoot_control.constant);
-//		pitch_mid = pitch_channel * PITCH_RC_SEN + gimbal_control_set->gimbal_rc_ctrl->mouse.y * PITCH_MOUSE_SEN;
-//		pitch control steering motor
+		temp_pitch = pitch_channel * PITCH_RC_SEN + gimbal_control_set->gimbal_rc_ctrl->mouse.y * PITCH_MOUSE_SEN;
+		
+		if(temp_pitch<0&&gimbal_control_set->laser_shoot_control.Pwm_L1<=1100)
+				*pitch = temp_pitch;
+		else if(temp_pitch>0&&gimbal_control_set->laser_shoot_control.Pwm_L1>=1600)
+				*pitch = temp_pitch;
+		else
+				gimbal_control_set->laser_shoot_control.Pwm_L1 += temp_pitch*600;
+		gimbal_control_set->laser_shoot_control.Pwm_L1 = gimbal_control_set->laser_shoot_control.Pwm_L1>1600? 1600:gimbal_control_set->laser_shoot_control.Pwm_L1;
+		gimbal_control_set->laser_shoot_control.Pwm_L1 = gimbal_control_set->laser_shoot_control.Pwm_L1<1100? 1100:gimbal_control_set->laser_shoot_control.Pwm_L1;
+		Angel_approx(&gimbal_control_set->laser_shoot_control.l1_data,&gimbal_control_set->laser_shoot_control.l1_iteration,&gimbal_control_set->laser_shoot_control.constant);
+		
+//		pitch control servo
 		
 }
 

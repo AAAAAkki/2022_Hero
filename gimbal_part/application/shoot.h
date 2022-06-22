@@ -64,12 +64,12 @@
 #define SWITCH_TRIGGER_OFF          1
 
 //卡单时间 以及反转时间
-#define BLOCK_TRIGGER_SPEED         1.0f
-#define BLOCK_TIME                  600
-#define REVERSE_TIME                150
+#define BLOCK_TRIGGER_SPEED         1.5f
+#define BLOCK_TIME                  500
+#define REVERSE_TIME                250
 #define REVERSE_SPEED_LIMIT         50.0f
 
-#define REVERSE_ECD									6554
+#define REVERSE_ECD									7554
 
 #define PI_FOUR                     0.78539816339744830961566084581988f
 #define PI_TEN                      0.314f
@@ -88,11 +88,11 @@
 #define TRIGGER_SLOW_SPEED_PID_KI		0.5f
 #define TRIGGER_SLOW_SPEED_PID_KD		0.0f
 
-#define TRIIGER_ECD_REVERSE_PID_KP	0.5f
+#define TRIIGER_ECD_REVERSE_PID_KP	0.6f
 #define TRIIGER_ECD_REVERSE_PID_KI	0.15f
 #define TRIIGER_ECD_REVERSE_PID_KD	0.05f
 
-#define TRIGGER_BULLET_PID_MAX_OUT  16000.0f
+#define TRIGGER_BULLET_PID_MAX_OUT  15000.0f
 #define TRIGGER_BULLET_PID_MAX_IOUT 4200.0f
 
 #define TRIGGER_READY_PID_MAX_OUT   16000.0f
@@ -114,6 +114,7 @@ typedef enum
     SHOOT_STOP = 0,
     SHOOT_READY,
 		SHOOT_BULLET,
+		SHOOT_ZERO_FORCE,
 		SHOOT_CONTINUE_BULLET,
 } shoot_mode_e;
 
@@ -158,6 +159,7 @@ typedef struct
     uint16_t heat_limit;
 			uint16_t heat;
     ext_game_robot_state_t *shoot_state;
+		uint8_t fric_error_count;
 		
 } shoot_control_t;
 

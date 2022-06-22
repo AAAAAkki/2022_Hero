@@ -6,17 +6,15 @@
 /*---------------------VARIABLES---------------------*/
 
 
-
-
-#define p_0 1.01325f				//1标准大气压
+#define p_0 1.01325f    //1标准大气压
 #define T_0 273.15f
-#define C_0 0.47f							//球的阻力系数
-#define MS 0.0032f					//17mm的质量
-#define DS 0.017f						//17mm
-#define MB_N 0.041f					//42mm不发光
-#define DB_N 0.042f					//42mm不发光
-#define MB_F 0.043f					//42mm发光
-#define DB_F 0.042f
+#define C_0 0.47f       //球体阻力系数
+#define MS 0.0032f     //17mm的质量
+#define DS 0.017f      //17mm
+#define MB_N 0.041f     //42mm不发光质量
+#define DB_N 0.042f     //42mm不发光
+#define MB_F 0.043f     //42mm发光质量
+#define DB_F 0.042f      //42mm发光
 
 #define SERVO_ERROR 12
 
@@ -33,14 +31,23 @@
 #define LASER_FIFO_BUF_NUM 32
 #define LASER_FIFO_BUF_LEN 32
 
-#define AMMOG 9.7803f //重力加速度
+
 #define AMMO1ONE 1.0f  //1
 #define AMMOHUNDRED 100.0f  //100
 #define AMMOTHOUSAND 1000.0f //1000
+#define AMMO180 180.0f //180
 #define AMMOLEVEL 30.0f //水平
 #define AMMOPI 3.14159265358979f //Π
-#define AMMO180 180.0f //180
+#define AMMOgo 9.80665f //标准重力加速度
+#define AMMOR 6371.393f //地球平均半径
 
+
+#define AMMOh 39.0f  	//现场海拔
+#define AMMFY1 31.0f 	//现场纬度（角度值，单位为度）
+#define AMMFY2 40.0f 	//现场纬度（角度值，单位为分）
+#define AMMFY3 57.0f 	//现场纬度（角度值，单位为秒）
+#define p_t    1.0015f	//现场气压（*10^5帕）
+#define T_t    25.0f  	//现场温度（摄氏度）
 
 //180
 #ifndef PI
@@ -81,14 +88,17 @@
 
 typedef struct  
 {	
- float p_t;//现场气压
- float T_t;//现场温度
  float row;//空气密度
  float m;//子弹质量
  float D;//子弹直径
  float area;//面积计算
  float k;//结果
  int Choose;
+ uint8_t rxbuff[9];
+ uint16_t dist;
+ uint16_t strength;
+ uint16_t temp;
+ float g ; //重力加速度
 }trajecyory_constant;
 
 typedef struct
@@ -135,8 +145,8 @@ typedef struct
 		trajecyory_constant constant;
 		L1_DATA_T l1_data;
 		L1_ITERATION_T l1_iteration;
-		uint8_t Pwm_L1;
-		uint8_t Pwm_GB;
+		int16_t Pwm_L1;
+		float Pwm_GB;
 }laser_shoot_t;
 
 void Angel_approx(L1_DATA_T *L1_Data, L1_ITERATION_T *L1_Iteration,trajecyory_constant *constant);
