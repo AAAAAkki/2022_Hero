@@ -101,10 +101,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 				for(int i=0;i<3;i++)
 						gimbal_trans.speed_set[i]=((fp32)temp[i])/transform_key;
 				gimbal_trans.chassis_mode=temp[3];
-				chassis_move.vx_set=gimbal_trans.speed_set[0];
-				chassis_move.vy_set=gimbal_trans.speed_set[1];
-				chassis_move.wz_set=gimbal_trans.speed_set[2];
-				chassis_move.chassis_mode=gimbal_trans.chassis_mode;
+
 				break;
 		}
 		case ui_info_id:

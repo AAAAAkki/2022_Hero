@@ -96,11 +96,11 @@ void shoot_init(void)
     //³õÊ¼»¯PID
 		trigger_pid_select();
 		
-		PID_init(&shoot_control.trigger_motor_ecd_pid, PID_POSITION, Trigger_ecd_reverse_pid, 12000, 2000);
+		PID_init(&shoot_control.trigger_motor_ecd_pid, PID_POSITION, Trigger_ecd_reverse_pid, 16000, 3000);
     PID_init(&shoot_control.fric_motor_pid[0], PID_POSITION, Fric_speed_pid0, FRIC_PID_MAX_OUT, FRIC_PID_MAX_IOUT);
     PID_init(&shoot_control.fric_motor_pid[1], PID_POSITION, Fric_speed_pid1, FRIC_PID_MAX_OUT, FRIC_PID_MAX_IOUT);
-		shoot_control.fric_motor_pid[0].proportion_output_filter_coefficient = exp(-300*1E-3);
-		shoot_control.fric_motor_pid[1].proportion_output_filter_coefficient = exp(-300*1E-3);
+		shoot_control.fric_motor_pid[0].proportion_output_filter_coefficient = exp(-500*1E-3);
+		shoot_control.fric_motor_pid[1].proportion_output_filter_coefficient = exp(-500*1E-3);
 //		shoot_control.trigger_motor_pid.derivative_output_filter_coefficient = exp(-0.05*1E-3);
 		shoot_control.trigger_motor_pid.proportion_output_filter_coefficient = exp(-1000*1E-3);
 		
@@ -117,7 +117,7 @@ void shoot_init(void)
     shoot_control.speed_set = 0.0f;
     shoot_control.key_time = 0;
 		shoot_control.sum_ecd_set=shoot_control.sum_ecd;
-		shoot_control.fric_offline_state = 0;
+		shoot_control.fric_error_count = 0;
 }
 
 /**
@@ -204,7 +204,7 @@ static int8_t last_s = RC_SW_UP;
     //????, ????,????
 		if(gimbal_behaviour == GIMBAL_ZERO_FORCE)	
 				shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
-		else if(shoot_control.shoot_mode == SHOOT_ZERO_FORCE && !shoot_control.fric_offline_state)
+		else if(shoot_control.shoot_mode == SHOOT_ZERO_FORCE)
 				shoot_control.shoot_mode = SHOOT_STOP;
 		
 		if ((switch_is_up(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && !switch_is_up(last_s) && shoot_control.shoot_mode == SHOOT_STOP))
@@ -261,7 +261,7 @@ static int8_t last_s = RC_SW_UP;
 				}
 		}
 		
-		if(shoot_control.fric_error_count == 100)
+		if(shoot_control.fric_error_count == 150)
 				shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
 		
     //??????? ????,?????
@@ -360,8 +360,9 @@ static void shoot_feedback_update(void)
         shoot_control.fric1_ramp.max_value = FRIC_15;
         shoot_control.fric2_ramp.max_value = FRIC_15;
     }
-		shoot_control.last_offline_state = shoot_control.fric_offline_state;
-		shoot_control.fric_offline_state = toe_is_error(FRIC_LEFT_MOTOR_TOE)||toe_is_error(FRIC_RIGHT_MOTOR_TOE);
+		
+		if(shoot_control.trigger_motor_pid.Iout>7000)
+				shoot_control.trigger_motor_pid.Iout = 7000;
 		if(toe_is_error(FRIC_LEFT_MOTOR_TOE)||toe_is_error(FRIC_RIGHT_MOTOR_TOE))
 				shoot_control.fric_error_count++;
 		else
@@ -384,8 +385,11 @@ static void trigger_motor_turn_back(void)
     {
         shoot_control.reverse_time++;
     }
-		else if(shoot_control.speed >=BLOCK_TRIGGER_SPEED)
+		else if(shoot_control.speed >=BLOCK_TRIGGER_SPEED){
 				shoot_control.block_time=0;
+				shoot_control.reverse_time = 0;
+		}
+				
 		
 		if(shoot_control.reverse_time)//reverse
 		{		
@@ -396,9 +400,9 @@ static void trigger_motor_turn_back(void)
 						shoot_control.block_time = 0;
 						PID_clear(&shoot_control.trigger_motor_ecd_pid);
 				}
-				if(shoot_control.reverse_time>REVERSE_TIME && fabs(shoot_control.speed) < BLOCK_TRIGGER_SPEED)//abandon reverse
+				if(shoot_control.reverse_time>REVERSE_TIME )//abandon reverse
 				{
-						shoot_control.reverse_time = 0;
+						
 						shoot_control.block_time = 0;
 						shoot_control.speed_set = trigger_speed;
 						//PID_clear(&shoot_control.trigger_motor_ecd_pid);
@@ -445,7 +449,7 @@ void trigger_pid_select(void){
 		
 		static const fp32 Trigger_speed_pid[3] = {TRIGGER_FAST_SPEED_PID_KP, TRIGGER_FAST_SPEED_PID_KI, TRIGGER_FAST_SPEED_PID_KD};
 		trigger_speed = FASTER_TRIGGER_SPEED;
-			
-		tolerant = trigger_speed/6*100+1100;
+		
+		tolerant = trigger_speed/6*100+1200;
     PID_init(&shoot_control.trigger_motor_pid, PID_POSITION, Trigger_speed_pid, TRIGGER_READY_PID_MAX_OUT, TRIGGER_READY_PID_MAX_IOUT);
 }

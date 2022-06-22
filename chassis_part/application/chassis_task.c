@@ -172,7 +172,7 @@ void chassis_task(void const *pvParameters)
     //chassis control pid calculate0
     //µ×ÅÌ¿ØÖÆPID¼ÆËã
 //		chassis_move.chassis_mode=intermedia_chassis_speed[3];
-//		top_down_speed_set(&chassis_move);
+		top_down_speed_set(&chassis_move);
     
 
     //make sure  one motor is online at least, so that the control CAN message can be received
@@ -690,9 +690,10 @@ chassis_move_t  *get_chassis_point(void)
 
 
 void top_down_speed_set(chassis_move_t *chassis_speed_set){
-	chassis_speed_set->vx_set=gimbal_trans.speed_set[0];
-	chassis_speed_set->vy_set=gimbal_trans.speed_set[1];
-	chassis_speed_set->wz_set=gimbal_trans.speed_set[2];
+		chassis_move.vx_set=gimbal_trans.speed_set[0];
+		chassis_move.vy_set=gimbal_trans.speed_set[1];
+		chassis_move.wz_set=gimbal_trans.speed_set[2];
+		chassis_move.chassis_mode=gimbal_trans.chassis_mode;
 }
 
 

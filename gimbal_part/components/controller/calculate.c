@@ -57,7 +57,7 @@ void Angel_approx(L1_DATA_T *L1_Data, L1_ITERATION_T *L1_Iteration,trajecyory_co
   constant->temp = (constant->rxbuff[4] | (constant->rxbuff[5] << 8))/8-256;
 	HAL_UART_Receive_IT(&huart1,constant->rxbuff ,9);
 	L1_Data->L1_Distance = constant->dist;
-	L1_Data->L1_Distance = 4;
+	L1_Data->L1_Distance = 3;
  	//常数变量化，以便arm_math库调用
 	
   float AmmoK = constant->k;          //1/2CρS
