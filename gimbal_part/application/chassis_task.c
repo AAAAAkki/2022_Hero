@@ -519,8 +519,8 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
       chassis_move_control->wz_set = chassis_power/11*1.4f;
       //speed limit
       //速度限幅
-      chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);
-      chassis_move_control->vy_set = fp32_constrain(chassis_move_control->vy_set, chassis_move_control->vy_min_speed, chassis_move_control->vy_max_speed);
+      chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed*0.6, chassis_move_control->vx_max_speed*0.6);
+      chassis_move_control->vy_set = fp32_constrain(chassis_move_control->vy_set, chassis_move_control->vy_min_speed*0.6, chassis_move_control->vy_max_speed*0.6);
     }
     else
     {
@@ -556,8 +556,8 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
       chassis_move_control->wz_set = chassis_power/11*1.4f;
       //speed limit
       //速度限幅
-      chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);
-      chassis_move_control->vy_set = fp32_constrain(chassis_move_control->vy_set, chassis_move_control->vy_min_speed, chassis_move_control->vy_max_speed);
+      chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed*0.6, 0.6*chassis_move_control->vx_max_speed);
+      chassis_move_control->vy_set = fp32_constrain(chassis_move_control->vy_set, chassis_move_control->vy_min_speed*0.6, 0.6*chassis_move_control->vy_max_speed);
   }
   else if (chassis_move_control->chassis_mode == CHASSIS_VECTOR_FOLLOW_CHASSIS_YAW)
   {

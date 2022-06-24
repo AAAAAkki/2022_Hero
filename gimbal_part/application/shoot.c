@@ -83,8 +83,8 @@ void shoot_init(void)
 		static const fp32 Trigger_ecd_reverse_pid[3] = {TRIIGER_ECD_REVERSE_PID_KP, TRIIGER_ECD_REVERSE_PID_KI, TRIIGER_ECD_REVERSE_PID_KD};
 //    static const fp32 Fric_speed_pid0[3] = {100, 0.01, 200};
 //		static const fp32 Fric_speed_pid1[3] = {100, 0.01, 200};
-		static const fp32 Fric_speed_pid0[3] = {40, 0.3, 0};
-		static const fp32 Fric_speed_pid1[3] = {40, 0.3, 0};
+		static const fp32 Fric_speed_pid0[3] = {38, 0.25, 0};
+		static const fp32 Fric_speed_pid1[3] = {38, 0.25, 0};
     shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
     //Ò£¿ØÆ÷Ö¸Õë
     shoot_control.shoot_rc = get_remote_control_point();
@@ -99,8 +99,8 @@ void shoot_init(void)
 		PID_init(&shoot_control.trigger_motor_ecd_pid, PID_POSITION, Trigger_ecd_reverse_pid, 16000, 3000);
     PID_init(&shoot_control.fric_motor_pid[0], PID_POSITION, Fric_speed_pid0, FRIC_PID_MAX_OUT, FRIC_PID_MAX_IOUT);
     PID_init(&shoot_control.fric_motor_pid[1], PID_POSITION, Fric_speed_pid1, FRIC_PID_MAX_OUT, FRIC_PID_MAX_IOUT);
-		shoot_control.fric_motor_pid[0].proportion_output_filter_coefficient = exp(-500*1E-3);
-		shoot_control.fric_motor_pid[1].proportion_output_filter_coefficient = exp(-500*1E-3);
+		shoot_control.fric_motor_pid[0].proportion_output_filter_coefficient = exp(-600*1E-3);
+		shoot_control.fric_motor_pid[1].proportion_output_filter_coefficient = exp(-600*1E-3);
 //		shoot_control.trigger_motor_pid.derivative_output_filter_coefficient = exp(-0.05*1E-3);
 		shoot_control.trigger_motor_pid.proportion_output_filter_coefficient = exp(-1000*1E-3);
 		
@@ -361,8 +361,8 @@ static void shoot_feedback_update(void)
         shoot_control.fric2_ramp.max_value = FRIC_15;
     }
 		
-		if(shoot_control.trigger_motor_pid.Iout>7000)
-				shoot_control.trigger_motor_pid.Iout = 7000;
+		if(shoot_control.trigger_motor_pid.Iout>5000)
+				shoot_control.trigger_motor_pid.Iout = 5000;
 		if(toe_is_error(FRIC_LEFT_MOTOR_TOE)||toe_is_error(FRIC_RIGHT_MOTOR_TOE))
 				shoot_control.fric_error_count++;
 		else
