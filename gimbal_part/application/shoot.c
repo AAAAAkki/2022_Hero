@@ -83,8 +83,8 @@ void shoot_init(void)
 		static const fp32 Trigger_ecd_reverse_pid[3] = {TRIIGER_ECD_REVERSE_PID_KP, TRIIGER_ECD_REVERSE_PID_KI, TRIIGER_ECD_REVERSE_PID_KD};
 //    static const fp32 Fric_speed_pid0[3] = {100, 0.01, 200};
 //		static const fp32 Fric_speed_pid1[3] = {100, 0.01, 200};
-		static const fp32 Fric_speed_pid0[3] = {40, 0.3, 0};
-		static const fp32 Fric_speed_pid1[3] = {40, 0.3, 0};
+		static const fp32 Fric_speed_pid0[3] = {40, 0.2, 0};
+		static const fp32 Fric_speed_pid1[3] = {40, 0.2, 0};
     shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
     //Ò£¿ØÆ÷Ö¸Õë
     shoot_control.shoot_rc = get_remote_control_point();
@@ -361,8 +361,8 @@ static void shoot_feedback_update(void)
         shoot_control.fric2_ramp.max_value = FRIC_15;
     }
 		
-		if(shoot_control.trigger_motor_pid.Iout>7000)
-				shoot_control.trigger_motor_pid.Iout = 7000;
+		if(shoot_control.trigger_motor_pid.Iout>5000)
+				shoot_control.trigger_motor_pid.Iout = 5000;
 		if(toe_is_error(FRIC_LEFT_MOTOR_TOE)||toe_is_error(FRIC_RIGHT_MOTOR_TOE))
 				shoot_control.fric_error_count++;
 		else
