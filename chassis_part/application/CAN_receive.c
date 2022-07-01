@@ -413,28 +413,8 @@ void CAN_shoot_data_send(uint8_t	bullet_type, uint8_t	bullet_freq, float	bullet_
     HAL_CAN_AddTxMessage(&CAN_Commucation, &gimbal_board_shoot_message, gimbal_board_shoot_data, &send_mail_box);
 }
 
-void get_shoot_mode(uint8_t *shoot_mode){
-		*shoot_mode = gimbal_trans.shoot_mode;
-}
-
-void get_swing_mode(uint8_t * swing_flag){
-		*swing_flag = gimbal_trans.swing_flag;
-}
-
-void get_pitch_angel(fp32 * pitch_angel){
-		*pitch_angel = gimbal_trans.pitch_angel_degree;
-}
-
-void get_yaw_absolute_angel(fp32 * yaw_absolute){
-		*yaw_absolute = gimbal_trans.yaw_absolute_angel;
-}
-
-void get_yaw_relative_angel(fp32 * yaw_relative){
-		*yaw_relative = gimbal_trans.yaw_relative_angel;
-}
-
 void get_cap_proportion(fp32 *cap_proportion){
-		*cap_proportion = (cap_measure.CapVot-16)/(24.0f-18.0f);
+		*cap_proportion = (cap_measure.CapVot-17)/(24.0f-17.0f);
 }
 
 gimbal_data_t *get_gimbal_data(void){

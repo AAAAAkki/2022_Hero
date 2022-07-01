@@ -691,9 +691,6 @@ static void gimbal_init(gimbal_control_t *init)
 		init->gimbal_pitch_motor.gimbal_motor_gyro_pid.derivative_output_filter_coefficient = exp(-0.05*1E-3);
 		init->gimbal_pitch_motor.gimbal_motor_gyro_pid.proportion_output_filter_coefficient = exp(-350*1E-3);
     //PID_init(&torque_current_pid, PID_POSITION, torque_current_pid_para, 30000, 30000);
-    //scope pid  need to debug
-		static const fp32 Scope_speed_pid[3] = {10, 0, 0};
-		PID_init(&init->gimbal_scope_motor.scope_motor_pid,PID_POSITION, Scope_speed_pid, 5000, 0);
 		//scope position reset
 		init->gimbal_scope_motor.scope_state=SCOPE_OFF;
 		//Çå³ıËùÓĞPID

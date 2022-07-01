@@ -231,11 +231,8 @@ typedef struct
 typedef struct
 {
 		const motor_measure_t *gimbal_motor_measure;
-		fp32 motor_speed;
-    fp32 speed_set;
     fp32 current_set;
     int16_t given_current;
-		pid_type_def scope_motor_pid;
 		uint8_t toggle_flag;
 		uint8_t scope_state;
 		uint16_t toggle_count;

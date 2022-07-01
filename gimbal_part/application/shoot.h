@@ -42,8 +42,6 @@
 #define SHOOT_DONE_KEY_OFF_TIME     15
 //鼠标长按判断
 #define PRESS_LONG_TIME             500
-//遥控器射击开关打下档一段时间后 连续发射子弹 用于清单
-#define RC_S_LONG_TIME              2000
 //摩擦轮高速 加速 时间
 #define UP_ADD_TIME                 80
 //电机反馈码盘值范围
@@ -55,15 +53,13 @@
 #define FULL_COUNT                  10
 //拨弹速度
 #define TRIGGER_SPEED               12.0f
-#define CONTINUE_TRIGGER_SPEED      4.0f
-#define READY_TRIGGER_SPEED         2.0f
 #define FASTER_TRIGGER_SPEED				72.0f
 
 #define KEY_OFF_JUGUE_TIME          500
 #define SWITCH_TRIGGER_ON           0
 #define SWITCH_TRIGGER_OFF          1
 
-//卡单时间 以及反转时间
+//卡弹时间 以及反转时间
 #define BLOCK_TRIGGER_SPEED         1.5f
 #define BLOCK_TIME                  500
 #define REVERSE_TIME                250
@@ -84,10 +80,6 @@
 #define TRIGGER_FAST_SPEED_PID_KI		7.8f
 #define TRIGGER_FAST_SPEED_PID_KD		65.0f
 
-#define TRIGGER_SLOW_SPEED_PID_KP		1150.0f
-#define TRIGGER_SLOW_SPEED_PID_KI		0.5f
-#define TRIGGER_SLOW_SPEED_PID_KD		0.0f
-
 #define TRIIGER_ECD_REVERSE_PID_KP	0.6f
 #define TRIIGER_ECD_REVERSE_PID_KI	0.15f
 #define TRIIGER_ECD_REVERSE_PID_KD	0.05f
@@ -104,18 +96,16 @@
 #define FRIC_ANGLE_PID_KD 0.0f
 
 #define FRIC_PID_MAX_OUT 16000.0f
-#define FRIC_PID_MAX_IOUT 800.0f
+#define FRIC_PID_MAX_IOUT 900.0f
 
-
-#define SHOOT_HEAT_REMAIN_VALUE     80
 
 typedef enum
 {
     SHOOT_STOP = 0,
-    SHOOT_READY,
-		SHOOT_BULLET,
-		SHOOT_ZERO_FORCE,
-		SHOOT_CONTINUE_BULLET,
+    SHOOT_READY,					//fric on
+		SHOOT_BULLET,					//trigger activated(shoot on bullet)
+		SHOOT_ZERO_FORCE,			//trigger zero force
+		SHOOT_CONTINUE_BULLET,//not applied for hero
 } shoot_mode_e;
 
 
@@ -142,12 +132,10 @@ typedef struct
 	  int32_t ecd_count;
     fp32 set_angle;
     int16_t given_current;
-		uint8_t trigger_high_speed;
 
     bool_t press_l;
     bool_t last_press_l;
     uint16_t press_l_time;
-    uint16_t rc_s_time;
 
     uint16_t block_time;
     uint16_t reverse_time;
@@ -157,7 +145,7 @@ typedef struct
     uint8_t key_time;
 
     uint16_t heat_limit;
-			uint16_t heat;
+		uint16_t heat;
     ext_game_robot_state_t *shoot_state;
 		uint8_t fric_error_count;
 		
@@ -167,6 +155,5 @@ typedef struct
 extern void shoot_init(void);
 extern int16_t shoot_control_loop(void);
 shoot_control_t *get_shoot_point(void);
-void trigger_pid_select(void);
 uint8_t get_shoot_mode(void);
 #endif

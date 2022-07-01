@@ -157,45 +157,25 @@ void chassis_task(void const *pvParameters)
   while (1)
   {
 
-//    //when mode changes, some data save
-//    //模式切换数据保存
+//    when mode changes, some data save
+//    模式切换数据保存
 //    chassis_mode_change_control_transit(&chassis_move);
     //chassis data update
     //底盘数据更新
     chassis_feedback_update(&chassis_move);
     //set chassis control set-point
     //底盘控制量设置
-		
-		
-		
 //    chassis_set_contorl(&chassis_move);
-    //chassis control pid calculate0
-    //底盘控制PID计算
-//		chassis_move.chassis_mode=intermedia_chassis_speed[3];
+    
 		top_down_speed_set(&chassis_move);
-    
-
-    //make sure  one motor is online at least, so that the control CAN message can be received
-    //确保至少一个电机在线， 这样CAN控制包可以被接收到
-    
-      //when remote control is offline, chassis motor should receive zero current.
-      //当遥控器掉线的时候，发送给底盘电机零电流.
-//      if (toe_is_error(DBUS_TOE))
-//      {
-//        CAN_cmd_chassis(0, 0, 0, 0);
-//      }
-//      else
-//      {
-//				//CAN_cmd_chassis(0, 0, 0, 0);
-//        //send control current
-//        //发送控制电流
-				chassis_control_loop(&chassis_move);
-        
-//      }
-		
-				CAN_cmd_chassis(chassis_move.motor_chassis[0].give_current, chassis_move.motor_chassis[1].give_current,
+//	chassis control pid calculate0
+//	底盘控制PID计算
+		chassis_control_loop(&chassis_move);
+//        send control current
+//        发送控制电流
+		CAN_cmd_chassis(chassis_move.motor_chassis[0].give_current, chassis_move.motor_chassis[1].give_current,
                        chassis_move.motor_chassis[2].give_current, chassis_move.motor_chassis[3].give_current);
-		
+//				CAN_cmd_chassis(0, 0, 0, 0);
 		//os delay
     //系统延时
     vTaskDelay(CHASSIS_CONTROL_TIME_MS);
@@ -231,6 +211,7 @@ static void chassis_init(chassis_move_t *chassis_move_init)
   //chassis angle PID
   //底盘角度pid值
   const static fp32 chassis_yaw_pid[3] = {CHASSIS_FOLLOW_GIMBAL_PID_KP, CHASSIS_FOLLOW_GIMBAL_PID_KI, CHASSIS_FOLLOW_GIMBAL_PID_KD};
+	//cap pid
 	const static fp32 chassis_buffer_pid[3] = {0.5,0,100};
 	const static fp32 voltage_pid[3] = {7000,35,300};
   const static fp32 chassis_x_order_filter[1] = {CHASSIS_ACCEL_X_NUM};
@@ -258,6 +239,7 @@ static void chassis_init(chassis_move_t *chassis_move_init)
     chassis_move_init->motor_chassis[i].chassis_motor_measure = get_chassis_motor_measure_point(i);
     PID_init(&chassis_move_init->motor_speed_pid[i], PID_POSITION, motor_speed_pid, M3505_MOTOR_SPEED_PID_MAX_OUT, M3505_MOTOR_SPEED_PID_MAX_IOUT);
   }
+	
 	PID_init(&chassis_move_init->buffer_pid,PID_POSITION,chassis_buffer_pid,20,0);
   PID_init(&chassis_move_init->cap_voltage_pid, PID_POSITION, voltage_pid, 20000, 8000);
 	//initialize angle PID

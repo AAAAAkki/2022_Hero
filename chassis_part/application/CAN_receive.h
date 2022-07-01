@@ -213,16 +213,6 @@ void CAN_heat_data_send(uint16_t shooter_heat, uint16_t shoot_heat_limit, uint8_
 
 void CAN_shoot_data_send(uint8_t	bullet_type, uint8_t	bullet_freq, float	bullet_speed);
 
-void get_shoot_mode(uint8_t * shoot_mode);
-
-void get_swing_mode(uint8_t * swing_flag);
-
-void get_pitch_angel(fp32 * pitch_angel);
-
-void get_yaw_absolute_angel(fp32 * yaw_absolute);
-
-void get_yaw_relative_angel(fp32 * yaw_relative);
-
 void get_cap_proportion(fp32 *cap_proportion);
 
 gimbal_data_t *get_gimbal_data(void);

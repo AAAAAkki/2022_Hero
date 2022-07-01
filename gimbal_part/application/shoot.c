@@ -66,11 +66,9 @@ static void trigger_motor_turn_back(void);
   * @retval         void
   */
 static void shoot_bullet_control(void);
-
 shoot_control_t shoot_control; //射击数据
 fp32 trigger_speed = 0;
-uint16_t tolerant = 0;
-uint8_t fast = 1;
+static const uint16_t tolerant = FASTER_TRIGGER_SPEED/6*100+1200;		//trigger_speed * 100 / 6 + 1200
 /**
   * @brief          射击初始化，初始化PID，遥控器指针，电机指针
   * @param[in]      void
@@ -81,10 +79,8 @@ void shoot_init(void)
 
     
 		static const fp32 Trigger_ecd_reverse_pid[3] = {TRIIGER_ECD_REVERSE_PID_KP, TRIIGER_ECD_REVERSE_PID_KI, TRIIGER_ECD_REVERSE_PID_KD};
-//    static const fp32 Fric_speed_pid0[3] = {100, 0.01, 200};
-//		static const fp32 Fric_speed_pid1[3] = {100, 0.01, 200};
-		static const fp32 Fric_speed_pid0[3] = {38, 0.25, 0};
-		static const fp32 Fric_speed_pid1[3] = {38, 0.25, 0};
+		static const fp32 Fric_speed_pid0[3] = {40, 0.25, 0};
+		static const fp32 Fric_speed_pid1[3] = {40, 0.25, 0};
     shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
     //遥控器指针
     shoot_control.shoot_rc = get_remote_control_point();
@@ -94,7 +90,9 @@ void shoot_init(void)
     shoot_control.fric_motor_measure[0] = get_fric_motor_measure_point(1);
     shoot_control.fric_motor_measure[1] = get_fric_motor_measure_point(2);
     //初始化PID
-		trigger_pid_select();
+		static const fp32 Trigger_speed_pid[3] = {TRIGGER_FAST_SPEED_PID_KP, TRIGGER_FAST_SPEED_PID_KI, TRIGGER_FAST_SPEED_PID_KD};
+		trigger_speed = FASTER_TRIGGER_SPEED;
+    PID_init(&shoot_control.trigger_motor_pid, PID_POSITION, Trigger_speed_pid, TRIGGER_READY_PID_MAX_OUT, TRIGGER_READY_PID_MAX_IOUT);
 		
 		PID_init(&shoot_control.trigger_motor_ecd_pid, PID_POSITION, Trigger_ecd_reverse_pid, 16000, 3000);
     PID_init(&shoot_control.fric_motor_pid[0], PID_POSITION, Fric_speed_pid0, FRIC_PID_MAX_OUT, FRIC_PID_MAX_IOUT);
@@ -201,12 +199,12 @@ static void shoot_set_mode(void)
 static int8_t last_s = RC_SW_UP;
     static uint8_t fric_state = 0;
     static uint16_t press_time = 0;
-    //????, ????,????
+    //if GIMBAL_ZERO_FORCE, set ammo booster to ZERO_FORCE, where 0 is sent to trigger and fric stop
 		if(gimbal_behaviour == GIMBAL_ZERO_FORCE)	
 				shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
 		else if(shoot_control.shoot_mode == SHOOT_ZERO_FORCE)
 				shoot_control.shoot_mode = SHOOT_STOP;
-		
+		//拨杆拨上开启摩擦轮，再次拨上关闭
 		if ((switch_is_up(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && !switch_is_up(last_s) && shoot_control.shoot_mode == SHOOT_STOP))
 		{
 				shoot_control.shoot_mode = SHOOT_READY;
@@ -216,17 +214,16 @@ static int8_t last_s = RC_SW_UP;
 				shoot_control.shoot_mode = SHOOT_STOP;
 		}
 
-		//????, ???????????
-		if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_rc->key.v & SHOOT_ON_KEYBOARD) && (shoot_control.shoot_mode == SHOOT_STOP || shoot_control.shoot_mode == SHOOT_ZERO_FORCE))
+		//拨杆拨中按X开启摩擦轮，按Z关闭
+		if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_rc->key.v & SHOOT_ON_KEYBOARD) && (shoot_control.shoot_mode == SHOOT_STOP || shoot_control.shoot_mode == SHOOT_ZERO_FORCE))//try to remove SHOOT_ZERO_FORCE
 		{
 				shoot_control.shoot_mode = SHOOT_READY;
 		}
-		//????, ???????????
 		else if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_rc->key.v & SHOOT_OFF_KEYBOARD) && shoot_control.shoot_mode != SHOOT_STOP && shoot_control.shoot_mode != SHOOT_ZERO_FORCE)
 		{
 				shoot_control.shoot_mode = SHOOT_STOP;
 		}
-
+		//开启摩擦轮后，拨杆拨下，固定间隔（3s）发射弹丸
 		if (shoot_control.shoot_mode == SHOOT_READY)
 		{
 				if (switch_is_down(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]))
@@ -240,8 +237,7 @@ static int8_t last_s = RC_SW_UP;
 						}
 				}
 		}
-
-
+		//开启摩擦轮后，拨杆拨中，按一次鼠标击发一次弹丸
 		if (switch_is_mid(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]) && (shoot_control.shoot_mode == SHOOT_READY||shoot_control.shoot_mode == SHOOT_BULLET))
 		{
 
@@ -250,21 +246,19 @@ static int8_t last_s = RC_SW_UP;
 						shoot_control.shoot_mode = SHOOT_BULLET;
 				}
 		}
-		
-
+		//热量控制
 		get_shoot_heat1_limit_and_heat0(&shoot_control.heat_limit, &shoot_control.heat);
 		if (!toe_is_error(REFEREE_TOE))
-		{
+		{		//英雄大弹丸增加热量100
 				if ((shoot_control.heat + 100 > shoot_control.heat_limit) && !(shoot_control.shoot_rc->key.v & KEY_PRESSED_OFFSET_G) && !shoot_control.move_flag && shoot_control.shoot_mode==SHOOT_BULLET)
 				{
 							shoot_control.shoot_mode = SHOOT_READY;
 				}
 		}
-		
+		//摩擦轮离线（ammo booster 断电），无力拨弹轮
 		if(shoot_control.fric_error_count == 150)
 				shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
-		
-    //??????? ????,?????
+    //云台无力，拨弹轮无力
     if (gimbal_cmd_to_shoot_stop())
     {
         shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
@@ -314,29 +308,13 @@ static void shoot_feedback_update(void)
     else
     {
         shoot_control.press_l_time = 0;
-    }
-		
+    }//try to remove this part
 		
 		if(shoot_control.shoot_mode==SHOOT_ZERO_FORCE)
 		{
 				shoot_control.sum_ecd_set=shoot_control.sum_ecd;
 		}
-		
-		
-    //射击开关下档时间计时
-    if (shoot_control.shoot_mode != SHOOT_STOP && switch_is_down(shoot_control.shoot_rc->rc.s[SHOOT_RC_MODE_CHANNEL]))
-    {
-
-        if (shoot_control.rc_s_time < RC_S_LONG_TIME)
-        {
-            shoot_control.rc_s_time++;
-        }
-    }
-    else
-    {
-        shoot_control.rc_s_time = 0;
-    }
-
+		//able to remove
     if (!toe_is_error(REFEREE_TOE))
     {
         if (shoot_control.shoot_state->shooter_id1_17mm_speed_limit == 15)
@@ -360,9 +338,10 @@ static void shoot_feedback_update(void)
         shoot_control.fric1_ramp.max_value = FRIC_15;
         shoot_control.fric2_ramp.max_value = FRIC_15;
     }
-		
-		if(shoot_control.trigger_motor_pid.Iout>5000)
-				shoot_control.trigger_motor_pid.Iout = 5000;
+		//limit Iout of trigger_pid
+		if(shoot_control.trigger_motor_pid.Iout>4500)
+				shoot_control.trigger_motor_pid.Iout = 4500;
+		//fric offline count
 		if(toe_is_error(FRIC_LEFT_MOTOR_TOE)||toe_is_error(FRIC_RIGHT_MOTOR_TOE))
 				shoot_control.fric_error_count++;
 		else
@@ -381,7 +360,7 @@ static void trigger_motor_turn_back(void)
         shoot_control.block_time++;
 				shoot_control.sum_ecd_reverse = shoot_control.sum_ecd - REVERSE_ECD;
     }
-    else if (shoot_control.block_time >= BLOCK_TIME)//blocked
+    else if (shoot_control.block_time >= BLOCK_TIME)//block confirmed
     {
         shoot_control.reverse_time++;
     }
@@ -389,7 +368,6 @@ static void trigger_motor_turn_back(void)
 				shoot_control.block_time=0;
 				shoot_control.reverse_time = 0;
 		}
-				
 		
 		if(shoot_control.reverse_time)//reverse
 		{		
@@ -400,7 +378,7 @@ static void trigger_motor_turn_back(void)
 						shoot_control.block_time = 0;
 						PID_clear(&shoot_control.trigger_motor_ecd_pid);
 				}
-				if(shoot_control.reverse_time>REVERSE_TIME )//abandon reverse
+				if(shoot_control.reverse_time>REVERSE_TIME )//abandon reverse, continue pushing trigger even blocked
 				{
 						
 						shoot_control.block_time = 0;
@@ -444,12 +422,4 @@ shoot_control_t *get_shoot_point(void)
 }
 uint8_t get_shoot_mode(void){
 		return shoot_control.shoot_mode;
-}
-void trigger_pid_select(void){
-		
-		static const fp32 Trigger_speed_pid[3] = {TRIGGER_FAST_SPEED_PID_KP, TRIGGER_FAST_SPEED_PID_KI, TRIGGER_FAST_SPEED_PID_KD};
-		trigger_speed = FASTER_TRIGGER_SPEED;
-		
-		tolerant = trigger_speed/6*100+1200;
-    PID_init(&shoot_control.trigger_motor_pid, PID_POSITION, Trigger_speed_pid, TRIGGER_READY_PID_MAX_OUT, TRIGGER_READY_PID_MAX_IOUT);
 }
