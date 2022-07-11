@@ -181,7 +181,7 @@ int16_t shoot_control_loop(void)
     shoot_control.fric_can1 = (int16_t)(shoot_control.fric1_ramp.out);
     shoot_control.fric_can2 = (int16_t)(shoot_control.fric2_ramp.out);
     PID_calc(&shoot_control.fric_motor_pid[0], shoot_control.fric_motor_measure[0]->speed_rpm, shoot_control.fric_can1);
-    PID_calc(&shoot_control.fric_motor_pid[1], shoot_control.fric_motor_measure[1]->speed_rpm, -shoot_control.fric_can1);
+    PID_calc(&shoot_control.fric_motor_pid[1], shoot_control.fric_motor_measure[1]->speed_rpm, -shoot_control.fric_can2);
 		CAN_CMD_FRIC((int16_t)shoot_control.fric_motor_pid[0].out, (int16_t)shoot_control.fric_motor_pid[1].out, gimbal_control.gimbal_scope_motor.current_set);
 //		CAN_CMD_FRIC(0,0,gimbal_control.gimbal_scope_motor.current_set);
 		
