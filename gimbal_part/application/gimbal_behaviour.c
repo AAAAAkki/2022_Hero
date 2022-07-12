@@ -825,10 +825,12 @@ static void 	gimbal_LASER_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimb
 				*pitch = 0;
 				temp_pitch *= 700;
 				temp_pitch += gimbal_control_set->laser_shoot_control.Pwm_L1;
+				temp_pitch = temp_pitch>1600? 1600:temp_pitch;
+				temp_pitch = temp_pitch<1100? 1100:temp_pitch;
+				gimbal_control_set->laser_shoot_control.Pwm_L1 = temp_pitch;
 		}
 		
-		gimbal_control_set->laser_shoot_control.Pwm_L1 = temp_pitch>1600? 1600:temp_pitch;
-		gimbal_control_set->laser_shoot_control.Pwm_L1 = temp_pitch<1100? 1100:temp_pitch;
+		
 		Angel_approx(&gimbal_control_set->laser_shoot_control.l1_data,&gimbal_control_set->laser_shoot_control.l1_iteration,&gimbal_control_set->laser_shoot_control.constant);
 		
 }
