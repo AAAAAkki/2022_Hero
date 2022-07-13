@@ -542,8 +542,8 @@ static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set)
 		if(gimbal_mode_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_R){
 				gimbal_behaviour = GIMBAL_SHOOT_LASER;
 		}
-		if(switch_is_down(gimbal_mode_set->gimbal_rc_ctrl->rc.s[1])&&switch_is_mid(gimbal_mode_set->gimbal_rc_ctrl->rc.s[GIMBAL_MODE_CHANNEL]))
-				gimbal_behaviour = GIMBAL_SHOOT_LASER;
+//		if(switch_is_down(gimbal_mode_set->gimbal_rc_ctrl->rc.s[1])&&switch_is_mid(gimbal_mode_set->gimbal_rc_ctrl->rc.s[GIMBAL_MODE_CHANNEL]))
+//				gimbal_behaviour = GIMBAL_SHOOT_LASER;
     //enter init mode
     //�жϽ���init״̬��
     {

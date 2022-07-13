@@ -50,6 +50,8 @@
 #include "referee_usart_task.h"
 #include "usb_task.h"
 #include "voltage_task.h"
+
+extern gimbal_control_t gimbal_control;
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -86,7 +88,30 @@ void MX_FREERTOS_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void USART1_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART1_IRQn 0 */
 
+  /* USER CODE END USART1_IRQn 0 */
+  HAL_UART_IRQHandler(&huart1);
+  /* USER CODE BEGIN USART1_IRQn 1 */
+
+  /* USER CODE END USART1_IRQn 1 */
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if(huart==&huart1){
+//		static uint16_t dist = 0;
+//		static uint16_t strength = 0;
+//		static uint16_t temp = 0;
+		HAL_UART_Receive_IT(&huart1,gimbal_control.laser_shoot_control.constant.rxbuff ,9);
+		gimbal_control.laser_shoot_control.constant.dist = gimbal_control.laser_shoot_control.constant.rxbuff[2] | (gimbal_control.laser_shoot_control.constant.rxbuff[3] << 8);
+//		strength = rxbuff[4] | (rxbuff[5] << 8);
+//	  temp = (rxbuff[4] | (rxbuff[5] << 8))/8-256;
+		
+	}
+}
 /* USER CODE END 0 */
 
 /**
@@ -146,6 +171,7 @@ int main(void)
     cali_param_init();
     remote_control_init();
     usart1_tx_dma_init();
+		
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */

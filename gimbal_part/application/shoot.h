@@ -61,11 +61,11 @@
 
 //卡弹时间 以及反转时间
 #define BLOCK_TRIGGER_SPEED         1.5f
-#define BLOCK_TIME                  500
-#define REVERSE_TIME                250
+#define BLOCK_TIME                  450
+#define REVERSE_TIME                400
 #define REVERSE_SPEED_LIMIT         50.0f
 
-#define REVERSE_ECD									7554
+#define REVERSE_ECD									7854
 
 #define PI_FOUR                     0.78539816339744830961566084581988f
 #define PI_TEN                      0.314f
@@ -80,9 +80,9 @@
 #define TRIGGER_FAST_SPEED_PID_KI		7.8f
 #define TRIGGER_FAST_SPEED_PID_KD		65.0f
 
-#define TRIIGER_ECD_REVERSE_PID_KP	0.6f
-#define TRIIGER_ECD_REVERSE_PID_KI	0.15f
-#define TRIIGER_ECD_REVERSE_PID_KD	0.05f
+#define TRIIGER_ECD_REVERSE_PID_KP	0.65f
+#define TRIIGER_ECD_REVERSE_PID_KI	0.2f
+#define TRIIGER_ECD_REVERSE_PID_KD	0.07f
 
 #define TRIGGER_BULLET_PID_MAX_OUT  15000.0f
 #define TRIGGER_BULLET_PID_MAX_IOUT 4200.0f
@@ -96,7 +96,7 @@
 #define FRIC_ANGLE_PID_KD 0.0f
 
 #define FRIC_PID_MAX_OUT 16000.0f
-#define FRIC_PID_MAX_IOUT 900.0f
+#define FRIC_PID_MAX_IOUT 1500.0f
 
 
 typedef enum
@@ -142,7 +142,6 @@ typedef struct
     bool_t move_flag;
 
     bool_t key;
-    uint8_t key_time;
 
     uint16_t heat_limit;
 		uint16_t heat;

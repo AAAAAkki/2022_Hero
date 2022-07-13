@@ -171,27 +171,27 @@ void Angel_approx(L1_DATA_T *L1_Data, L1_ITERATION_T *L1_Iteration,trajecyory_co
   L1_Iteration->TotalCalcu_Numbers = 0;
 }
 
-void USART1_IRQHandler(void)
-{
-  /* USER CODE BEGIN USART1_IRQn 0 */
+//void USART1_IRQHandler(void)
+//{
+//  /* USER CODE BEGIN USART1_IRQn 0 */
 
-  /* USER CODE END USART1_IRQn 0 */
-  HAL_UART_IRQHandler(&huart1);
-  /* USER CODE BEGIN USART1_IRQn 1 */
+//  /* USER CODE END USART1_IRQn 0 */
+//  HAL_UART_IRQHandler(&huart1);
+//  /* USER CODE BEGIN USART1_IRQn 1 */
 
-  /* USER CODE END USART1_IRQn 1 */
-}
+//  /* USER CODE END USART1_IRQn 1 */
+//}
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-	if(huart==&huart1){
-//		static uint16_t dist = 0;
-//		static uint16_t strength = 0;
-//		static uint16_t temp = 0;
-		HAL_UART_Receive_IT(&huart1,gimbal_control.laser_shoot_control.constant.rxbuff ,9);
-		gimbal_control.laser_shoot_control.constant.dist = gimbal_control.laser_shoot_control.constant.rxbuff[2] | (gimbal_control.laser_shoot_control.constant.rxbuff[3] << 8);
-//		strength = rxbuff[4] | (rxbuff[5] << 8);
-//	  temp = (rxbuff[4] | (rxbuff[5] << 8))/8-256;
-		
-	}
-}
+//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+//{
+//	if(huart==&huart1){
+////		static uint16_t dist = 0;
+////		static uint16_t strength = 0;
+////		static uint16_t temp = 0;
+//		HAL_UART_Receive_IT(&huart1,gimbal_control.laser_shoot_control.constant.rxbuff ,9);
+//		gimbal_control.laser_shoot_control.constant.dist = gimbal_control.laser_shoot_control.constant.rxbuff[2] | (gimbal_control.laser_shoot_control.constant.rxbuff[3] << 8);
+////		strength = rxbuff[4] | (rxbuff[5] << 8);
+////	  temp = (rxbuff[4] | (rxbuff[5] << 8))/8-256;
+//		
+//	}
+//}
