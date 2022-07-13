@@ -71,26 +71,27 @@ void UserTask(void const *pvParameters) {
     memset(&car, 0, sizeof(car));
 
     UI_send_init();
-    UI_label_static();
-    UI_car_init();
-    UI_car_static();
-    UI_aimline();
+    for (int i = 0; i < 3; i++) {  // 刷新三次
+        UI_label_static();
+        UI_car_init();
+        UI_car_static();
+        UI_aimline();
+    }
     while (1) {
         // 刷新
-        time = (time + 1) % 1000;
+        time = (time + 1) % 200;
         if (time == 0) {
             UI_label_static();  // 重新加载数据表格
             UI_car_static();
         } else if (time % 50 == 0) {
+            // 保证热插拔，重新选择ID
+            robot_id_select();
+            // 重新绘制
             UI_label_cache_reset();
             UI_aimline();  // 重新绘制瞄准线
             UI_label_change();
-            UI_car_change();
         }
         UI_car_change();
-
-        robot_id_select(); //保证热插拔，每次任务都选择一次ID
-
         vTaskDelay(1);
     }
 }
