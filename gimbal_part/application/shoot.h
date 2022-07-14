@@ -96,7 +96,8 @@
 #define FRIC_ANGLE_PID_KD 0.0f
 
 #define FRIC_PID_MAX_OUT 16000.0f
-#define FRIC_PID_MAX_IOUT 1500.0f
+#define FRIC_PID_MAX_IOUT 5500.0f
+#define FRIC_PID_MAX_IOUT_LEFT 3500.0f
 
 
 typedef enum
