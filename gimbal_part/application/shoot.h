@@ -38,6 +38,7 @@
 #define SHOOT_ON_KEYBOARD           KEY_PRESSED_OFFSET_X
 #define SHOOT_OFF_KEYBOARD          KEY_PRESSED_OFFSET_Z
 
+#define TARGET_BULLET_SPEED					15.7f
 //射击完成后 子弹弹出去后，判断时间，以防误触发
 #define SHOOT_DONE_KEY_OFF_TIME     15
 //鼠标长按判断
@@ -148,6 +149,9 @@ typedef struct
 		uint16_t heat;
     ext_game_robot_state_t *shoot_state;
 		uint8_t fric_error_count;
+		
+		fp32 last_bullet_speed;
+		fp32 bullet_speed;
 		
 } shoot_control_t;
 

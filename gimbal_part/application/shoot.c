@@ -35,6 +35,7 @@
 extern ext_game_robot_state_t robot_state;
 extern gimbal_control_t gimbal_control;
 extern gimbal_behaviour_e gimbal_behaviour;
+extern chassis_data_t chassis_data_receive;
 #define shoot_laser_on() laser_on()   //激光开启宏定义
 #define shoot_laser_off() laser_off() //激光关闭宏定义
 //微动开关IO
@@ -113,9 +114,10 @@ void shoot_init(void)
     shoot_control.move_flag = 0;
     shoot_control.speed = 0.0f;
     shoot_control.speed_set = 0.0f;
-    
 		shoot_control.sum_ecd_set=shoot_control.sum_ecd;
 		shoot_control.fric_error_count = 0;
+		shoot_control.last_bullet_speed = 0;
+		shoot_control.bullet_speed = 0;
 }
 
 /**
@@ -314,33 +316,29 @@ static void shoot_feedback_update(void)
 		{
 				shoot_control.sum_ecd_set=shoot_control.sum_ecd;
 		}
-		//able to remove
-    if (!toe_is_error(REFEREE_TOE))
-    {
-        if (shoot_control.shoot_state->shooter_id1_17mm_speed_limit == 15)
-        {
-            shoot_control.fric1_ramp.max_value = FRIC_15;
-            shoot_control.fric2_ramp.max_value = FRIC_15;
-        }
-        else if (shoot_control.shoot_state->shooter_id1_17mm_speed_limit == 18)
-        {
-            shoot_control.fric1_ramp.max_value = FRIC_18;
-            shoot_control.fric2_ramp.max_value = FRIC_18;
-        }
-        else if (shoot_control.shoot_state->shooter_id1_17mm_speed_limit == 30)
-        {
-            shoot_control.fric1_ramp.max_value = FRIC_30;
-            shoot_control.fric2_ramp.max_value = FRIC_30;
-        }
-    }
-    else
-    {
-        shoot_control.fric1_ramp.max_value = FRIC_15;
-        shoot_control.fric2_ramp.max_value = FRIC_15;
-    }
+		
 		//limit Iout of trigger_pid
 		if(shoot_control.trigger_motor_pid.Iout>4500)
 				shoot_control.trigger_motor_pid.Iout = 4500;
+		if(shoot_control.bullet_speed !=chassis_data_receive.bullet_speed){		//new bullet speed comes
+				//bullet speed incorrect
+				if(shoot_control.last_bullet_speed !=0){
+						if(shoot_control.bullet_speed < TARGET_BULLET_SPEED && shoot_control.last_bullet_speed < TARGET_BULLET_SPEED && chassis_data_receive.bullet_speed < TARGET_BULLET_SPEED + 0.5){
+								shoot_control.fric1_ramp.max_value += (TARGET_BULLET_SPEED - chassis_data_receive.bullet_speed) * 50;
+								shoot_control.fric2_ramp.max_value += (TARGET_BULLET_SPEED - chassis_data_receive.bullet_speed) * 50;
+						}
+						else if(shoot_control.bullet_speed > TARGET_BULLET_SPEED && shoot_control.last_bullet_speed > TARGET_BULLET_SPEED && chassis_data_receive.bullet_speed > TARGET_BULLET_SPEED + 0.4){
+								shoot_control.fric1_ramp.max_value += (TARGET_BULLET_SPEED - chassis_data_receive.bullet_speed) * 50;
+								shoot_control.fric2_ramp.max_value += (TARGET_BULLET_SPEED - chassis_data_receive.bullet_speed) * 50;
+						}
+						//TODO: time factor
+				}
+				//update bullet speed record
+				if (chassis_data_receive.bullet_speed != shoot_control.bullet_speed && chassis_data_receive.bullet_speed > 14.5){
+						shoot_control.last_bullet_speed = shoot_control.bullet_speed;
+						shoot_control.bullet_speed = chassis_data_receive.bullet_speed;
+				}
+		}
 		//fric offline count
 		if(toe_is_error(FRIC_LEFT_MOTOR_TOE)||toe_is_error(FRIC_RIGHT_MOTOR_TOE))
 				shoot_control.fric_error_count++;
