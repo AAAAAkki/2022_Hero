@@ -87,7 +87,7 @@ void label_draw(uint8_t optional) {
 //    }
 
     // !Form: 小陀螺状态
-//    u8_temp = ui.ui_gimbal_data->swing_flag;  // XXX: 有时候刷新错误  @Juntong(2022-7-15): 我真的不记得了
+//    u8_temp = ui.ui_gimbal_data->swing_flag;  // XXX: 有时候刷新错误  @Juntong(2022-7-15): 我真的不记得什么错误
 //    if (u8_temp != ui_cache_spin_state) {
 //        ui_cache_spin_state = u8_temp;
 //        memset(&vision_3, 0, sizeof(vision_3));
