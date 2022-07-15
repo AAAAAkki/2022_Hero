@@ -79,7 +79,7 @@ void UserTask(void const *pvParameters) {
     }
     while (1) {
         // 刷新
-        time = (time + 1) % 200;
+        time = (time + 1) % 128;
         if (time == 0) {
             UI_label_static();  // 重新加载数据表格
             UI_car_static();
