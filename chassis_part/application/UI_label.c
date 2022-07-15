@@ -75,29 +75,29 @@ void label_draw(uint8_t optional) {
     }
 
     //  !Form: Pitch轴数据
-    fp32_temp = ui.ui_gimbal_data->pitch_angel_degree;
-    if (fabsf(ui_cache_pitch_angle - fp32_temp) >= 0.001) {
-        ui_cache_pitch_angle = fp32_temp;
-        char pitch_angle_value[12];
-        String_Data CH_PITCH_DATA;
-        memset(&CH_PITCH_DATA, 0, sizeof(CH_PITCH_DATA));
-        sprintf(pitch_angle_value, "%.1f", fp32_temp);
-        Char_Draw(&CH_PITCH_DATA, "022", optional, 8, UI_Color_Yellow, 15, 6, 4, 280, 800, &pitch_angle_value[0]);
-        Char_ReFresh(CH_PITCH_DATA);
-    }
+//    fp32_temp = ui.ui_gimbal_data->pitch_angel_degree;
+//    if (fabsf(ui_cache_pitch_angle - fp32_temp) >= 0.001) {
+//        ui_cache_pitch_angle = fp32_temp;
+//        char pitch_angle_value[12];
+//        String_Data CH_PITCH_DATA;
+//        memset(&CH_PITCH_DATA, 0, sizeof(CH_PITCH_DATA));
+//        sprintf(pitch_angle_value, "%.1f", fp32_temp);
+//        Char_Draw(&CH_PITCH_DATA, "022", optional, 8, UI_Color_Yellow, 15, 6, 4, 280, 800, &pitch_angle_value[0]);
+//        Char_ReFresh(CH_PITCH_DATA);
+//    }
 
     // !Form: 小陀螺状态
-    u8_temp = ui.ui_gimbal_data->swing_flag;  // FIXME: 有时候刷新错误
-    if (u8_temp != ui_cache_spin_state) {
-        ui_cache_spin_state = u8_temp;
-        memset(&vision_3, 0, sizeof(vision_3));
-        if (ui_cache_spin_state == 1) {  // 小陀螺启动
-            Char_Draw(&vision_3, "201", optional, 1, UI_Color_Yellow, 15, 2, 4, 280, 770, "ON");
-        } else {
-            Char_Draw(&vision_3, "201", optional, 1, UI_Color_Yellow, 15, 3, 4, 280, 770, "OFF");
-        }
-        Char_ReFresh(vision_3);
-    }
+//    u8_temp = ui.ui_gimbal_data->swing_flag;  // XXX: 有时候刷新错误  @Juntong(2022-7-15): 我真的不记得什么错误
+//    if (u8_temp != ui_cache_spin_state) {
+//        ui_cache_spin_state = u8_temp;
+//        memset(&vision_3, 0, sizeof(vision_3));
+//        if (ui_cache_spin_state == 1) {  // 小陀螺启动
+//            Char_Draw(&vision_3, "201", optional, 1, UI_Color_Yellow, 15, 2, 4, 280, 770, "ON");
+//        } else {
+//            Char_Draw(&vision_3, "201", optional, 1, UI_Color_Yellow, 15, 3, 4, 280, 770, "OFF");
+//        }
+//        Char_ReFresh(vision_3);
+//    }
 
     // !Form: 电容显示
     char string[8];
@@ -125,13 +125,13 @@ void UI_label_static() {
     Char_Draw(&image_0, "104", UI_Graph_ADD, 1, UI_Color_Cyan, 15, 8, 4, 60, 830, "FIRC");  // 摩擦轮
     Char_ReFresh(image_0);
 
-    memset(&image_1, 0, sizeof(image_1));
-    Char_Draw(&image_1, "105", UI_Graph_ADD, 1, UI_Color_Cyan, 15, 8, 4, 60, 800, "PITCH");
-    Char_ReFresh(image_1);
-
-    memset(&image_2, 0, sizeof(image_2));
-    Char_Draw(&image_2, "106", UI_Graph_ADD, 1, UI_Color_Cyan, 15, 4, 4, 60, 770, "SPIN");  // 小陀螺
-    Char_ReFresh(image_2);
+//    memset(&image_1, 0, sizeof(image_1));
+//    Char_Draw(&image_1, "105", UI_Graph_ADD, 1, UI_Color_Cyan, 15, 8, 4, 60, 800, "PITCH");
+//    Char_ReFresh(image_1);
+//
+//    memset(&image_2, 0, sizeof(image_2));
+//    Char_Draw(&image_2, "106", UI_Graph_ADD, 1, UI_Color_Cyan, 15, 4, 4, 60, 770, "SPIN");  // 小陀螺
+//    Char_ReFresh(image_2);
 
     //更新数据
     ui.ui_chassis_move = get_chassis_point();  // 获取底盘数据
