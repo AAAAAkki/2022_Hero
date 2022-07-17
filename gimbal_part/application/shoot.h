@@ -97,7 +97,7 @@
 #define FRIC_ANGLE_PID_KD 0.0f
 
 #define FRIC_PID_MAX_OUT 16000.0f
-#define FRIC_PID_MAX_IOUT 5500.0f
+#define FRIC_PID_MAX_IOUT 5000.0f
 #define FRIC_PID_MAX_IOUT_LEFT 3500.0f
 
 
@@ -143,8 +143,6 @@ typedef struct
     uint16_t reverse_time;
     bool_t move_flag;
 
-    bool_t key;
-
     uint16_t heat_limit;
 		uint16_t heat;
     ext_game_robot_state_t *shoot_state;
@@ -152,6 +150,7 @@ typedef struct
 		
 		fp32 last_bullet_speed;
 		fp32 bullet_speed;
+		uint8_t adp_flag;
 		
 } shoot_control_t;
 

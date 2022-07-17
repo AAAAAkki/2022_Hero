@@ -1,10 +1,14 @@
 #ifndef BSP_FRIC_H
 #define BSP_FRIC_H
 #include "struct_typedef.h"
+// TEST_BULLET: 1 -- use training bullet, 0 -- official game bullet 
+#define TEST_BULLET 0
+#if TEST_BULLET
+#define FRIC_16 5500
+#else
+#define FRIC_16 5950
+#endif
 
-#define FRIC_15 5700
-#define FRIC_18 4500
-#define FRIC_30 8800
 #define FRIC_OFF 0
 
 extern void fric_off(void);

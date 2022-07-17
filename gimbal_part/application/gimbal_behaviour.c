@@ -533,7 +533,6 @@ static void gimbal_behavour_set(gimbal_control_t *gimbal_mode_set)
 				gimbal_mode_set->vision_mode=1;
         gimbal_behaviour = GIMBAL_ABSOLUTE_ANGLE;
     }
-
     if (toe_is_error(DBUS_TOE))
     {
         gimbal_behaviour = GIMBAL_ZERO_FORCE;

@@ -80,8 +80,8 @@ void shoot_init(void)
 
     
 		static const fp32 Trigger_ecd_reverse_pid[3] = {TRIIGER_ECD_REVERSE_PID_KP, TRIIGER_ECD_REVERSE_PID_KI, TRIIGER_ECD_REVERSE_PID_KD};
-		static const fp32 Fric_speed_pid0[3] = {38, 0.25, 0};
-		static const fp32 Fric_speed_pid1[3] = {38, 0.25, 0};
+		static const fp32 Fric_speed_pid0[3] = {35, 0.35, 0};
+		static const fp32 Fric_speed_pid1[3] = {37, 0.35, 0};
     shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
     //遥控器指针
     shoot_control.shoot_rc = get_remote_control_point();
@@ -99,15 +99,15 @@ void shoot_init(void)
     PID_init(&shoot_control.fric_motor_pid[0], PID_POSITION, Fric_speed_pid0, FRIC_PID_MAX_OUT, FRIC_PID_MAX_IOUT);
     PID_init(&shoot_control.fric_motor_pid[1], PID_POSITION, Fric_speed_pid1, FRIC_PID_MAX_OUT, FRIC_PID_MAX_IOUT);
 		shoot_control.fric_motor_pid[0].proportion_output_filter_coefficient = exp(-600*1E-3);
-		shoot_control.fric_motor_pid[1].proportion_output_filter_coefficient = exp(-600*1E-3);
+		shoot_control.fric_motor_pid[1].proportion_output_filter_coefficient = exp(-550*1E-3);
 //		shoot_control.trigger_motor_pid.derivative_output_filter_coefficient = exp(-0.05*1E-3);
 		shoot_control.trigger_motor_pid.proportion_output_filter_coefficient = exp(-1000*1E-3);
 		
 		shoot_control.ecd_count=0;
     //更新数据
     shoot_feedback_update();
-    ramp_init(&shoot_control.fric1_ramp, SHOOT_CONTROL_TIME * 0.001f, FRIC_15, FRIC_OFF);
-    ramp_init(&shoot_control.fric2_ramp, SHOOT_CONTROL_TIME * 0.001f, FRIC_15, FRIC_OFF);
+    ramp_init(&shoot_control.fric1_ramp, SHOOT_CONTROL_TIME * 0.001f, FRIC_16, FRIC_OFF);
+    ramp_init(&shoot_control.fric2_ramp, SHOOT_CONTROL_TIME * 0.001f, FRIC_16, FRIC_OFF);
     shoot_control.fric_can1 = FRIC_OFF;
     shoot_control.fric_can2 = FRIC_OFF;
     shoot_control.given_current = 0;
@@ -118,6 +118,7 @@ void shoot_init(void)
 		shoot_control.fric_error_count = 0;
 		shoot_control.last_bullet_speed = 0;
 		shoot_control.bullet_speed = 0;
+		shoot_control.adp_flag = 0;
 }
 
 /**
@@ -320,24 +321,28 @@ static void shoot_feedback_update(void)
 		//limit Iout of trigger_pid
 		if(shoot_control.trigger_motor_pid.Iout>4500)
 				shoot_control.trigger_motor_pid.Iout = 4500;
-		if(shoot_control.bullet_speed !=chassis_data_receive.bullet_speed){		//new bullet speed comes
+		
+		if(shoot_control.bullet_speed !=chassis_data_receive.bullet_speed && chassis_data_receive.bullet_speed > 14.5 && chassis_data_receive.bullet_speed < 17.0){		//new bullet speed comes
 				//bullet speed incorrect
 				if(shoot_control.last_bullet_speed !=0){
-						if(shoot_control.bullet_speed < TARGET_BULLET_SPEED && shoot_control.last_bullet_speed < TARGET_BULLET_SPEED && chassis_data_receive.bullet_speed < TARGET_BULLET_SPEED + 0.5){
-								shoot_control.fric1_ramp.max_value += (TARGET_BULLET_SPEED - chassis_data_receive.bullet_speed) * 50;
-								shoot_control.fric2_ramp.max_value += (TARGET_BULLET_SPEED - chassis_data_receive.bullet_speed) * 50;
+						if(shoot_control.bullet_speed < TARGET_BULLET_SPEED && shoot_control.last_bullet_speed < TARGET_BULLET_SPEED && chassis_data_receive.bullet_speed < TARGET_BULLET_SPEED - 0.35){
+								shoot_control.adp_flag = 1;
 						}
-						else if(shoot_control.bullet_speed > TARGET_BULLET_SPEED && shoot_control.last_bullet_speed > TARGET_BULLET_SPEED && chassis_data_receive.bullet_speed > TARGET_BULLET_SPEED + 0.4){
-								shoot_control.fric1_ramp.max_value += (TARGET_BULLET_SPEED - chassis_data_receive.bullet_speed) * 50;
-								shoot_control.fric2_ramp.max_value += (TARGET_BULLET_SPEED - chassis_data_receive.bullet_speed) * 50;
+						else if(shoot_control.bullet_speed > TARGET_BULLET_SPEED && shoot_control.last_bullet_speed > TARGET_BULLET_SPEED && chassis_data_receive.bullet_speed > TARGET_BULLET_SPEED + 0.35){
+								shoot_control.adp_flag = 1;
 						}
 						//TODO: time factor
 				}
 				//update bullet speed record
-				if (chassis_data_receive.bullet_speed != shoot_control.bullet_speed && chassis_data_receive.bullet_speed > 14.5){
-						shoot_control.last_bullet_speed = shoot_control.bullet_speed;
-						shoot_control.bullet_speed = chassis_data_receive.bullet_speed;
+				if(shoot_control.adp_flag){
+						fp32 adpt_value = -(shoot_control.last_bullet_speed + shoot_control.bullet_speed + chassis_data_receive.bullet_speed) / 3 + TARGET_BULLET_SPEED;
+						adpt_value *= 40;
+						shoot_control.fric1_ramp.max_value += adpt_value;
+						shoot_control.fric2_ramp.max_value += adpt_value;
 				}
+				shoot_control.last_bullet_speed = shoot_control.bullet_speed;
+				shoot_control.bullet_speed = chassis_data_receive.bullet_speed;
+				shoot_control.adp_flag = 0;
 		}
 		//fric offline count
 		if(toe_is_error(FRIC_LEFT_MOTOR_TOE)||toe_is_error(FRIC_RIGHT_MOTOR_TOE))
