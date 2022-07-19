@@ -63,7 +63,8 @@ void servo_task(void const *argument)
     servo_rc = get_remote_control_point();
 
     
-		gimbal_control.laser_shoot_control.Pwm_L1 = SERVO_MID_PWM;
+//		gimbal_control.laser_shoot_control.Pwm_L1 = SERVO_MID_PWM;
+		gimbal_control.laser_shoot_control.Pwm_L1 = 1360;
 		servo_pwm_set(gimbal_control.laser_shoot_control.Pwm_L1);
     while (1)
     {

@@ -81,7 +81,7 @@ void shoot_init(void)
     
 		static const fp32 Trigger_ecd_reverse_pid[3] = {TRIIGER_ECD_REVERSE_PID_KP, TRIIGER_ECD_REVERSE_PID_KI, TRIIGER_ECD_REVERSE_PID_KD};
 		static const fp32 Fric_speed_pid0[3] = {35, 0.35, 0};
-		static const fp32 Fric_speed_pid1[3] = {37, 0.35, 0};
+		static const fp32 Fric_speed_pid1[3] = {36, 0.35, 0};
     shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
     //Ò£¿ØÆ÷Ö¸Õë
     shoot_control.shoot_rc = get_remote_control_point();
