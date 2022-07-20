@@ -164,16 +164,16 @@ void UI_aimline() {
     if (ui_scope_state == 2) {        //开镜
 
         memset(&line_1, 0, sizeof(line_1));
-        Line_Draw(&line_1, "901", UI_Graph_Del, 1, UI_Color_Yellow, 2, 930, 712, 990, 712);
+        Line_Draw(&line_1, "901", UI_Graph_Change, 1, UI_Color_Green, 2, 900, 761, 1020, 761);
 
         memset(&line_2, 0, sizeof(line_2));
-        Line_Draw(&line_2, "902", UI_Graph_Del, 1, UI_Color_Yellow, 2, 900, 696, 1020, 696);
+        Line_Draw(&line_2, "902", UI_Graph_Change, 1, UI_Color_Green, 2, 900, 692, 1020, 692);
 
         memset(&line_3, 0, sizeof(line_3));
-        Line_Draw(&line_3, "903", UI_Graph_Del, 1, UI_Color_Pink, 2, 870, 655, 1050, 655);
+        Line_Draw(&line_3, "903", UI_Graph_Change, 1, UI_Color_Green, 2, 900, 422, 1020, 422);
 
-//        memset(&line_4, 0, sizeof(line_4));
-//        Line_Draw(&line_4, "904", UI_Graph_Del, 1, UI_Color_Green, 2, 840, 613, 1080, 613);
+        memset(&line_4, 0, sizeof(line_4));
+        Line_Draw(&line_4, "904", UI_Graph_Change, 1, UI_Color_Green, 2, 900, 354, 1020, 354);
         UI_ReFresh(2, line_1, line_2);
         UI_ReFresh(1, line_3);
     } else {  //开镜之外的情况
@@ -186,8 +186,8 @@ void UI_aimline() {
         memset(&line_3, 0, sizeof(line_3));
         Line_Draw(&line_3, "903", UI_Graph_ADD, 1, UI_Color_Pink, 2, 870, 655, 1050, 655);
 
-//        memset(&line_4, 0, sizeof(line_4));
-//        Line_Draw(&line_4, "904", UI_Graph_ADD, 1, UI_Color_Green, 2, 840, 613, 1080, 613);
+        memset(&line_4, 0, sizeof(line_4));
+        Line_Draw(&line_4, "904", UI_Graph_ADD, 1, UI_Color_Green, 0, 0, 0, 0, 0);
         UI_ReFresh(2, line_1, line_2);
         UI_ReFresh(1, line_3);
     }
