@@ -7,6 +7,7 @@
   ****************************辽宁科技大学COD****************************
   */
 
+#include <stdio.h>
 #include "User_Task.h"
 #include "referee.h"
 #include "cmsis_os.h"
@@ -52,6 +53,7 @@ Graph_Data line_1;
 Graph_Data line_2;
 Graph_Data line_3;
 Graph_Data line_4;
+String_Data time_data;
 
 void ui_char_refresh(void);
 
@@ -67,25 +69,38 @@ void UI_car_static(void);
 
 void UserTask(void const *pvParameters) {
     static uint16_t time = 0;
+    static uint16_t time_count = 0;
+    char time_string_data[3];
 
     memset(&car, 0, sizeof(car));
 
     UI_send_init();
-    UI_label_static();
     UI_car_init();
-    UI_car_static();
-    UI_aimline();
+    for (int i = 0; i < 3; i++) {  // 刷新三次
+        UI_label_static();
+        UI_car_static();
+        UI_aimline();
+    }
     while (1) {
         // 刷新
-        time = (time + 1) % 1000;
+        time = (time + 1) % 128;
         if (time == 0) {
             UI_label_static();  // 重新加载数据表格
             UI_car_static();
-        } else if (time % 50 == 0) {
-            UI_label_cache_reset();
+        } else if (time % 10 == 0) {
+            UI_label_cache_reset();  // 清除表格数据的缓存
             UI_aimline();  // 重新绘制瞄准线
+        }
+        if (time % 32 == 0) {
+            // 更新数据
             UI_label_change();
-            UI_car_change();
+            // 绘制、刷新计时器
+            time_count = (time_count + 1) % 100;
+            sprintf(time_string_data, "%3d", time_count);
+            Char_Draw(&time_data, "987", time == 1 ? UI_Graph_ADD : UI_Graph_Change,
+                      1, UI_Color_Black,
+                      10, 3, 3, 1750, 1060, time_string_data);
+            Char_ReFresh(time_data);
         }
         UI_car_change();
 
