@@ -151,6 +151,8 @@ typedef struct
 		fp32 last_bullet_speed;
 		fp32 bullet_speed;
 		uint8_t adp_flag;
+		uint8_t adp_tolerant;
+		pid_type_def bullet_speed_pid;
 		
 } shoot_control_t;
 
@@ -158,5 +160,6 @@ typedef struct
 extern void shoot_init(void);
 extern int16_t shoot_control_loop(void);
 shoot_control_t *get_shoot_point(void);
+void bullet_speed_adapt(void);
 uint8_t get_shoot_mode(void);
 #endif

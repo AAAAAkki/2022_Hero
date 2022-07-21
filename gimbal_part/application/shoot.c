@@ -80,6 +80,7 @@ void shoot_init(void)
 
     
 		static const fp32 Trigger_ecd_reverse_pid[3] = {TRIIGER_ECD_REVERSE_PID_KP, TRIIGER_ECD_REVERSE_PID_KI, TRIIGER_ECD_REVERSE_PID_KD};
+		static const fp32 Bullet_speed_adpt_pid[3] = {40, 3, 0};
 		static const fp32 Fric_speed_pid0[3] = {35, 0.35, 0};
 		static const fp32 Fric_speed_pid1[3] = {36, 0.35, 0};
     shoot_control.shoot_mode = SHOOT_ZERO_FORCE;
@@ -119,6 +120,8 @@ void shoot_init(void)
 		shoot_control.last_bullet_speed = 0;
 		shoot_control.bullet_speed = 0;
 		shoot_control.adp_flag = 0;
+		shoot_control.adp_tolerant = 3;
+		PID_init(&shoot_control.bullet_speed_pid, PID_POSITION,Bullet_speed_adpt_pid, 70, 30);
 }
 
 /**
@@ -319,31 +322,11 @@ static void shoot_feedback_update(void)
 		}
 		
 		//limit Iout of trigger_pid
-		if(shoot_control.trigger_motor_pid.Iout>4500)
-				shoot_control.trigger_motor_pid.Iout = 4500;
+		if(shoot_control.trigger_motor_pid.Iout>5000)
+				shoot_control.trigger_motor_pid.Iout = 5000;
 		
-		if(shoot_control.bullet_speed !=chassis_data_receive.bullet_speed && chassis_data_receive.bullet_speed > 14.5 && chassis_data_receive.bullet_speed < 17.0){		//new bullet speed comes
-				//bullet speed incorrect
-				if(shoot_control.last_bullet_speed !=0){
-						if(shoot_control.bullet_speed < TARGET_BULLET_SPEED && shoot_control.last_bullet_speed < TARGET_BULLET_SPEED && chassis_data_receive.bullet_speed < TARGET_BULLET_SPEED - 0.35){
-								shoot_control.adp_flag = 1;
-						}
-						else if(shoot_control.bullet_speed > TARGET_BULLET_SPEED && shoot_control.last_bullet_speed > TARGET_BULLET_SPEED && chassis_data_receive.bullet_speed > TARGET_BULLET_SPEED + 0.35){
-								shoot_control.adp_flag = 1;
-						}
-						//TODO: time factor
-				}
-				//update bullet speed record
-				if(shoot_control.adp_flag){
-						fp32 adpt_value = -(shoot_control.last_bullet_speed + shoot_control.bullet_speed + chassis_data_receive.bullet_speed) / 3 + TARGET_BULLET_SPEED;
-						adpt_value *= 40;
-						shoot_control.fric1_ramp.max_value += adpt_value;
-						shoot_control.fric2_ramp.max_value += adpt_value;
-				}
-				shoot_control.last_bullet_speed = shoot_control.bullet_speed;
-				shoot_control.bullet_speed = chassis_data_receive.bullet_speed;
-				shoot_control.adp_flag = 0;
-		}
+		bullet_speed_adapt();
+		
 		//fric offline count
 		if(toe_is_error(FRIC_LEFT_MOTOR_TOE)||toe_is_error(FRIC_RIGHT_MOTOR_TOE))
 				shoot_control.fric_error_count++;
@@ -425,4 +408,46 @@ shoot_control_t *get_shoot_point(void)
 }
 uint8_t get_shoot_mode(void){
 		return shoot_control.shoot_mode;
+}
+
+void bullet_speed_adapt(void){
+//		if(shoot_control.bullet_speed !=chassis_data_receive.bullet_speed && chassis_data_receive.bullet_speed > 14.5 && chassis_data_receive.bullet_speed < 17.0){		//new bullet speed comes
+//				//bullet speed incorrect
+//				if(shoot_control.last_bullet_speed !=0){
+//						if(shoot_control.bullet_speed < TARGET_BULLET_SPEED && shoot_control.last_bullet_speed < TARGET_BULLET_SPEED && chassis_data_receive.bullet_speed < TARGET_BULLET_SPEED - 0.35){
+//								shoot_control.adp_flag = 1;
+//						}
+//						else if(shoot_control.bullet_speed > TARGET_BULLET_SPEED && shoot_control.last_bullet_speed > TARGET_BULLET_SPEED && chassis_data_receive.bullet_speed > TARGET_BULLET_SPEED + 0.35){
+//								shoot_control.adp_flag = 1;
+//						}
+//						//TODO: time factor
+//				}
+//				//update bullet speed record
+//				if(shoot_control.adp_flag){
+//						fp32 adpt_value = -(shoot_control.last_bullet_speed + shoot_control.bullet_speed + chassis_data_receive.bullet_speed) / 3 + TARGET_BULLET_SPEED;
+//						adpt_value *= 40;
+//						shoot_control.fric1_ramp.max_value += adpt_value;
+//						shoot_control.fric2_ramp.max_value += adpt_value;
+//				}
+//				shoot_control.last_bullet_speed = shoot_control.bullet_speed;
+//				shoot_control.bullet_speed = chassis_data_receive.bullet_speed;
+//				shoot_control.adp_flag = 0;
+//		}
+		if(shoot_control.bullet_speed !=chassis_data_receive.bullet_speed)
+				PID_calc(&shoot_control.bullet_speed_pid, chassis_data_receive.bullet_speed,TARGET_BULLET_SPEED);
+		if(shoot_control.bullet_speed !=chassis_data_receive.bullet_speed && chassis_data_receive.bullet_speed < TARGET_BULLET_SPEED - 0.35)
+				shoot_control.adp_tolerant--;
+		else if(shoot_control.bullet_speed !=chassis_data_receive.bullet_speed && chassis_data_receive.bullet_speed > TARGET_BULLET_SPEED + 0.35)
+				shoot_control.adp_tolerant++;
+		if(shoot_control.adp_tolerant == 0){
+				shoot_control.fric1_ramp.max_value += shoot_control.bullet_speed_pid.out;
+				shoot_control.fric2_ramp.max_value += shoot_control.bullet_speed_pid.out;
+				shoot_control.adp_tolerant += 2;
+		}
+		else if(shoot_control.adp_tolerant == 5){
+				shoot_control.fric1_ramp.max_value += shoot_control.bullet_speed_pid.out;
+				shoot_control.fric2_ramp.max_value += shoot_control.bullet_speed_pid.out;
+				shoot_control.adp_tolerant -= 2;
+		}
+		shoot_control.bullet_speed = chassis_data_receive.bullet_speed;
 }

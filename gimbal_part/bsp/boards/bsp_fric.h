@@ -2,7 +2,7 @@
 #define BSP_FRIC_H
 #include "struct_typedef.h"
 // TEST_BULLET: 1 -- use training bullet, 0 -- official game bullet 
-#define TEST_BULLET 1
+#define TEST_BULLET 0
 #if TEST_BULLET
 #define FRIC_16 5565
 #else
