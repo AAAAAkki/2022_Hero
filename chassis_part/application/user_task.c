@@ -25,6 +25,9 @@ extern vision_control_t vision_control;
 #define PI 3.1415936
 #define cbc car.basic_config
 
+#define TIME_COUNT_START_ASCII 30  // '0'
+#define TIME_COUNT_STOP_ASCII 39   // '9'
+
 #define set_name(d, s1, s2, s3) do{\
                                     (d)[0] = (uint8_t) (s1); \
                                     (d)[1] = (uint8_t) (s2); \
@@ -52,14 +55,11 @@ Graph_Data line_1;
 Graph_Data line_2;
 Graph_Data line_3;
 Graph_Data line_4;
-
-void ui_char_refresh(void);
+String_Data time_data;
 
 void robot_id_data_init(void);
 
 void robot_id_select(void);
-
-void ui_refresh(void);
 
 void UI_aimline();
 
@@ -67,15 +67,43 @@ void UI_car_static(void);
 
 void UserTask(void const *pvParameters) {
     static uint16_t time = 0;
+    static char time_count = TIME_COUNT_START_ASCII;
 
     memset(&car, 0, sizeof(car));
 
     UI_send_init();
+    UI_car_init();
     for (int i = 0; i < 3; i++) {  // 刷新三次
         UI_label_static();
         UI_car_init();
         UI_car_static();
         UI_aimline();
+    }
+    for (int i = 0; i < 3; i++) {  // 刷新三次
+        UI_label_static();
+        UI_car_static();
+        UI_aimline();
+
+        // time change shower init
+        Char_Draw(&time_data, "987", UI_Graph_ADD,
+                  2, UI_Color_Yellow, 14, 1, 2,
+                  910, 100, &time_count);
+        Char_ReFresh(time_data);
+
+        //aimline init
+        memset(&line_1, 0, sizeof(line_1));
+        Line_Draw(&line_1, "901", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 930, 712, 990, 712);
+
+        memset(&line_2, 0, sizeof(line_2));
+        Line_Draw(&line_2, "902", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 900, 696, 1020, 696);
+
+        memset(&line_3, 0, sizeof(line_3));
+        Line_Draw(&line_3, "903", UI_Graph_ADD, 1, UI_Color_Pink, 2, 870, 655, 1050, 655);
+
+        memset(&line_4, 0, sizeof(line_4));
+        Line_Draw(&line_4, "904", UI_Graph_ADD, 1, UI_Color_Green, 0, 0, 0, 0, 0);
+        UI_ReFresh(2, line_1, line_2);
+        UI_ReFresh(2, line_3, line_4);
     }
     while (1) {
         // 刷新
@@ -88,8 +116,42 @@ void UserTask(void const *pvParameters) {
             robot_id_select();
             // 重新绘制
             UI_label_cache_reset();
+        } else if (time % 10 == 0) {
+            UI_label_cache_reset();  // 清除表格数据的缓存
             UI_aimline();  // 重新绘制瞄准线
+            Char_Draw(&time_data, "987", UI_Graph_ADD,
+                      2, UI_Color_Yellow, 14, 1, 2,
+                      910, 100, &time_count);
+            Char_ReFresh(time_data);
+            //aimline init
+            memset(&line_1, 0, sizeof(line_1));
+            Line_Draw(&line_1, "901", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 930, 712, 990, 712);
+
+            memset(&line_2, 0, sizeof(line_2));
+            Line_Draw(&line_2, "902", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 900, 696, 1020, 696);
+
+            memset(&line_3, 0, sizeof(line_3));
+            Line_Draw(&line_3, "903", UI_Graph_ADD, 1, UI_Color_Pink, 2, 870, 655, 1050, 655);
+
+            memset(&line_4, 0, sizeof(line_4));
+            Line_Draw(&line_4, "904", UI_Graph_ADD, 1, UI_Color_Green, 0, 0, 0, 0, 0);
+            UI_ReFresh(2, line_1, line_2);
+            UI_ReFresh(2, line_3, line_4);
+        }
+        if (time % 32 == 0) {
+            // 更新数据
             UI_label_change();
+            // 更新刷新计时器
+            // 计时器递增
+            if (time_count < TIME_COUNT_STOP_ASCII) {
+                time_count += 1;
+            } else {  // time_count == TIME_COUNT_STOP_ASCII
+                time_count = TIME_COUNT_START_ASCII;
+            }
+            Char_Draw(&time_data, "987", UI_Graph_Change,
+                      2, UI_Color_Yellow, 14, 1, 2,
+                      910, 100, &time_count);
+            Char_ReFresh(time_data);
         }
         UI_car_change();
         vTaskDelay(1);
@@ -154,7 +216,6 @@ void UI_send_init() {
 /*** 数据赋值 ***/
     robot_id_data_init();
     robot_id_select();
-
 }
 
 
@@ -165,32 +226,32 @@ void UI_aimline() {
     if (ui_scope_state == 2) {        //开镜
 
         memset(&line_1, 0, sizeof(line_1));
-        Line_Draw(&line_1, "901", UI_Graph_Del, 1, UI_Color_Yellow, 2, 930, 670, 990, 670);
+        Line_Draw(&line_1, "901", UI_Graph_Change, 1, UI_Color_Green, 2, 900, 761, 1020, 761);
 
         memset(&line_2, 0, sizeof(line_2));
-        Line_Draw(&line_2, "902", UI_Graph_Del, 1, UI_Color_Yellow, 2, 900, 702, 1020, 702);
+        Line_Draw(&line_2, "902", UI_Graph_Change, 1, UI_Color_Green, 2, 900, 692, 1020, 692);
 
         memset(&line_3, 0, sizeof(line_3));
-        Line_Draw(&line_3, "903", UI_Graph_Del, 1, UI_Color_Pink, 2, 870, 655, 1050, 655);
+        Line_Draw(&line_3, "903", UI_Graph_Change, 1, UI_Color_Green, 2, 900, 422, 1020, 422);
 
-//        memset(&line_4, 0, sizeof(line_4));
-//        Line_Draw(&line_4, "904", UI_Graph_Del, 1, UI_Color_Green, 2, 840, 613, 1080, 613);
+        memset(&line_4, 0, sizeof(line_4));
+        Line_Draw(&line_4, "904", UI_Graph_Change, 1, UI_Color_Green, 2, 900, 354, 1020, 354);
         UI_ReFresh(2, line_1, line_2);
-        UI_ReFresh(1, line_3);
+        UI_ReFresh(2, line_3, line_4);
     } else {  //开镜之外的情况
         memset(&line_1, 0, sizeof(line_1));
-        Line_Draw(&line_1, "901", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 930, 670, 990, 670);
+        Line_Draw(&line_1, "901", UI_Graph_Change, 1, UI_Color_Yellow, 2, 930, 712, 990, 712);
 
         memset(&line_2, 0, sizeof(line_2));
-        Line_Draw(&line_2, "902", UI_Graph_ADD, 1, UI_Color_Yellow, 2, 900, 702, 1020, 702);
+        Line_Draw(&line_2, "902", UI_Graph_Change, 1, UI_Color_Yellow, 2, 900, 696, 1020, 696);
 
         memset(&line_3, 0, sizeof(line_3));
-        Line_Draw(&line_3, "903", UI_Graph_ADD, 1, UI_Color_Pink, 2, 870, 655, 1050, 655);
+        Line_Draw(&line_3, "903", UI_Graph_Change, 1, UI_Color_Pink, 2, 870, 655, 1050, 655);
 
-//        memset(&line_4, 0, sizeof(line_4));
-//        Line_Draw(&line_4, "904", UI_Graph_ADD, 1, UI_Color_Green, 2, 840, 613, 1080, 613);
+        memset(&line_4, 0, sizeof(line_4));
+        Line_Draw(&line_4, "904", UI_Graph_Change, 1, UI_Color_Green, 0, 0, 0, 0, 0);
         UI_ReFresh(2, line_1, line_2);
-        UI_ReFresh(1, line_3);
+        UI_ReFresh(2, line_3, line_4);
     }
 }
 
