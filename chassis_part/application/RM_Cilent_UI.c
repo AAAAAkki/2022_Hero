@@ -226,7 +226,7 @@ void Float_Draw(String_Data *image,char imagename[3],u32 Graph_Operate,u32 Graph
    image->Graph_Control.start_y = Start_y;
    image->Graph_Control.start_angle = Graph_Size;
    image->Graph_Control.end_angle = Graph_Digit;
-   sprintf((char *) image->show_Data,"%d", (int) float_data);
+   sprintf((char *) image->show_Data,"%.5f", float_data);
 }
 
 /************************************************绘制字符型数据*************************************************

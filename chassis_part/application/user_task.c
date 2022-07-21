@@ -26,6 +26,9 @@ extern vision_control_t vision_control;
 #define PI 3.1415936
 #define cbc car.basic_config
 
+#define TIME_COUNT_START_ASCII 30  // '0'
+#define TIME_COUNT_STOP_ASCII 39   // '9'
+
 #define set_name(d, s1, s2, s3) do{\
                                     (d)[0] = (uint8_t) (s1); \
                                     (d)[1] = (uint8_t) (s2); \
@@ -69,8 +72,7 @@ void UI_car_static(void);
 
 void UserTask(void const *pvParameters) {
     static uint16_t time = 0;
-    static uint16_t time_count = 0;
-    char time_string_data[3];
+    static char time_count = TIME_COUNT_START_ASCII;
 
     memset(&car, 0, sizeof(car));
 
@@ -81,9 +83,9 @@ void UserTask(void const *pvParameters) {
         UI_car_static();
         UI_aimline();
 
-        Float_Draw(&time_data, "987", UI_Graph_ADD,
-                   2, UI_Color_Yellow, 14, 0, 2,
-                   910, 100, (float) time_count);
+        Char_Draw(&time_data, "987", UI_Graph_ADD,
+                  2, UI_Color_Yellow, 14, 1, 2,
+                  910, 100, &time_count);
         Char_ReFresh(time_data);
         //aimline init
         memset(&line_1, 0, sizeof(line_1));
@@ -109,9 +111,9 @@ void UserTask(void const *pvParameters) {
         } else if (time % 10 == 0) {
             UI_label_cache_reset();  // 清除表格数据的缓存
             UI_aimline();  // 重新绘制瞄准线
-            Float_Draw(&time_data, "987", UI_Graph_ADD,
-                       2, UI_Color_Yellow, 14, 0, 2,
-                       910, 100, (float) time_count);
+            Char_Draw(&time_data, "987", UI_Graph_ADD,
+                      2, UI_Color_Yellow, 14, 1, 2,
+                      910, 100, &time_count);
             Char_ReFresh(time_data);
             //aimline init
             memset(&line_1, 0, sizeof(line_1));
@@ -131,12 +133,16 @@ void UserTask(void const *pvParameters) {
         if (time % 32 == 0) {
             // 更新数据
             UI_label_change();
-            // 绘制、刷新计时器
-            time_count = (time_count + 1) % 100;
-//            sprintf(time_string_data, "%#3d", time_count + 1);
-            Float_Draw(&time_data, "987", UI_Graph_Change,
-                       2, UI_Color_Yellow, 14, 0, 2,
-                       910, 100, (float) time_count);
+            // 更新刷新计时器
+            // 计时器递增
+            if (time_count < TIME_COUNT_STOP_ASCII) {
+                time_count += 1;
+            } else {  // time_count == TIME_COUNT_STOP_ASCII
+                time_count = TIME_COUNT_START_ASCII;
+            }
+            Char_Draw(&time_data, "987", UI_Graph_Change,
+                      2, UI_Color_Yellow, 14, 1, 2,
+                      910, 100, &time_count);
             Char_ReFresh(time_data);
         }
         UI_car_change();
