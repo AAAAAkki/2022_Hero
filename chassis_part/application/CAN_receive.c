@@ -115,7 +115,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 				gimbal_trans.swing_flag=rx_data[1]&0x01;
 				gimbal_trans.scope_state=rx_data[1]&0x02;
 				gimbal_trans.pitch_angel_degree=(fp32)temp[1]/100;
-				gimbal_trans.yaw_absolute_angel=(fp32)temp[2]/100;
+				gimbal_trans.fric_rpm=temp[2];
 				gimbal_trans.yaw_relative_angel=(fp32)temp[3]/100;
 		}
 

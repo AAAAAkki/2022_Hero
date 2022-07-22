@@ -451,3 +451,7 @@ void bullet_speed_adapt(void){
 		}
 		shoot_control.bullet_speed = chassis_data_receive.bullet_speed;
 }
+
+int16_t get_mean_fric_rpm(void){
+		return (shoot_control.firc_speed[0] - shoot_control.firc_speed[1])/2;
+}

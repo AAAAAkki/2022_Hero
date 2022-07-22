@@ -65,7 +65,7 @@ typedef struct
 		uint8_t shoot_mode;  // 射击模式: 0-摩擦轮、拨弹轮都不动; 1-摩擦轮动拨弹轮不动; 2-都动
 		uint8_t swing_flag;  // 1开小陀螺 0不开
 		fp32 pitch_angel_degree;
-		fp32 yaw_absolute_angel;
+		int16_t fric_rpm;			//摩擦轮转速
 		fp32 yaw_relative_angel;  // 视为 body_angel
 		uint8_t scope_state;		//1-scope_on 0-scope_off
 }gimbal_data_t;

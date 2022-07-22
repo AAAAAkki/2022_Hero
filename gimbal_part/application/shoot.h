@@ -162,4 +162,5 @@ extern int16_t shoot_control_loop(void);
 shoot_control_t *get_shoot_point(void);
 void bullet_speed_adapt(void);
 uint8_t get_shoot_mode(void);
+int16_t get_mean_fric_rpm(void);
 #endif

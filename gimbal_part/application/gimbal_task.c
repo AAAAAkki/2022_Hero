@@ -346,7 +346,7 @@ void gimbal_task(void const *pvParameters)
         gimbal_scope_control(&gimbal_control);							 //scope position set
 				shoot_can_set_current = shoot_control_loop();        //射击任务控制循环
 				send_gimbal_motor_state(get_shoot_mode(),gimbal_control.gimbal_scope_motor.scope_state,get_swing_flag(),gimbal_control.gimbal_pitch_motor.absolute_angle_degree,
-																gimbal_control.gimbal_yaw_motor.absolute_angle_degree,gimbal_control.gimbal_yaw_motor.relative_angle/PI*180);
+																get_mean_fric_rpm(),gimbal_control.gimbal_yaw_motor.relative_angle/PI*180);
 																														 //data for ui on chassis
 #if YAW_TURN
         yaw_can_set_current = -gimbal_control.gimbal_yaw_motor.given_current;
