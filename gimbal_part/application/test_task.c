@@ -42,9 +42,19 @@ void test_task(void const * argument)
     static uint8_t error, last_error;
     static uint8_t error_num;
     error_list_test_local = get_error_list_point();
+		static uint8_t buzzer_flag = 1;
+		static uint8_t buzzer_flag_count = 200;
 
     while(1)
     {
+				if(!buzzer_flag_count){
+						if(HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY_Pin) == 0){
+								buzzer_flag ^= 0x1;
+								buzzer_flag_count = 200;
+						}
+				}
+				else
+						buzzer_flag_count--;
         error = 0;
 
         //find error
@@ -60,13 +70,13 @@ void test_task(void const * argument)
 
         //no error, stop buzzer
         //Ã»ÓÐ´íÎó, Í£Ö¹·äÃùÆ÷
-        if(error == 0 && last_error != 0)
+        if((error == 0 && last_error != 0)||!buzzer_flag)
         {
             buzzer_off();
         }
         //have error
         //ÓÐ´íÎó
-        if(error)
+        if(error && buzzer_flag)
         {
             buzzer_warn_error(error_num+1);
         }

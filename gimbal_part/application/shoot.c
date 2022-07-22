@@ -325,7 +325,7 @@ static void shoot_feedback_update(void)
 		if(shoot_control.trigger_motor_pid.Iout>5000)
 				shoot_control.trigger_motor_pid.Iout = 5000;
 		
-		bullet_speed_adapt();
+		//bullet_speed_adapt();
 		
 		//fric offline count
 		if(toe_is_error(FRIC_LEFT_MOTOR_TOE)||toe_is_error(FRIC_RIGHT_MOTOR_TOE))
