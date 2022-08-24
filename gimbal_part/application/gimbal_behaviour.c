@@ -837,7 +837,7 @@ static void 	gimbal_LASER_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimb
 
 void key_micro_control(fp32 *yaw, fp32 *pitch, gimbal_control_t *gimbal_control_set)
 {
-		static uint8_t flag_c=0,flag_f=0,flag_b=0,flag_v=0;//rfgv
+		static uint8_t flag_c=0,flag_f=0,flag_b=0,flag_v=0;//cfvb
 		if(!flag_b)
 		{
 				if(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_B && !(gimbal_control_set->gimbal_rc_ctrl->key.v & KEY_PRESSED_OFFSET_CTRL))

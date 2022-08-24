@@ -305,3 +305,8 @@ const uint8_t *get_remote_buff_point(void)
 	return sbus_rx_buf[1];
 }
 
+bool_t key_pressed(uint16_t judged_key){
+		if((judged_key & rc_ctrl.key.v)==judged_key)
+			return 1;
+		return 0;
+}

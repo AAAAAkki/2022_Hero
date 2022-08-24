@@ -322,8 +322,8 @@ static void shoot_feedback_update(void)
 		}
 		
 		//limit Iout of trigger_pid
-		if(shoot_control.trigger_motor_pid.Iout>5000)
-				shoot_control.trigger_motor_pid.Iout = 5000;
+		if(shoot_control.trigger_motor_pid.Iout>6000)
+				shoot_control.trigger_motor_pid.Iout = 6000;
 		
 		//bullet_speed_adapt();
 		
